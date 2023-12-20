@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@/components/analytics";
 import { ModeToggle } from "@/components/mode-toggle";
-import {Logo} from "@/components/Logo";
+import {Logo} from "@/components/logo";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,12 +53,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={`antialiased subpixel-antialiased min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 ${inter.className}`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="max-w-4xl mx-auto py-10 px-4">
+          <div className="max-w-4xl mx-auto pt-10 pb-20 px-4">
             <header>
               <div className="flex items-center justify-between">
                 <Logo />
                 <nav className="ml-auto mr-4 text-lg font-medium space-x-6">
-                  <Link href="/">Home</Link>
+                  <Link href="/posts">Posts</Link>
                   <Link href="/books">Books</Link>
                   <Link href="/courses">Courses</Link>
                 </nav>
