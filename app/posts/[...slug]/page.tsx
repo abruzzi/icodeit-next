@@ -3,6 +3,7 @@ import { allPosts } from "contentlayer/generated"
 
 import { Metadata } from "next"
 import { Mdx } from "@/components/mdx-components"
+import {Merriweather} from "next/font/google";
 
 interface PostProps {
   params: {
@@ -42,6 +43,8 @@ export async function generateStaticParams(): Promise<PostProps["params"][]> {
   }))
 }
 
+const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
+
 export default async function PostPage({ params }: PostProps) {
   const post = await getPostFromParams(params)
 
@@ -50,15 +53,16 @@ export default async function PostPage({ params }: PostProps) {
   }
 
   return (
-    <article className="py-6 prose dark:prose-invert">
-      <h1 className="mb-2">{post.title}</h1>
+    <article className="max-w-5xl py-6 prose dark:prose-invert sm:text-lg">
+      <h1 className={`my-10 ${merriweather.className}`}>{post.title}</h1>
       {post.description && (
-        <p className="text-xl mt-0 text-slate-700 dark:text-slate-200">
+        <p className="text-xl italic mt-0 text-slate-700 dark:text-slate-200">
           {post.description}
         </p>
       )}
+      <time dateTime={post.date}>{post.date}</time>
       <hr className="my-4" />
       <Mdx code={post.body.code} />
     </article>
-  )
+  );
 }
