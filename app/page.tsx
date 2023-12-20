@@ -5,13 +5,14 @@ import {Inter, Merriweather} from "next/font/google";
 import React from "react";
 import Image from 'next/image';
 
+import { compareDesc } from "date-fns";
+
 const merriweather = Merriweather({weight: "400", subsets: ["latin"]});
 const inter = Inter({weight: "400", subsets: ["latin"]});
-import {compareDesc} from "date-fns";
 
 export default function Home() {
   return (
-    <div className="max-w-5xl mx-auto prose dark:prose-invert">
+    <div className="max-w-4xl mx-auto prose dark:prose-invert">
       <div
         className="flex flex-col items-center text-center space-y-4 py-12 text-lg leading-normal sm:flex-row sm:text-left sm:items-center sm:space-y-0 sm:space-x-4">
         <div className="w-32 h-32">

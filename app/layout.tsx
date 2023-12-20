@@ -5,9 +5,9 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@/components/analytics";
 import { ModeToggle } from "@/components/mode-toggle";
+import {Logo} from "@/components/Logo";
 
 const inter = Inter({ subsets: ["latin"] });
-
 
 export const metadata = {
   title: "I Code It",
@@ -39,7 +39,7 @@ export const metadata = {
   },
   charSet: "UTF-8",
   robots: "index, follow",
-  metadataBase: new URL('https://icodeit.com.au'),
+  metadataBase: new URL("https://icodeit.com.au"),
 };
 
 interface RootLayoutProps {
@@ -53,16 +53,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={`antialiased subpixel-antialiased min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 ${inter.className}`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="max-w-5xl mx-auto py-10 px-4">
+          <div className="max-w-4xl mx-auto py-10 px-4">
             <header>
               <div className="flex items-center justify-between">
-                <ModeToggle />
-                <nav className="ml-auto text-lg font-medium space-x-6">
+                <Logo />
+                <nav className="ml-auto mr-4 text-lg font-medium space-x-6">
                   <Link href="/">Home</Link>
                   <Link href="/books">Books</Link>
                   <Link href="/courses">Courses</Link>
-                  <Link href="/tutorials">Tutorials</Link>
                 </nav>
+                <ModeToggle />
               </div>
             </header>
             <main>{children}</main>
