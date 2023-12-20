@@ -7,13 +7,14 @@ import Image from "next/image";
 
 import {compareDesc} from "date-fns";
 import {Subscribe} from "@/components/subscribe";
+import {SubTitle} from "@/components/sub-title";
 
 const merriweather = Merriweather({weight: "400", subsets: ["latin"]});
 const inter = Inter({weight: "400", subsets: ["latin"]});
 
 export default function Home() {
   return (
-    <div className="max-w-4xl mx-auto prose dark:prose-invert">
+    <div className="max-w-4xl mx-auto prose dark:prose-invert text-lg">
       <div
         className="flex flex-col items-center text-center space-y-4 py-12 text-lg leading-normal sm:flex-row sm:text-left sm:items-center sm:space-y-0 sm:space-x-4">
         <div className="w-32 h-32">
@@ -36,11 +37,7 @@ export default function Home() {
         </div>
       </div>
 
-      <h2
-        className={`text-xl text-brand mb-4 uppercase ${inter.className} tracking-widest color-brand font-bold`}
-      >
-        Recent Articles
-      </h2>
+      <SubTitle content="Recent Articles" />
 
       {allPosts
         .slice(0, 5)
@@ -48,7 +45,7 @@ export default function Home() {
         .map((post) => (
           <article key={post._id}>
             <Link href={post.slug} className={`no-underline`}>
-              <h3 className={`${merriweather.className}`}>{post.title}</h3>
+              <h2 className={`${merriweather.className} hover:text-brand transition-colors duration-2`}>{post.title}</h2>
             </Link>
             {post.description && <p className={`text-slate-600 dark:text-slate-300`}>{post.description}</p>}
           </article>

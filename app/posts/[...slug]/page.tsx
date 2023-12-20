@@ -55,7 +55,7 @@ export default async function PostPage({ params }: PostProps) {
   }
 
   return (
-    <article className="max-w-4xl py-6 prose dark:prose-invert sm:text-lg">
+    <article className="max-w-4xl py-6 prose dark:prose-invert text-lg">
       <h1 className={`my-10 ${merriweather.className}`}>{post.title}</h1>
       {post.description && (
         <p className="text-xl italic mt-0 text-slate-700 dark:text-slate-200">
