@@ -36,6 +36,43 @@ export async function generateMetadata({
   }
 }
 
+/**
+ * import { Metadata } from 'next';
+ *
+ * export function generateMetadata({ params: { slug } }: IProps): Metadata {
+ *   const post = allPosts.find((post) => post._raw.flattenedPath === slug);
+ *
+ *   if (!post) {
+ *     return {};
+ *   }
+ *
+ *   const { description, title, date } = post;
+ *
+ *   const ogImage = {
+ *     url: `${process.env.HOST}/post/${slug}/og.png`,
+ *   };
+ *
+ *   return {
+ *     title,
+ *     description,
+ *     openGraph: {
+ *       type: 'article',
+ *       url: `${process.env.HOST}/post/${slug}`,
+ *       title,
+ *       description,
+ *       publishedTime: date,
+ *       images: [ogImage],
+ *     },
+ *     twitter: {
+ *       title,
+ *       description,
+ *       images: ogImage,
+ *       card: 'summary_large_image',
+ *     },
+ *   };
+ * }
+ */
+
 export async function generateStaticParams(): Promise<PageProps["params"][]> {
   return allPages.map((page) => ({
     slug: page.slugAsParams.split("/"),

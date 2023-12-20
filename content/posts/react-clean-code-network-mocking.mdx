@@ -32,11 +32,11 @@ If we draw a `statechart` for the description above, it will be something like t
 
 ### The happy path
 
-We can start with the happy path as that’s the most easier step and the most important thing we want to ensure to happen.
+We can start with the happy path as that’s the easiest step and the most important thing we want to ensure to happen.
 
 In test, the happy path for (initialised → ready) can be described as:
 
-```tsx
+```tsx title="DirectToBoot.test.tsx"
 it("enables button when the order is ready", async () => {
     render(<DirectToBoot orderId="order-id"/>);
 
