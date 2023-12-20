@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 type ProductType = {
   categories: string[];
   link: string;
@@ -18,7 +16,7 @@ export const Product = ({
   return (
     <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto px-4 mx-auto rounded-xl space-x-4">
       <div className="flex-shrink-0">
-        <Image
+        <img
           className="w-44 max-w-none object-cover rounded"
           width={176}
           src={cover}
