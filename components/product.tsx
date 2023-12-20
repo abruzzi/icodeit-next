@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Mdx } from "@/components/mdx-components";
 
 type ProductType = {
   categories: string[];
@@ -45,9 +44,7 @@ export const Product = ({
           </h3>
         </a>
 
-        <p className="text-base font-light">
-          <Mdx code={description} />
-        </p>
+        <p className="text-base font-light">{description}</p>
       </div>
     </div>
   );
