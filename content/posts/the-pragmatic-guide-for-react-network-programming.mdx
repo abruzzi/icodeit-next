@@ -23,7 +23,7 @@ Let's break down the simple application into some steps so I can easily reveal a
 
 Fetching remote data from the server side in React is not super difficult. Use `fetch` with the right URL with the resource and convert the data into JSON, and you are ready to go.
 
-```tsx
+```tsx title="UserList.tsx" {4-8}
 const [users, setUsers] = useState<User[]>([])
 
 useEffect(() => {

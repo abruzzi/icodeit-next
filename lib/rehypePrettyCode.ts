@@ -1,7 +1,9 @@
 import {type LineElement, type Options} from "rehype-pretty-code"
 
 export const rehypePrettyCodeOptions: Partial<Options> = {
-  onVisitHighlightedLine(element: LineElement) {
-    element.properties.className?.push("line--highlighted")
-  }
+  theme: {
+    light: "solarized-light",
+    dark: "github-dark-dimmed"
+  },
+  keepBackground: false
 }
