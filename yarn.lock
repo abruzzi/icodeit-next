@@ -4519,6 +4519,11 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
+reading-duration@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/reading-duration/-/reading-duration-1.1.2.tgz#ab2834a7d811a5084be6dfcb1e34277fbe6879ea"
+  integrity sha512-rm/bVuqGCZ6Ox1R9lIkgOa5+PG96MDD5n8w62k/6+woRTGT3Wss76c/LBo9hBgpUVQSYqw2uSyshBKOksrQ7xA==
+
 reflect.getprototypeof@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/reflect.getprototypeof/-/reflect.getprototypeof-1.0.4.tgz"
