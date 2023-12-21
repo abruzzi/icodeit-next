@@ -40,12 +40,12 @@ export default function Home() {
       <SubTitle content="Recent Articles" />
 
       {allPosts
-        .slice(0, 5)
         .sort((a, b) => compareDesc(a.date, b.date))
+        .slice(0, 5)
         .map((post) => (
-          <article key={post._id}>
+          <article key={post._id} className={`my-8`}>
             <Link href={post.slug} className={`no-underline`}>
-              <h2 className={`${merriweather.className} hover:text-brand transition-colors duration-2`}>{post.title}</h2>
+              <h2 className={`${merriweather.className} my-2 hover:text-brand transition-colors duration-2`}>{post.title}</h2>
             </Link>
             {post.description && <p className={`text-slate-600 dark:text-slate-300`}>{post.description}</p>}
           </article>

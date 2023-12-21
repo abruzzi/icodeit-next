@@ -66,6 +66,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
               </div>
             </header>
             <main>{children}</main>
+            <footer className={`flex flex-row my-4 items-center justify-center text-sm`}>
+              <div className="mr-auto">
+                &copy; 2023
+              </div>
+
+              <nav className="mt-12 flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
+                <a href="https://twitter.com/JuntaoQiu" target="_blank">X</a>
+                <a href="https://www.linkedin.com/in/juntaoqiu/" target="_blank">L</a>
+                <a href="https://github.com/abruzzi/" target="_blank">G</a>
+              </nav>
+            </footer>
           </div>
           <Analytics />
         </ThemeProvider>
