@@ -2,8 +2,8 @@ import Link from "next/link";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
-import { ThemeProvider } from "@/components/theme-provider";
-import { Analytics } from "@/components/analytics";
+import { ThemeProvider } from "@/components/supporting/theme-provider";
+import { Analytics } from "@/components/supporting/analytics";
 import { ModeToggle } from "@/components/mode-toggle";
 import {Logo} from "@/components/logo";
 

@@ -4,6 +4,7 @@ type ProductType = {
   title: string;
   cover: string;
   description: string;
+  coverSize?: "small" | "medium";
 };
 
 export const Product = ({
@@ -12,18 +13,20 @@ export const Product = ({
   cover,
   categories,
   description,
+  coverSize = "small",
 }: ProductType) => {
   return (
-    <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto px-4 mx-auto rounded-xl space-x-4">
+    <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto mx-auto gap-6">
       <div className="flex-shrink-0">
         <img
-          className="w-44 max-w-none object-cover rounded"
-          width={176}
+          className={`${coverSize === 'small' ? "w-44" : "w-96"}  max-w-none object-cover rounded`}
+          width={coverSize === 'small' ? 176 : 384}
           src={cover}
           alt={title}
         />
       </div>
-      <div className="ml-8">
+
+      <div>
         <a
           href={link}
           target="_blank"

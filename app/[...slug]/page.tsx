@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { allPages, Page } from "contentlayer/generated";
 
-import { Mdx } from "@/components/mdx-components";
+import { Mdx } from "@/components/supporting/mdx-components";
+import {Subscribe} from "@/components/subscribe";
+import React from "react";
 
 interface PageProps {
   params: {
@@ -92,6 +94,7 @@ export default async function PagePage({ params }: PageProps) {
       {page.description && <p>{page.description}</p>}
       <hr />
       <Mdx code={page.body.code} />
+      <Subscribe />
     </article>
   );
 }

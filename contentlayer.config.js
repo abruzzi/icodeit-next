@@ -31,6 +31,9 @@ export const Page = defineDocumentType(() => ({
     },
     cover: {
       type: "string"
+    },
+    coverSize: {
+      type: "string"
     }
   },
   computedFields,
