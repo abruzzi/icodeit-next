@@ -6,6 +6,8 @@ import { Mdx } from "@/components/mdx-components";
 import { Merriweather } from "next/font/google";
 
 import { formatRelative } from "date-fns";
+import Image from "next/image";
+import React from "react";
 
 interface PostProps {
   params: {
@@ -47,6 +49,34 @@ export async function generateStaticParams(): Promise<PostProps["params"][]> {
 
 const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
 
+const Avatar = () => {
+  return (
+    <div className="w-12 h-12">
+      <Image
+        src="/juntao.qiu.avatar.png"
+        width={48}
+        height={48}
+        alt="Juntao Qiu Avatar"
+        className="m-0 rounded-full"
+      />
+    </div>
+  );
+};
+
+const AuthorInfo = () => {
+  return (
+    <div className={`flex flex-row items-center`}>
+      <Avatar />
+      <div className={`text-sm ml-2`}>
+        <div>Juntao Qiu</div>
+        <a className={`text-brand no-underline text-xs`} href="https://twitter.com/JuntaoQiu" target="_blank">
+          @JuntaoQiu
+        </a>
+      </div>
+    </div>
+  );
+};
+
 export default async function PostPage({ params }: PostProps) {
   const post = await getPostFromParams(params);
 
@@ -55,15 +85,16 @@ export default async function PostPage({ params }: PostProps) {
   }
 
   return (
-    <article className="max-w-4xl py-6 prose dark:prose-invert text-lg">
+    <article className="max-w-4xl py-6 prose dark:prose-invert text-md sm:text-lg">
+      <time dateTime={post.date}>{formatRelative(post.date, new Date())}</time>
       <h1 className={`my-10 ${merriweather.className}`}>{post.title}</h1>
       {post.description && (
-        <p className="text-xl italic mt-0 text-slate-700 dark:text-slate-200">
+        <p className="text-lg font-light italic mt-0 text-slate-700 dark:text-slate-200">
           {post.description}
         </p>
       )}
-      <time dateTime={post.date}>{formatRelative(post.date, new Date())}</time>
-      <hr className="my-4" />
+      <AuthorInfo />
+      <hr className="my-8" />
       <Mdx code={post.body.code} />
     </article>
   );

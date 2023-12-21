@@ -23,13 +23,13 @@ export const Product = ({
           alt={title}
         />
       </div>
-      <div className="ml-6">
+      <div className="ml-8">
         <a
           href={link}
           target="_blank"
           className="mt-2 inline-block no-underline"
         >
-          <h3 className="flex items-center gap-x-2 text-xl font-semibold leading-tight hover:text-brand transition-colors duration-200">
+          <h3 className="m-0 flex items-center gap-x-2 text-xl font-semibold leading-tight hover:text-brand transition-colors duration-200">
             {categories.map((cat: string) => (
               <span
                 key={cat}
@@ -43,6 +43,9 @@ export const Product = ({
         </a>
 
         <p className="text-base font-light">{description}</p>
+        <a href={link} className={`text-brand no-underline`} target="_blank">
+          Learn more...
+        </a>
       </div>
     </div>
   );

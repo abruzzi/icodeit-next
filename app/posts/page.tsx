@@ -1,13 +1,14 @@
-import {allPosts} from "@/.contentlayer/generated";
+import { allPosts } from "@/.contentlayer/generated";
 import Link from "next/link";
 
-import {Inter, Merriweather} from "next/font/google";
+import { Inter, Merriweather } from "next/font/google";
 import React from "react";
 
-import {compareDesc} from "date-fns";
-import {Subscribe} from "@/components/subscribe";
+import { compareDesc } from "date-fns";
+import { Subscribe } from "@/components/subscribe";
+import { PostCard } from "@/components/post-card";
 
-const merriweather = Merriweather({weight: "400", subsets: ["latin"]});
+const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
 
 export const metadata = {
   title: "I Code It",
@@ -44,23 +45,24 @@ export const metadata = {
   metadataBase: new URL("https://icodeit.com.au"),
 };
 
-
 export default function Posts() {
   return (
-    <div className="max-w-4xl py-6 mx-auto prose dark:prose-invert text-lg">
+    <div className="max-w-4xl py-6 mx-auto prose dark:prose-invert text-md">
       <h1 className={`py-6`}>All Articles</h1>
 
-      <p>
-        In this blog, I share insights on software development, focusing on design principles and patterns to address
-        complex business challenges. Topics like refactoring, test-driven development, and pair programming are covered,
-        emphasizing how they contribute to more maintainable and enjoyable coding practices.
+      <p className={`font-light`}>
+        In this blog, I share insights on software development, focusing on
+        design principles and patterns to address complex business challenges.
+        Topics like refactoring, test-driven development, and pair programming
+        are covered, emphasizing how they contribute to more maintainable and
+        enjoyable coding practices.
       </p>
 
-      <p>
-        Software development is an intellectually stimulating journey. It&apos;s rewarding to overcome challenges and
-        achieve
-        a deep sense of satisfaction. This blog is where I document these enriching experiences, hoping to inspire and
-        engage fellow enthusiasts in the art of coding.
+      <p className={`font-light`}>
+        Software development is an intellectually stimulating journey. It&apos;s
+        rewarding to overcome challenges and achieve a deep sense of
+        satisfaction. This blog is where I document these enriching experiences,
+        hoping to inspire and engage fellow enthusiasts in the art of coding.
       </p>
 
       <hr />
@@ -68,15 +70,10 @@ export default function Posts() {
       {allPosts
         .sort((a, b) => compareDesc(a.date, b.date))
         .map((post) => (
-          <article key={post._id}>
-            <Link href={post.slug} className={`no-underline`}>
-              <h2 className={`${merriweather.className}`}>{post.title}</h2>
-            </Link>
-            {post.description && <p className={`text-slate-600 dark:text-slate-300`}>{post.description}</p>}
-          </article>
+          <PostCard post={post} key={post._id} />
         ))}
 
-      <Subscribe/>
+      <Subscribe />
     </div>
   );
 }
