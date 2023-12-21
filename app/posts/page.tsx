@@ -1,14 +1,10 @@
 import { allPosts } from "@/.contentlayer/generated";
-import Link from "next/link";
 
-import { Inter, Merriweather } from "next/font/google";
 import React from "react";
 
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/subscribe";
 import { PostCard } from "@/components/post-card";
-
-const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
 
 export const metadata = {
   title: "I Code It",

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[I Code It | Juntao Qiu]]></title>
+        <description><![CDATA[I Code It is focusing on maintainable React code and masterful use of frontend technologies like Refactoring and Test-Driven Development.]]></description>
+        <link>https://icodeit.com.au</link>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Thu, 21 Dec 2023 20:35:07 GMT</lastBuildDate>
+        <atom:link href="https://icodeit.com.au/rss.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[Implementing Dynamic Import and Code Splitting]]></title>
+            <description><![CDATA[As an application grows and more code is added, the initial loading time can become noticeably longer. This delay, sometimes lasting several seconds, can frustrate users. To avoid this, it's essential to optimize loading times.]]></description>
+            <link>https://icodeit.com.au/posts/dynamic-import</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/dynamic-import</guid>
+            <pubDate>Thu, 21 Dec 2023 04:46:12 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Why Web UI Development Is So Hard?]]></title>
+            <description><![CDATA[The landscape of web UI development is fraught with challenges that extend beyond writing code and designing interfaces. The inherent language limitations, nuanced data management, async complexities, and often-ignored unhappy paths collectively make this a formidable field. Architectural decisions ...]]></description>
+            <link>https://icodeit.com.au/posts/why-ui-is-so-hard</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/why-ui-is-so-hard</guid>
+            <pubDate>Tue, 10 Oct 2023 20:40:47 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[The 2nd Editor of Test-Driven Development With React]]></title>
+            <description><![CDATA[After several months of revising and editiong and rewording, finally "Test-Driven Development with React and TypeScript," is officially out!]]></description>
+            <link>https://icodeit.com.au/posts/the-2nd-edition-of-atdd</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/the-2nd-edition-of-atdd</guid>
+            <pubDate>Thu, 07 Sep 2023 06:09:59 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Test-Driven Development Mini Course]]></title>
+            <description><![CDATA[The Mini-Course on React and Test-Driven Development will provide you with the skills and knowledge to build robust, scalable and maintainable React applications.]]></description>
+            <link>https://icodeit.com.au/posts/tdd-mini-course</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/tdd-mini-course</guid>
+            <pubDate>Wed, 01 Feb 2023 06:09:59 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Join My 7 Day React Clean Code Challenge]]></title>
+            <description><![CDATA[Are you looking to start your React journey with React in 2023, or do you want to sharpen your React techniques to the next level? Join my 7-Day Challenge to learn all these with a project simulation!]]></description>
+            <link>https://icodeit.com.au/posts/7-day-react-clean-code-challenge</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/7-day-react-clean-code-challenge</guid>
+            <pubDate>Thu, 29 Dec 2022 03:47:22 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[React Clean Code -  mocking network scenarios]]></title>
+            <description><![CDATA[Handling network requests is complicated. There are too many cases you have to consider on top of the asynchronised process. And testing these code can be even more challenging...]]></description>
+            <link>https://icodeit.com.au/posts/react-clean-code-network-mocking</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/react-clean-code-network-mocking</guid>
+            <pubDate>Wed, 21 Dec 2022 04:17:49 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[The Pragmatic Guide for React Network Programming]]></title>
+            <description><![CDATA[Fetching data from a remote server can be challenging, especially when you have to consider cache, re-fetch, error handling, timeout etc...]]></description>
+            <link>https://icodeit.com.au/posts/the-pragmatic-guide-for-react-network-programming</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/the-pragmatic-guide-for-react-network-programming</guid>
+            <pubDate>Fri, 16 Dec 2022 10:52:12 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[If I Could Only Teach One Thing to a Beginner Developer]]></title>
+            <description><![CDATA[A few weeks ago, I got an interesting idea when I was writing a blog post about how to abstract your code to make it easier to reuse. I wanted to know what other developers think is the most important principle they would teach a newbie developer and why they would choose that design principle.]]></description>
+            <link>https://icodeit.com.au/posts/if-i-could-only-teach-one-thing-to-a-beginner-developer</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/if-i-could-only-teach-one-thing-to-a-beginner-developer</guid>
+            <pubDate>Thu, 01 Dec 2022 04:46:12 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Implementing Design System]]></title>
+            <description><![CDATA[So it’s not a single standard of how you would design at scale but a set of standards, and it is a visual language, which is important both by the user experience design and implementation...]]></description>
+            <link>https://icodeit.com.au/posts/implementing-design-system</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/implementing-design-system</guid>
+            <pubDate>Sat, 19 Nov 2022 06:15:59 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[A story: from idea to product]]></title>
+            <description><![CDATA[As the saying goes: all great things have small beginnings. Even the most complicated product starts with a small and simple idea. And during the process of implementing it, even for a simple App like To Buy, there are many details to consider and polish.]]></description>
+            <link>https://icodeit.com.au/posts/idea-to-product</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/idea-to-product</guid>
+            <pubDate>Wed, 28 Oct 2020 04:46:12 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Different Levels of Abstraction]]></title>
+            <description><![CDATA[The ability of abstracting should be the most fundamental skill a developer should have, and I can't emphasise this enough. By abstracting, we can escape from the overwhelming seemingly irrelevant details to a solution that could solve all the problems at one go.]]></description>
+            <link>https://icodeit.com.au/posts/levels-of-abs</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/levels-of-abs</guid>
+            <pubDate>Fri, 10 Jul 2020 12:11:16 GMT</pubDate>
+        </item>
+    </channel>
+</rss>
