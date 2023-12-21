@@ -1,6 +1,6 @@
-import {defineDocumentType, makeSource} from "contentlayer/source-files"
+import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypePrettyCode from "rehype-pretty-code";
-import {rehypePrettyCodeOptions} from "./lib/rehypePrettyCode";
+import { rehypePrettyCodeOptions } from "./lib/rehypePrettyCode";
 
 /** @type {import('contentlayer/source-files').ComputedFields} */
 const computedFields = {
@@ -12,7 +12,7 @@ const computedFields = {
     type: "string",
     resolve: (doc) => doc._raw.flattenedPath.split("/").slice(1).join("/"),
   },
-}
+};
 
 export const Page = defineDocumentType(() => ({
   name: "Page",
@@ -25,19 +25,21 @@ export const Page = defineDocumentType(() => ({
     },
     description: {
       type: "string",
+      required: true,
     },
     category: {
-      type: "string"
+      type: "string",
     },
     cover: {
-      type: "string"
+      type: "string",
+      required: true,
     },
     coverSize: {
-      type: "string"
-    }
+      type: "string",
+    },
   },
   computedFields,
-}))
+}));
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
@@ -50,20 +52,22 @@ export const Post = defineDocumentType(() => ({
     },
     description: {
       type: "string",
+      required: true,
     },
     date: {
       type: "date",
       required: true,
     },
     category: {
-      type: "string"
+      type: "string",
     },
     cover: {
-      type: "string"
-    }
+      type: "string",
+      required: true,
+    },
   },
   computedFields,
-}))
+}));
 
 export default makeSource({
   contentDirPath: "./content",
@@ -71,4 +75,4 @@ export default makeSource({
   mdx: {
     rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
   },
-})
+});

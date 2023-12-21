@@ -37,9 +37,31 @@ export async function generateMetadata({
     return {};
   }
 
+  const { description, title, date, cover } = post;
+
+  const ogImage = {
+    url: cover,
+  };
+
   return {
-    title: post.title,
-    description: post.description,
+    title,
+    description,
+    openGraph: {
+      type: "article",
+      url: `/posts/${params.slug}`,
+      title,
+      description,
+      publishedTime: date,
+      images: [ogImage],
+    },
+    twitter: {
+      title,
+      description,
+      images: ogImage,
+      card: "summary_large_image",
+    },
+    robots: "index, follow",
+    metadataBase: new URL("https://icodeit.com.au"),
   };
 }
 
@@ -80,7 +102,9 @@ const AuthorInfo = ({ duration }: { duration: string }) => {
         </a>
       </div>
 
-      <div className={`ml-auto text-sm text-slate-700 dark:text-slate-400`}>{duration}</div>
+      <div className={`ml-auto text-sm text-slate-700 dark:text-slate-400`}>
+        {duration}
+      </div>
     </div>
   );
 };
@@ -99,7 +123,12 @@ export default async function PostPage({ params }: PostProps) {
 
   return (
     <article className="max-w-4xl py-6 prose dark:prose-invert text-md sm:text-lg">
-      <time dateTime={post.date} className={`text-sm text-slate-700 dark:text-slate-400`}>{formatRelative(post.date, new Date())}</time>
+      <time
+        dateTime={post.date}
+        className={`text-sm text-slate-700 dark:text-slate-400`}
+      >
+        {formatRelative(post.date, new Date())}
+      </time>
       <h1 className={`my-10 ${merriweather.className}`}>{post.title}</h1>
       {post.description && (
         <p className="text-lg font-light italic mt-0 text-slate-700 dark:text-slate-200">
