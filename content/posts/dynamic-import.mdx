@@ -1,0 +1,181 @@
+---
+title: "Implementing Dynamic Import and Code Splitting"
+description: "As an application grows and more code is added, the initial loading time can become noticeably longer. This delay, sometimes lasting several seconds, can frustrate users. To avoid this, it's essential to optimize loading times."
+date: 2023-12-21T15:46:12+11:00
+cover: "/posts/images/dynamic-import/editor-dark.png"
+---
+
+As an application grows and more code is added, the initial loading time can become noticeably longer. This delay, sometimes lasting several seconds, can frustrate users. To avoid this, it's essential to optimize loading times.
+
+Upon analyzing user behavior, it becomes apparent that certain functionalities are seldom used. For instance, the “Show Advanced Options” button is only occasionally clicked. This observation leads to an intriguing possibility: what if these advanced features are loaded only when needed? Such an approach could significantly reduce loading and parsing times, thereby enhancing the user experience.
+
+Code splitting and on-demand loading are effective strategies for improving initial loading times. These techniques, while not new, come with nuances and potential pitfalls that are crucial to understand before implementation.
+
+In this article, we'll delve deeper into code splitting and asynchronous loading. We'll explore handling loading statuses, error management, and testing through practical examples.
+
+### The `import` Operator
+
+The dynamic `import` operator, although similar in appearance to the static import statement, functions quite differently. The Mozilla Developer Network (MDN) describes it as:
+
+> The **`import()`** syntax, commonly referred to as *dynamic import*, is a function-like expression that enables the asynchronous and dynamic loading of an ECMAScript module into a potentially non-module environment.
+> 
+> Unlike its declaration-style counterpart, dynamic imports are evaluated only when required, offering greater syntactic flexibility.
+>
+
+Consider it akin to an Ajax call, like the `fetch` API. It returns a promise, and upon resolution, you receive the imported module.
+
+```jsx
+import("/calculator.js").then((calculator) => {
+  const result = calculator.add(1, 3);
+  console.log(result);
+});
+```
+
+Notice the distinction from the static import `import {add} from '/calculator.js'`.
+
+Imagine a `calculator.js` file, heavy with various mathematical functions. We aim to delay its loading until necessary. In `main.js`, the `calculator` is loaded only when a user interacts with a checkbox:
+
+```jsx
+const result = document.querySelector("#result");
+
+document.querySelector("#toggle").addEventListener("change", () => {
+  import("/calculator.js")
+    .then((calculator) => {
+      const addition = calculator.add(1, 5);
+      result.innerHTML = `Script calculator.js loaded, function call returns ${addition}`;
+    })
+    .catch((error) => {
+      result.innerHTML = `Failed to load script calculator.js, ${error}`;
+    });
+});
+```
+
+Inspecting the network request reveals the asynchronous loading of the script:
+
+![Network request screenshot demonstrating asynchronous module loading](/posts/images/dynamic-import/calculator.png)
+
+This feature is built into most modern browsers, allowing use in various frameworks and libraries (like jQuery).
+
+However, in React applications, the Suspense and lazy APIs offer a more structured and performant approach.
+
+### Suspense and Lazy
+
+The Suspense API, along with the lazy function, enhances component loading in React. Suspense defers rendering, displaying a fallback component (like a loader or skeleton) until the main component is ready:
+
+```jsx
+<Suspense fallback={<Loading />}>
+  <BigTable />
+</Suspense>
+```
+
+To enable this, components must be 'Suspense-enabled'. According to the React documentation:
+
+> **Only Suspense-enabled data sources activate Suspense components.** These include:
+> 
+> - Data fetching with frameworks like [Relay](https://relay.dev/docs/guided-tour/rendering/loading-states/) and [Next.js](https://nextjs.org/docs/getting-started/react-essentials)
+> - Lazy-loading component code with `lazy`
+> - Reading the value of a Promise with `use`
+> 
+> Suspense **does not** detect data fetching within an Effect or event handler.
+> 
+
+The `lazy` function's signature is:
+
+```jsx
+const BigTable = lazy(() => import('./big-table.js'))
+```
+
+Combining Suspense with lazy, we get:
+
+```jsx
+<Suspense fallback={<Loading />}>
+  <BigTable />
+</Suspense>
+```
+
+This setup shows a `Loading` component while `BigTable` loads, transitioning smoothly once loaded. Subsequent renders won’t trigger additional loads as the script is cached by the browser.
+
+### Handling Real-World Scenarios
+
+However, not all paths are smooth. Considerations for less-than-ideal scenarios include:
+
+- **Loading Indicator**: A simple, yet clear indicator to inform users that a process is underway.
+- **Error Handling**: Internet unpredictability necessitates an error indicator, possibly with a retry option for recoverable errors.
+- **Strategic Asynchronous Loading**: Deciding which application parts can be loaded asynchronously is crucial.
+
+For instance, an 'Advanced Tools' button might be hidden initially, becoming available based on user actions or preferences.
+
+![Advanced Tools](/posts/images/dynamic-import/editor-dark.png)
+
+Since associated menus and tools might be substantial, especially with third-party libraries, they should be loaded only when needed.
+
+### Practical Implementation
+
+To illustrate, consider a prototype using `react-aria-components`. Here's the setup for a menu with asynchronously loaded tools:
+
+```jsx
+import './ProTools.css';
+
+import {
+  Button,
+  Menu,
+  MenuItem,
+  MenuTrigger,
+  Popover,
+} from "react-aria-components";
+
+const ProTools = () => {
+  return (
+    <li>
+      <MenuTrigger>
+        <Button aria-label="Menu">
+          <span className="material-symbols-outlined">more_horiz</span>
+        </Button>
+        <Popover>
+          <Menu onAction={x => console.log(x)}>
+            <MenuItem id="table">Table</MenuItem>
+            <MenuItem id="chart">Chart</MenuItem>
+            <MenuItem id="image">Image</MenuItem>
+            <MenuItem id="video">Video</MenuItem>
+            <MenuItem id="other">Other</MenuItem>
+          </Menu>
+        </Popover>
+      </MenuTrigger>
+    </li>
+  );
+};
+
+export default ProTools;
+```
+
+Next, we define the async entry point:
+
+```jsx
+import { lazy } from "react";
+
+const AsyncProTools = lazy(() => import("./ProTools"));
+
+export { AsyncProTools };
+```
+
+And in the main component:
+
+```jsx
+<ErrorBoundary fallback={<Error />}>
+  {enableAdvancedTools && (
+    <Suspense fallback={<Spinner />}>
+      <AsyncProTools />
+    </Suspense>
+  )}
+</ErrorBoundary>
+```
+
+Here, an `Error` component acts as a fallback.
+
+![Loading on demand](/posts/images/dynamic-import/dynamic-loading.png)
+
+The JavaScript file for `ProTools` is significantly larger than the main chunk, emphasizing the need for separate, on-demand loading.
+
+### Conclusion
+
+Dynamic imports and code splitting are powerful tools for optimizing web applications. By understanding and implementing these techniques, developers can significantly improve user experience, especially in applications with growing complexity.

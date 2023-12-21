@@ -8,6 +8,7 @@ import { Merriweather } from "next/font/google";
 import { formatRelative } from "date-fns";
 import Image from "next/image";
 import React from "react";
+import {Subscribe} from "@/components/subscribe";
 
 interface PostProps {
   params: {
@@ -94,8 +95,12 @@ export default async function PostPage({ params }: PostProps) {
         </p>
       )}
       <AuthorInfo />
+
       <hr className="my-8" />
+
       <Mdx code={post.body.code} />
+
+      <Subscribe />
     </article>
   );
 }
