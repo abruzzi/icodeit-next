@@ -43,7 +43,7 @@ export const metadata = {
 
 export default function Posts() {
   return (
-    <div className="max-w-4xl py-6 mx-auto prose dark:prose-invert text-md">
+    <div className="max-w-4xl py-6 mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <h1 className={`py-6`}>All Articles</h1>
 
       <p className={`font-light`}>

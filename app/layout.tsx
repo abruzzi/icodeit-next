@@ -5,7 +5,8 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/supporting/theme-provider";
 import { Analytics } from "@/components/supporting/analytics";
 import { ModeToggle } from "@/components/mode-toggle";
-import {Logo} from "@/components/logo";
+import { Logo } from "@/components/logo";
+import { BackToTop } from "@/components/back-to-top";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,7 +51,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body
-        className={`antialiased subpixel-antialiased min-h-screen bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
+        className={`relative antialiased subpixel-antialiased min-h-screen bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="max-w-4xl mx-auto pt-10 pb-20 px-4">
@@ -66,19 +67,29 @@ export default function RootLayout({ children }: RootLayoutProps) {
               </div>
             </header>
             <main>{children}</main>
-            <footer className={`flex flex-row my-4 items-center justify-center text-sm`}>
-              <div className="mr-auto">
-                &copy; 2023
-              </div>
+            <footer
+              className={`flex flex-row my-4 items-center justify-center text-sm`}
+            >
+              <div className="mr-auto">&copy; 2023</div>
 
               <nav className="mt-12 flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
-                <a href="https://twitter.com/JuntaoQiu" target="_blank">X</a>
-                <a href="https://www.linkedin.com/in/juntaoqiu/" target="_blank">L</a>
-                <a href="https://github.com/abruzzi/" target="_blank">G</a>
+                <a href="https://twitter.com/JuntaoQiu" target="_blank">
+                  X
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/juntaoqiu/"
+                  target="_blank"
+                >
+                  L
+                </a>
+                <a href="https://github.com/abruzzi/" target="_blank">
+                  G
+                </a>
               </nav>
             </footer>
           </div>
           <Analytics />
+          <BackToTop />
         </ThemeProvider>
       </body>
     </html>

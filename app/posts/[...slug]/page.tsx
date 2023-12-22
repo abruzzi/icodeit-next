@@ -122,7 +122,7 @@ export default async function PostPage({ params }: PostProps) {
   });
 
   return (
-    <article className="max-w-4xl py-6 prose dark:prose-invert text-md sm:text-lg">
+    <article className="relative max-w-4xl py-6 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <time
         dateTime={post.date}
         className={`text-sm text-slate-700 dark:text-slate-400`}

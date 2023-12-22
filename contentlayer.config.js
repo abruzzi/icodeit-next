@@ -1,6 +1,12 @@
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypePrettyCode from "rehype-pretty-code";
-import { rehypePrettyCodeOptions } from "./lib/rehypePrettyCode";
+
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
+import rehypeToc from "@jsdevtools/rehype-toc";
+
+import { rehypePrettyCodeOptions } from "./lib/rehype-pretty-code";
+import { rehypeTOCSettings } from "./lib/rehype-toc-options";
 
 /** @type {import('contentlayer/source-files').ComputedFields} */
 const computedFields = {
@@ -73,6 +79,11 @@ export default makeSource({
   contentDirPath: "./content",
   documentTypes: [Post, Page],
   mdx: {
-    rehypePlugins: [[rehypePrettyCode, rehypePrettyCodeOptions]],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeAutolinkHeadings,
+      [rehypeToc, rehypeTOCSettings],
+      [rehypePrettyCode, rehypePrettyCodeOptions],
+    ],
   },
 });

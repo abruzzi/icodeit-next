@@ -11,7 +11,7 @@ import { AboutMe } from "@/components/about-me";
 
 export default function Home() {
   return (
-    <div className="max-w-4xl mx-auto prose dark:prose-invert text-md">
+    <div className="max-w-4xl mx-auto prose dark:prose-invert text-base">
       <AboutMe />
 
       <hr/>
