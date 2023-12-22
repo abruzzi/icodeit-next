@@ -10,6 +10,8 @@ import Image from "next/image";
 import React from "react";
 import { Subscribe } from "@/components/subscribe";
 import readingDuration from "reading-duration";
+import { LinkedinIcon, LinkedinShareButton } from "react-share";
+import { SocialMediaSharing } from "@/components/social-media-sharing";
 
 interface PostProps {
   params: {
@@ -122,7 +124,7 @@ export default async function PostPage({ params }: PostProps) {
   });
 
   return (
-    <article className="relative max-w-4xl py-6 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+    <article className="relative max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <time
         dateTime={post.date}
         className={`text-sm text-slate-700 dark:text-slate-400`}
@@ -142,6 +144,7 @@ export default async function PostPage({ params }: PostProps) {
 
       <Mdx code={post.body.code} />
 
+      <SocialMediaSharing post={post} />
       <Subscribe />
     </article>
   );

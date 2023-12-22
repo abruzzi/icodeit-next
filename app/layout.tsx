@@ -7,6 +7,8 @@ import { Analytics } from "@/components/supporting/analytics";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Logo } from "@/components/logo";
 import { BackToTop } from "@/components/back-to-top";
+import {LinkedinIcon, XIcon} from "react-share";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -72,18 +74,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             >
               <div className="mr-auto">&copy; 2023</div>
 
-              <nav className="mt-12 flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
+              <nav className="flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
                 <a href="https://twitter.com/JuntaoQiu" target="_blank">
-                  X
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/juntaoqiu/"
-                  target="_blank"
-                >
-                  L
-                </a>
-                <a href="https://github.com/abruzzi/" target="_blank">
-                  G
+                  <XIcon size={20} round />
                 </a>
               </nav>
             </footer>
