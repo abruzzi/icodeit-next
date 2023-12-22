@@ -22,7 +22,7 @@ const AboutMe = () => {
         <a
           href="https://juntao.substack.com/"
           target="_blank"
-          className={`text-brand`}
+          className={`bg-gradient-to-r from-brand to-indigo-400 inline-block text-transparent bg-clip-text`}
         >
           Subscribe
         </a>{" "}
