@@ -1,17 +1,18 @@
 import Link from "next/link";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import {Inter} from "next/font/google";
 
-import { ThemeProvider } from "@/components/supporting/theme-provider";
-import { Analytics } from "@/components/supporting/analytics";
-import { ModeToggle } from "@/components/mode-toggle";
-import { Logo } from "@/components/logo";
-import { BackToTop } from "@/components/back-to-top";
-import {LinkedinIcon, XIcon} from "react-share";
+import {ThemeProvider} from "@/components/supporting/theme-provider";
+import {Analytics} from "@/components/supporting/analytics";
+import {ModeToggle} from "@/components/mode-toggle";
+import {Logo} from "@/components/logo";
+import {BackToTop} from "@/components/back-to-top";
 import React from "react";
-import {FaGithub, FaLinkedin} from "react-icons/fa6";
 
-const inter = Inter({ subsets: ["latin"] });
+import {FaGithub, FaLinkedin} from "react-icons/fa6";
+import {XIcon} from "react-share";
+
+const inter = Inter({subsets: ["latin"]});
 
 export const metadata = {
   title: "I Code It",
@@ -50,48 +51,52 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({children}: RootLayoutProps) {
   return (
     <html lang="en">
-      <body
-        className={`relative antialiased subpixel-antialiased min-h-screen bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="max-w-4xl mx-auto pt-10 pb-20 px-4">
-            <header>
-              <div className="flex items-center justify-between">
-                <Logo />
-                <nav className="ml-auto mr-4 text-lg font-medium space-x-6">
-                  <Link href="/posts">Posts</Link>
-                  <Link href="/books">Books</Link>
-                  <Link href="/courses">Courses</Link>
-                </nav>
-                <ModeToggle />
-              </div>
-            </header>
-            <main>{children}</main>
-            <footer
-              className={`flex flex-row my-4 items-center justify-center text-sm`}
-            >
-              <div className="mr-auto">&copy; 2023</div>
+    <body
+      className={`relative antialiased subpixel-antialiased min-h-screen bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
+    >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 
-              <nav className="flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
-                <a href="https://twitter.com/JuntaoQiu" target="_blank">
-                  <XIcon size={20} round />
-                </a>
-                <a href="https://github.com/abruzzi" target="_blank">
-                  <FaGithub size={20} />
-                </a>
-                <a href="https://www.linkedin.com/in/juntaoqiu/" target="_blank">
-                  <FaLinkedin size={20} />
-                </a>
-              </nav>
-            </footer>
+
+      <div className="max-w-4xl mx-auto pt-10 pb-20 px-4">
+
+        <header>
+          <div className="flex items-center justify-between">
+            <Logo />
+            <nav className="ml-auto mr-4 text-lg font-medium space-x-6">
+              <Link href="/posts" className={`hover:text-brand transition-colors duration-200`}>Posts</Link>
+              <Link href="/books" className={`hover:text-brand transition-colors duration-200`}>Books</Link>
+              <Link href="/courses" className={`hover:text-brand transition-colors duration-200`}>Courses</Link>
+            </nav>
+            <ModeToggle />
           </div>
-          <Analytics />
-          <BackToTop />
-        </ThemeProvider>
-      </body>
+        </header>
+
+        <main>{children}</main>
+        <footer
+          className={`flex flex-row my-4 items-center justify-center text-sm`}
+        >
+          <div className="mr-auto">&copy; 2023</div>
+
+          <nav className="flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
+            <a href="https://twitter.com/JuntaoQiu" target="_blank">
+              <XIcon size={20} round/>
+            </a>
+            <a href="https://github.com/abruzzi" target="_blank">
+              <FaGithub size={20}/>
+            </a>
+            <a href="https://www.linkedin.com/in/juntaoqiu/" target="_blank">
+              <FaLinkedin size={20}/>
+            </a>
+          </nav>
+        </footer>
+      </div>
+      <Analytics/>
+      <BackToTop/>
+    </ThemeProvider>
+    </body>
     </html>
-  );
+);
 }

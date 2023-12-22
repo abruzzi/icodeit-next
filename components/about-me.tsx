@@ -6,7 +6,7 @@ const inter = Inter({ weight: "400", subsets: ["latin"] });
 
 const AboutMe = () => {
   return (
-    <div className="flex flex-col items-center text-center space-y-4 py-12 text-lg leading-normal sm:flex-row sm:text-left sm:items-center sm:space-y-0 sm:space-x-4">
+    <div className="flex flex-col items-center text-center space-y-4 py-16 text-lg leading-normal sm:flex-row sm:text-left sm:items-center sm:space-y-0 sm:space-x-4">
       <div className="w-32 h-32">
         <Image
           src="/juntao.qiu.avatar.png"
