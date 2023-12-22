@@ -7,7 +7,7 @@ import {
   useScroll,
   Variants,
 } from "framer-motion";
-import {BiUpArrow} from "react-icons/bi";
+import { BiUpArrowAlt } from "react-icons/bi";
 
 const ScrollToTopContainerVariants: Variants = {
   hide: { opacity: 0, y: 100 },
@@ -40,7 +40,7 @@ const BackToTop = () => {
       animate={controls}
       onClick={scrollToTop}
     >
-      <BiUpArrow size={16} />
+      <BiUpArrowAlt size={16} />
     </motion.button>
   );
 };
