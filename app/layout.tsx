@@ -9,6 +9,7 @@ import { Logo } from "@/components/logo";
 import { BackToTop } from "@/components/back-to-top";
 import {LinkedinIcon, XIcon} from "react-share";
 import React from "react";
+import {FaGithub, FaLinkedin} from "react-icons/fa6";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -77,6 +78,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <nav className="flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
                 <a href="https://twitter.com/JuntaoQiu" target="_blank">
                   <XIcon size={20} round />
+                </a>
+                <a href="https://github.com/abruzzi" target="_blank">
+                  <FaGithub size={20} />
+                </a>
+                <a href="https://www.linkedin.com/in/juntaoqiu/" target="_blank">
+                  <FaLinkedin size={20} />
                 </a>
               </nav>
             </footer>

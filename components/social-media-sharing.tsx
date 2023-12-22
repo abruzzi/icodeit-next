@@ -8,6 +8,7 @@ import {
 } from "react-share";
 import React from "react";
 import type { Post } from "contentlayer/generated";
+import { FaLinkedin } from "react-icons/fa6";
 
 const SocialMediaSharing = ({ post }: { post: Post }) => {
   return (
@@ -17,7 +18,7 @@ const SocialMediaSharing = ({ post }: { post: Post }) => {
         summary={post.description}
         url={`https://icodeit.com.au${post.slug}`}
       >
-        <LinkedinIcon size={20} round />
+        <FaLinkedin size={20} />
       </LinkedinShareButton>
 
       <TwitterShareButton
