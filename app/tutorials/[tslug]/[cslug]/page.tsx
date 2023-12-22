@@ -11,17 +11,19 @@ import React from "react";
 import { Subscribe } from "@/components/subscribe";
 import readingDuration from "reading-duration";
 import { SocialMediaSharing } from "@/components/social-media-sharing";
+import Link from "next/link";
+import {GrNext, GrPrevious} from "react-icons/gr";
+import {Navigation} from "@/components/navigation";
 
-interface PostProps {
+interface ChapterProps {
   params: {
-    slug: string[];
+    tslug: string;
+    cslug: string;
   };
 }
 
-async function getChapterFromParams(params: PostProps["params"]) {
-  console.log(params);
-  `tutorail-slug`
-  const slug = `${params?[]}` params?.slug?.join("/");
+async function getChapterFromParams(params: ChapterProps["params"]) {
+  const slug = `${params?.tslug}/${params?.cslug}`;
   const chapter = allChapters.find((post) => post.slugAsParams === slug);
 
   if (!chapter) {
@@ -32,8 +34,8 @@ async function getChapterFromParams(params: PostProps["params"]) {
 }
 
 export async function generateMetadata({
-                                         params,
-                                       }: PostProps): Promise<Metadata> {
+  params,
+}: ChapterProps): Promise<Metadata> {
   const chapter = await getChapterFromParams(params);
 
   if (!chapter) {
@@ -68,10 +70,16 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams(): Promise<PostProps["params"][]> {
-  return allChapters.map((chapter) => ({
-    slug: chapter.slugAsParams.split("/"),
-  }));
+export async function generateStaticParams(): Promise<
+  ChapterProps["params"][]
+> {
+  return allChapters.map((chapter) => {
+    let slugs = chapter.slugAsParams.split("/");
+    return {
+      tslug: slugs[0],
+      cslug: slugs[1],
+    };
+  });
 }
 
 const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
@@ -112,7 +120,7 @@ const AuthorInfo = ({ duration }: { duration: string }) => {
   );
 };
 
-export default async function Chapter({ params }: PostProps) {
+export default async function Chapter({ params }: ChapterProps) {
   const chapter = await getChapterFromParams(params);
 
   if (!chapter) {
@@ -143,7 +151,11 @@ export default async function Chapter({ params }: PostProps) {
 
       <hr className="my-8" />
 
+      <Navigation chapter={chapter} />
+
       <Mdx code={chapter.body.code} />
+
+      <Navigation chapter={chapter} />
 
       <Subscribe />
     </article>

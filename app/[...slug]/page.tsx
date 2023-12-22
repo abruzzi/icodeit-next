@@ -75,7 +75,7 @@ export default async function PagePage({ params }: PageProps) {
   }
 
   return (
-    <article className="max-w-4xl py-16 mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+    <article className="max-w-sm md:max-w-3xl lg:max-w-4xl py-16 mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <h1 className={`py-6`}>{page.title}</h1>
       {page.description && <p className={`font-light`}>{page.description}</p>}
       <hr />

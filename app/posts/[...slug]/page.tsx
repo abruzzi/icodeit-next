@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { allPosts } from "contentlayer/generated";
+import { allPosts, Post } from "contentlayer/generated";
 
 import { Metadata } from "next";
 import { Mdx } from "@/components/supporting/mdx-components";
@@ -10,7 +10,6 @@ import Image from "next/image";
 import React from "react";
 import { Subscribe } from "@/components/subscribe";
 import readingDuration from "reading-duration";
-import { LinkedinIcon, LinkedinShareButton } from "react-share";
 import { SocialMediaSharing } from "@/components/social-media-sharing";
 
 interface PostProps {
@@ -67,13 +66,45 @@ export async function generateMetadata({
   };
 }
 
+type HeadingType = {
+  level: string;
+  text: string;
+  slug: string;
+};
+
+const TOC = ({ post }: { post: Post }) => {
+  return (
+    <nav className={`order-last hidden shrink-0 lg:block py-32 sticky`}>
+      <h3 className={`text-brand uppercase tracking-wide`}>On this page</h3>
+      <div>
+        {post.headings.map((heading: HeadingType) => {
+          return (
+            <div key={`#${heading.slug}`} className={`py-0.5 text-xs font-light text-slate-600 hover:text-slate-800 dark:text-slate-400 hover:dark:text-slate-300 transition-colors duration-200`}>
+              <a
+                className="data-[level=two]:pl-4 data-[level=three]:pl-8"
+                data-level={heading.level}
+                href={`${post.slug}#${heading.slug}`}
+              >
+                {heading.text}
+              </a>
+            </div>
+          );
+        })}
+      </div>
+    </nav>
+  );
+};
+
 export async function generateStaticParams(): Promise<PostProps["params"][]> {
   return allPosts.map((post) => ({
     slug: post.slugAsParams.split("/"),
   }));
 }
 
-const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
+const merriweather = Merriweather({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 const Avatar = () => {
   return (
@@ -124,28 +155,31 @@ export default async function PostPage({ params }: PostProps) {
   });
 
   return (
-    <article className="relative max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
-      <time
-        dateTime={post.date}
-        className={`text-sm text-slate-700 dark:text-slate-400`}
-      >
-        {formatRelative(post.date, new Date())}
-      </time>
-      <h1 className={`my-10 ${merriweather.className}`}>{post.title}</h1>
-      {post.description && (
-        <p className="text-lg font-light italic mt-0 text-slate-700 dark:text-slate-200">
-          {post.description}
-        </p>
-      )}
+    <>
+      <article className="max-w-sm md:max-w-3xl lg:max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+        <time
+          dateTime={post.date}
+          className={`text-sm text-slate-700 dark:text-slate-400`}
+        >
+          {formatRelative(post.date, new Date())}
+        </time>
+        <h1 className={`my-10 ${merriweather.className}`}>{post.title}</h1>
+        {post.description && (
+          <p className="text-lg font-light italic mt-0 text-slate-700 dark:text-slate-200">
+            {post.description}
+          </p>
+        )}
 
-      <AuthorInfo duration={readingTime} />
+        <AuthorInfo duration={readingTime} />
 
-      <hr className="my-8" />
+        <hr className="my-8" />
 
-      <Mdx code={post.body.code} />
+        <Mdx code={post.body.code} />
 
-      <SocialMediaSharing post={post} />
-      <Subscribe />
-    </article>
+        <SocialMediaSharing post={post} />
+        <Subscribe />
+      </article>
+      <TOC post={post} />
+    </>
   );
 }

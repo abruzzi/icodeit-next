@@ -57,12 +57,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body
-        className={`relative antialiased subpixel-antialiased min-h-screen bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
+        className={`subpixel-antialiased min-h-screen bg-no-repeat bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="max-w-4xl mx-auto pt-10 pb-20 px-4">
+          <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto pt-10 pb-20 px-4">
             <Header />
-            <main>{children}</main>
+            <main className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>{children}</main>
             <Footer />
           </div>
           <Analytics />

@@ -1,8 +1,15 @@
-# Week 1: Game News - Game Insider
+---
+title: "Week 1: Game News - Game Insider"
+description: "As an application grows and more code is added, the initial loading time can become noticeably longer. This delay, sometimes lasting several seconds, can frustrate users. To avoid this, it's essential to optimize loading times."
+date: 2023-12-22T17:46:12+11:00
+tutorialId: "3-web-designs-in-3-weeks"
+prev: "introduction"
+next: "week-2"
+---
 
 In week one, we will work together to implement a page in HTML and CSS. This [mockup](https://dribbble.com/shots/19038057-Game-News-Main-Page) by designer Roman Zakhareko about game news was published on Dirbbble. It was chosen because it contains many essential elements, such as the navigation bar, the hero banner, a list with images and text, etc. Understanding how these elements are implemented in HTML and CSS will help us to implement any other more complex pages in the future.
 
-![Design By Roman Zakhareko](week-1/game-insider.png)
+![Design By Roman Zakhareko](/tutorials/3-web-designs-in-3-weeks/week-1/game-insider.png)
 
 In addition, this mockup is relatively simple in general and contains a limited amount of elements. This allows us to intersperse the implementation of the page with an introduction to some useful tools. Such as how to select colours from the mockup, how to use icons in HTML, how to edit code in real-time. The use and configuration of these tools is also crucial to implementing our other two designs in the following two weeks.
 
@@ -18,25 +25,25 @@ In this book, we will be using [Visual Studio Code](https://code.visualstudio.co
 
 After downloading the platform-specific installation package and installing it, you will get an interface that looks like this. (I will demonstrate with the Mac version in this book.)
 
-![Visual Studio Code](week-1/vscode.png)
+![Visual Studio Code](/tutorials/3-web-designs-in-3-weeks/week-1/vscode.png)
 
 Before we can start, we need to install one Code extension: [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) (by Ritwick Dey). Once installed, Live Server will launch a local HTTP server and monitor your HTML/CSS changes so that the corresponding page in your browser will automatically refresh as soon as an edit is made.
 
-![Live Server](week-1/live-server.png)
+![Live Server](/tutorials/3-web-designs-in-3-weeks/week-1/live-server.png)
 
 After installation, you will see a new icon in the status bar.
 
-![Live Server Installed](week-1/live-server-installed.png)
+![Live Server Installed](/tutorials/3-web-designs-in-3-weeks/week-1/live-server-installed.png)
 
 Clicking on this icon will start a local HTTP service, and Live Server will launch your default browser and load the page.
 
-![Live Server Launched](week-1/live-server-launched.png)
+![Live Server Launched](/tutorials/3-web-designs-in-3-weeks/week-1/live-server-launched.png)
 
 ### Colour picker (optional)
 
 We will need a colour picker as the mockup doesn't come with the colors. Depending on the platform, you may need to install different applications. On Mac, the built-in tool `Digital Colour Meter` is pretty good and does the job.
 
-![Color Picker](week-1/color-picker.png)
+![Color Picker](/tutorials/3-web-designs-in-3-weeks/week-1/color-picker.png)
 
 In practice, designers usually would share the colour palette with developers so that you don't have to inspect yourself. But at other times, such as when you wish to do some exploration or when you only have the mockup on hand, the colour picker is a could be handy.
 
@@ -48,13 +55,13 @@ Today's browsers are extremely versatile. It can be a video player, a music play
 
 For example, in Chrome on Mac, you can open the DevTool by right-clicking on any web page and click `inspect` or just pressing `Cmd+Shift+I`.
 
-![Chrome Devtool](week-1/chrome-devtools.png)
+![Chrome Devtool](/tutorials/3-web-designs-in-3-weeks/week-1/chrome-devtools.png)
 
 Once in inspect mode, you can click on any element on the page to see the code. On the right-hand side, you can see the style used for the element, and you can modify them in place. Pretty amazing, right?
 
 For example, on the `Chrome` download page, you can inspect the download button and change the rounded blue button to pink and remove the rounded corners.
 
-![Chrome Download](week-1/chrome-editing.png)
+![Chrome Download](/tutorials/3-web-designs-in-3-weeks/week-1/chrome-editing.png)
 
 During our process, we will frequently use the developer tools for debugging to see the effect in real-time. Once we are happy with our changes, we can then copy them back into the editor.
 
@@ -86,7 +93,7 @@ Inside a `div` (short for `divider`, an invisible container for other elements),
 
 By default, the browser would render it as something like this:
 
-![HTML Only](week-1/html-without-css.png)
+![HTML Only](/tutorials/3-web-designs-in-3-weeks/week-1/html-without-css.png)
 
 And if we define some CSS to modify the style:
 
@@ -110,7 +117,7 @@ p {
 
 We could get something more appealing like this:
 
-![With Style One](week-1/style-1.png)
+![With Style One](/tutorials/3-web-designs-in-3-weeks/week-1/style-1.png)
 
 Don't worry if you don't understand everything at the moment, I'll have you covered. If we apply another style set like:
 
@@ -134,7 +141,7 @@ p {
 
 With no changes to the HTML, we get a completely different picture of the presentation simply by changing the CSS.
 
-![With Style Two](week-1/style-2.png)
+![With Style Two](/tutorials/3-web-designs-in-3-weeks/week-1/style-2.png)
 
 Here I have deliberately ignored the place of JavaScript in our projects (which is crucial in any serious web applications), as this book is primarily concerned with the combination of HTML and CSS. Additionally, `JavaScript` alone has become very rare in web development, and people are more or less need libraries or frameworks such as React or AngularJS for web applications.
 
@@ -144,7 +151,7 @@ One of the core functions of CSS is to provide layout for page elements, and at 
 
 When viewing a particular element in your browser's DevTool, you may have noticed a small set of boxes in the bottom right-hand corner of the page:
 
-![Bbox Model](week-1/box-models.png)
+![Bbox Model](/tutorials/3-web-designs-in-3-weeks/week-1/box-models.png)
 
 The space that an element occupies on the page is made up of several components: the content of the element itself, the distance from the content to the border: the inner spacing (padding), the width of the border, and the outer spacing between the border and other elements (margin).
 
@@ -162,7 +169,7 @@ You can either write all the HTML at once or implement one module, add styles to
 
 As seen from the mockup, the navigation part of it is a relatively independent component, so we can start from it. Let's do some preparatory work first, create a directory `week-1`, and create two files `index.html` and `style.css` in it. Finally, we create a subdirectory of `assets` in `week-1` for image resources.
 
-![Folder Structure](week-1/folder-structure.png)
+![Folder Structure](/tutorials/3-web-designs-in-3-weeks/week-1/folder-structure.png)
 
 In `index.html` we need to set some basic HTML code, aka boilerplate HTML:
 
@@ -230,7 +237,7 @@ For the navigation bar, HTML has a `nav` tag available, and for the list content
 
 There are seven items in the navigation bar. Five hyperlinks are in the middle, and the first one is an icon and the last one is a button. To help CSS to select specific elements, we need to add the attribute like `class= "xxx"` (and use `.xxx` to refer it) to some elements.
 
-![Without Style](week-1/navigation-html.png)
+![Without Style](/tutorials/3-web-designs-in-3-weeks/week-1/navigation-html.png)
 
 By default, browsers add a bullets to all `li`s, as well as some spacing to `ul` for easier reading. Browsers always assume that the page is usable without any CSS. We need to override these default styles via CSS:
 
@@ -250,7 +257,7 @@ li {
 }
 ```
 
-![Reset Default Styles](week-1/after-reset.png)
+![Reset Default Styles](/tutorials/3-web-designs-in-3-weeks/week-1/after-reset.png)
 
 Here, `*` is a special selector, which means to select all HTML elements on the page. And for all these selected elements, we apply two rules, `margin:0` to eliminate the outer space, that is, no outer padding; `padding:0` means eliminate padding, that is, there is no space between the element content and the border.
 
@@ -265,7 +272,7 @@ nav {
 }
 ```
 
-![Center Aligned](week-1/center-aligned.png)
+![Center Aligned](/tutorials/3-web-designs-in-3-weeks/week-1/center-aligned.png)
 
 Next, we want the seven elements in the navigation to be arranged horizontally, not vertically. Here we have to mention two different elements in HTML: `block-level` elements and `inline` elements (strictly speaking, there are more than two in HTML, but we will only describe the two most common ones here). Block-level elements occupy a single line by default, no matter how wide their actual content is. Inline elements keep the content on the same line.
 
@@ -284,7 +291,7 @@ Next, we want the seven elements in the navigation to be arranged horizontally, 
 
 For example, since `p` is a block-level element by default, it will be on its own line. And `span` will stay on the same line. Since most HTML elements are block-level elements, they render as many lines by default.
 
-![Block and Inline](week-1/block-vs-inline.png)
+![Block and Inline](/tutorials/3-web-designs-in-3-weeks/week-1/block-vs-inline.png)
 
 We can use `flex` layout to override this default behaviour. `flex` one of the layout machenism in CSS. I'm not going to cover all `flex` properties here (because that is almost a book in itself), and we will only cover a few common ones here.
 
@@ -298,7 +305,7 @@ First, to use the `flex` layout, we need a container element, and then set the c
 
 Immediately, all elements became one line like a magic!
 
-![Flex Layout](week-1/flex-init.png)
+![Flex Layout](/tutorials/3-web-designs-in-3-weeks/week-1/flex-init.png)
 
 Next, we make some spacing adjustments, making sure the `Login` button is on the right, and the logo is on the left, and the other links are relatively centred:
 
@@ -314,7 +321,7 @@ Next, we make some spacing adjustments, making sure the `Login` button is on the
 
 The `.list-item:last-child` selector here will select the last child node with the class `.list-item`, and similarly, `:first-child` will select the first child.
 
-![With Space in Between](week-1/with-space-in-between.png)
+![With Space in Between](/tutorials/3-web-designs-in-3-weeks/week-1/with-space-in-between.png)
 
 For hyperlinks, browsers will add a lot of styles by default, such as the underline and bright font colours. According to the mockup, we need to override these styles as well:
 
@@ -329,7 +336,7 @@ For hyperlinks, browsers will add a lot of styles by default, such as the underl
 
 The `.list-item a` selector means to look for the `a` (hyperlink) tag in the child nodes of `.list-item`. CSS selectors are parsed from right to left, this selector when interpreted will first look for all `a`, then see if there is `.list-item` in its ancestor node, and then decide whether to apply these CSS rules or not.
 
-![Anchors](week-1/restyling-anchors.png)
+![Anchors](/tutorials/3-web-designs-in-3-weeks/week-1/restyling-anchors.png)
 
 Next, let's customise the button, which has rounded corners and some white space between the text and its border. White space is very important in design. Enough white space can make reading easier and make the page more attracting.
 
@@ -356,7 +363,7 @@ Usually, the logo will be an image element, but we simply use some texts to simu
 
 In this way, the logo looks the same as the mockup.
 
-![Button](week-1/button.png)
+![Button](/tutorials/3-web-designs-in-3-weeks/week-1/button.png)
 
 But if you look closely at the button, it doesn't align with other elements (like the red line in the image above). Alignment is another extremely important principle in design (we'll cover that in chapter three), and our brains prefer neat arrangements over disorder. In fact, horizontally aligning elements inside a container has historically been super difficult, but this problem is easily solved using `flex` layout.
 
@@ -381,11 +388,11 @@ Also, let's add some extra whitespace to the navigation bar to give him more bre
 
 Here is how the "final" navigation bar looks like now:
 
-![Navigation List](week-1/navigation-final.png)
+![Navigation List](/tutorials/3-web-designs-in-3-weeks/week-1/navigation-final.png)
 
 We are now very close to the mockup, although it's not pixel prefect. Even better, using the `flex` layout, our navbar will still work well on wider screens, like the button will always be on the right side of the page, pretty cool right?
 
-![In Wider Screen](week-1/wider-screen.png)
+![In Wider Screen](/tutorials/3-web-designs-in-3-weeks/week-1/wider-screen.png)
 
 ### Implementing the Hero Banner
 
@@ -421,7 +428,7 @@ Also, don't use `div` unless necessary. Usually, though, the two are used interc
 
 Before any styles, this part looks like this:
 
-![HTML of Hero Section](week-1/hero-html-only.png)
+![HTML of Hero Section](/tutorials/3-web-designs-in-3-weeks/week-1/hero-html-only.png)
 
 To make the two `block-level` elements `brief` and `media` line up horizontally, what method should we use? That's right, like the navbar, we can set the container `hero-section` to be a `flex` container:
 
@@ -436,7 +443,7 @@ To make the two `block-level` elements `brief` and `media` line up horizontally,
 
 Well, the horizontal arrangement is fine, but the width of the two parts seems to be uneven. The image part occupies more space, and the text is pushed to the left. We need them be half and half distributed:
 
-![Flex Initial Attemp](week-1/hero-flex-init.png)
+![Flex Initial Attemp](/tutorials/3-web-designs-in-3-weeks/week-1/hero-flex-init.png)
 
 At this time, we need to use the `flex:1` rule for both elements in the container and set the width of `100%` for the image instead of the default width so that the image will fill the available width of its container (the `.game-cover`):
 
@@ -452,7 +459,7 @@ At this time, we need to use the `flex:1` rule for both elements in the containe
 
 Note there is a new CSS syntax here: `>`. This symbol represents the immediate child node of the selected `.hero-section`. Without this direct operator, `.hero-section section` would select all `section`s inside `.hero-section`, no matter how deep it is.
 
-![Flex Evenly](week-1/hero-flex-evenly.png)
+![Flex Evenly](/tutorials/3-web-designs-in-3-weeks/week-1/hero-flex-evenly.png)
 
 The `flex:1` here needs some extra explanation too. This is a typical CSS abbreviation, and its full form is:
 
@@ -479,7 +486,7 @@ We can illustrate the relationship between these attributes through a concrete e
 
 In the beginning, we set `container` as a flex container, and their child nodes `box` are automatically flex elements. But since the length of each word is not the same, the arrangement of the four boxes is like this:
 
-![Default settings](week-1/flex-demo-init.png)
+![Default settings](/tutorials/3-web-designs-in-3-weeks/week-1/flex-demo-init.png)
 
 ```css
 .container {
@@ -512,7 +519,7 @@ We set the `flex-grow` of all divs with `box` class to 1, which means they have 
 
 At this point, they will fill the entire container and share the space evenly:
 
-![Distributed Evenly](week-1/flex-demo-flex-1.png)
+![Distributed Evenly](/tutorials/3-web-designs-in-3-weeks/week-1/flex-demo-flex-1.png)
 
 If we set different growth factor for some elements:
 
@@ -530,7 +537,7 @@ If we set different growth factor for some elements:
 
 Then when the container space is sufficient, the first and fourth elements will grow faster than the other elements (as they have large `flex-grow` proportion).
 
-![Grow faster](week-1/flex-demo-flex-grow-faster.png)
+![Grow faster](/tutorials/3-web-designs-in-3-weeks/week-1/flex-demo-flex-grow-faster.png)
 
 `flex-shrink` is quite the opposite of `flex-grow`. When the width of the flex container is less than the sum of the widths of all flex items, `flex-shrink` defines the ratio by which each element shrinks.
 
@@ -554,7 +561,7 @@ Then when the container space is sufficient, the first and fourth elements will 
 
 For example, in this example, we set `flex-basis` to 50%, that is, each flex element shrinks or stretches from 50% of the parent element. Obviously, because there are four elements in the container, the overall length exceeds the container, so `flex-shrink` takes effect, and the result is that the second and third elements shrink faster than the other two and are, therefore smaller:
 
-![Shrink Faster](week-1/flex-demo-flex-shrink-faster.png)
+![Shrink Faster](/tutorials/3-web-designs-in-3-weeks/week-1/flex-demo-flex-shrink-faster.png)
 
 #### Polishing the homepage banner
 
@@ -587,7 +594,7 @@ For customising the button and the navigation bar, we used the colour picker to 
 
 We use `appearance: none` here to reset the browser's default style and then add rounded corners, background colour and font colour to it.
 
-![Left Side of Hero Area](week-1/hero-left-side.png)
+![Left Side of Hero Area](/tutorials/3-web-designs-in-3-weeks/week-1/hero-left-side.png)
 
 For the right side of the banner, we noticed that rating content overlaid on the image in the mockup. This effect of **cascading** of content requires a little explanation.
 
@@ -629,7 +636,7 @@ Finally, we made a little adjustment to the corners of the image to make the imp
 
 This results in an image with rounded corners, and a circle with a radius of 32 pixels:
 
-![Final Touch](week-1/hero-final-touch.png)
+![Final Touch](/tutorials/3-web-designs-in-3-weeks/week-1/hero-final-touch.png)
 
 Congratulations, we have completed the second major part of the page. Here we learned some details of `flex` layout to achieve an even distribution of elements in a flex container, and we also learned to use absolute positioning (`position: absolute`) and relative positioning (`position: relative`) to make elements Layer up to make it more visually pleasing.
 
@@ -663,7 +670,7 @@ The news list is relatively straightforward, consisting of a title and four arti
 
 Note the new tag we use here, `article`. `article` represents a standalone entity, such as a piece of news, a tweet, a blog, etc. When writing HTML, we also need to consider how to make the content semantic, meaning one can read the HTML code directly in the editor. Many web pages were filled with redundant and meaningless tags in the early days (and today as well). When we write a page, we need to consider the readability and maintainability from the very beginning.
 
-![HTML Done](week-1/news-html.png)
+![HTML Done](/tutorials/3-web-designs-in-3-weeks/week-1/news-html.png)
 
 Well, that doesn't look very appealing. Let's add some styles to it.
 
@@ -685,11 +692,11 @@ Well, that doesn't look very appealing. Let's add some styles to it.
 
 After adding `flex:1`, the news lines up correctly:
 
-![Without images](week-1/news-flex.png)
+![Without images](/tutorials/3-web-designs-in-3-weeks/week-1/news-flex.png)
 
 Now let's find some real game covers to make it looks authentic.
 
-![With images](week-1/news-images-broken.png)
+![With images](/tutorials/3-web-designs-in-3-weeks/week-1/news-images-broken.png)
 
 Oops, the whole page seems to be messed up! But don't worry. You only need to specify the size of the image as a percentage so that the image will automatically scale to its container size:
 
@@ -702,7 +709,7 @@ Oops, the whole page seems to be messed up! But don't worry. You only need to sp
 
 The picture scales correctly now:
 
-![Resizing image](week-1/news-images-resized.png)
+![Resizing image](/tutorials/3-web-designs-in-3-weeks/week-1/news-images-resized.png)
 
 In addition, we noticed that the font was too thick and larger than in the mockup, also the spacing between the title and the image was too close.
 
@@ -721,7 +728,7 @@ h4 {
 
 And now the final result is like:
 
-![News Section](week-1/news-final.png)
+![News Section](/tutorials/3-web-designs-in-3-weeks/week-1/news-final.png)
 
 Looks much better, doesn't it? This completes most of the content of this page. There are some parts that I have deliberately omitted, such as the use of icons, the shadows of buttons. These topics will be covered in conjunction with design in the following chapters.
 
@@ -733,7 +740,7 @@ How to publish your page on a public platform, so anyone anywhere in the world c
 
 If you don't want to install some extra software on your machine, then `Netlify` will be easier. After registering an account, you only need to drag and drop the local directory `week-1` to its website. After a few minutes `Netlify` will complete the deployment and provide you with a URL that you can share with others, pretty straightforward.
 
-![Drag and Drop in Netlify](week-1/netlify.png)
+![Drag and Drop in Netlify](/tutorials/3-web-designs-in-3-weeks/week-1/netlify.png)
 
 Additionally, we'll cover a little bit about using `Surge` to publish your work here. First, you need to install [`Node.js`](https://nodejs.org/en/). After the installation, you will have the `npm` package manager in your command line.
 
@@ -752,11 +759,11 @@ surge
 
 At this time, `surge` will prompt you to log in or create an account, and then it will randomly assign a domain name to you and complete the deployment.
 
-![Run Surge Command Line Tool](week-1/surge-command-line.png)
+![Run Surge Command Line Tool](/tutorials/3-web-designs-in-3-weeks/week-1/surge-command-line.png)
 
 You can now access the URL in public network or share it to others.
 
-![Our Site is Published](week-1/published.png)
+![Our Site is Published](/tutorials/3-web-designs-in-3-weeks/week-1/published.png)
 
 ## Summary
 
