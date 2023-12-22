@@ -127,6 +127,10 @@ export const Chapter = defineDocumentType(() => ({
       type: "date",
       required: true,
     },
+    order: {
+      type: "number",
+      required: true
+    },
     tutorialId: { type: "string", required: true },
     category: {
       type: "string",

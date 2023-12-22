@@ -16,6 +16,12 @@ const Header = () => {
             Posts
           </Link>
           <Link
+            href="/tutorials"
+            className={`hidden md:inline hover:text-brand transition-colors duration-200`}
+          >
+            Tutorials
+          </Link>
+          <Link
             href="/books"
             className={`hover:text-brand transition-colors duration-200`}
           >
@@ -23,7 +29,7 @@ const Header = () => {
           </Link>
           <Link
             href="/courses"
-            className={`hover:text-brand transition-colors duration-200`}
+            className={`hidden md:inline hover:text-brand transition-colors duration-200`}
           >
             Courses
           </Link>

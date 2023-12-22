@@ -1,0 +1,70 @@
+---
+order: 7
+title: "Week 1: Publish your design"
+description: "Hero Banner"
+date: 2023-12-22T17:46:12+11:00
+tutorialId: "3-web-designs-in-3-weeks"
+prev: "introduction"
+next: "week-2"
+---
+
+## Publish your design
+
+Congratulations, you have completed your first reproduction from the mockup. I believe you are very satisfied with your work, you really should. So let us share this joy with your friends!
+
+How to publish your page on a public platform, so anyone anywhere in the world can access it? We can do this with tools like [Netlify](https://www.netlify.com/) or [Surge](https://surge.sh/).
+
+If you don't want to install some extra software on your machine, then `Netlify` will be easier. After registering an account, you only need to drag and drop the local directory `week-1` to its website. After a few minutes `Netlify` will complete the deployment and provide you with a URL that you can share with others, pretty straightforward.
+
+![Drag and Drop in Netlify](/tutorials/3-web-designs-in-3-weeks/week-1/netlify.png)
+
+Additionally, we'll cover a little bit about using `Surge` to publish your work here. First, you need to install [`Node.js`](https://nodejs.org/en/). After the installation, you will have the `npm` package manager in your command line.
+
+Now, let's install the command line tool of `surge`. You need to execute it in the Terminal program:
+
+```sh
+npm install --global surge
+```
+
+Then go to your working directory, which is `week-1`:
+
+```sh
+cd ~/tutorial/3w3ps/week-1
+surge
+```
+
+At this time, `surge` will prompt you to log in or create an account, and then it will randomly assign a domain name to you and complete the deployment.
+
+![Run Surge Command Line Tool](/tutorials/3-web-designs-in-3-weeks/week-1/surge-command-line.png)
+
+You can now access the URL in public network or share it to others.
+
+![Our Site is Published](/tutorials/3-web-designs-in-3-weeks/week-1/published.png)
+
+## Summary
+
+This week, we learned how to deconstruct a mockup and write corresponding HTML documents, learned how to use the `flex` layout to implement the navigation bar, and how to control the even distribution of elements, and learned how to use absolute positioning to elements that out of the document flow, as well as some other common typography techniques (like using `padding` and `margin`), etc.
+
+I'm sure you can't wait to do something with your new achieved skills, so here are some interesting challenges.
+
+## Challenges
+
+### Challenge 1
+
+Find a website you visit frequently, and use Chrome's DevTool to inspect the site's navigation bar. See what knowledge we discussed above and what knowledge is new to you. In addition, you can try to reimplement the navigation bar by the method we introduce here.
+
+1. Write semantic HTML tags
+1. Layout with `flex`
+1. Adjust typography with margin and padding
+
+### Challenge 2
+
+Inspect your favourite website's Landing Page, analyse its font and layout, then try to replicate it locally. You might want to pay attention to these:
+
+1. Write semantic HTML tags
+1. Use of fonts
+1. The combination of background colour and foreground colour
+1. Use `flex` layout
+1. Adjust typography with margin and padding
+
+In the next week, we will learn more about `flex` layout, in the vertical direction, using grids for more complex layouts, and layouting elements of different heights. We'll also cover how to use external fonts and icons to make pages more interesting.

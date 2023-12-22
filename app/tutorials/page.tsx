@@ -5,6 +5,7 @@ import React from "react";
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/subscribe";
 import Link from "next/link";
+import { TutorialCard } from "@/components/tutorial-card";
 
 export const metadata = {
   title: "I Code It",
@@ -46,18 +47,21 @@ export default function Tutorials() {
     <div className="max-w-4xl py-16 mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <h1 className={`py-6`}>All Tutorials</h1>
 
+      <p className={`font-light`}>
+        In certain scenarios, a detailed, step-by-step guide is essential for
+        implementing projects, whether big or small, from scratch. These
+        comprehensive tutorials, which I have developed, cover various aspects
+        of Web Development. Ranging from basic fundamentals to advanced topics,
+        these tutorials are designed to be beneficial as you actively follow and
+        apply them.
+      </p>
+
       <hr />
 
       {allTutorials
         .sort((a, b) => compareDesc(a.date, b.date))
         .map((tutorial) => (
-          <Link key={tutorial._id} href={tutorial.slug} className={`no-underline`}>
-            <h2
-              className={`my-2 hover:text-brand transition-colors duration-2`}
-            >
-              {tutorial.title}
-            </h2>
-          </Link>
+          <TutorialCard tutorial={tutorial} key={tutorial._id} />
         ))}
 
       <Subscribe />
