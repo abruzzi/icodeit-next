@@ -2,9 +2,8 @@ import { allChapters } from "@/.contentlayer/generated";
 
 import React from "react";
 
-import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/subscribe";
-import Link from "next/link";
+import { ChapterCard } from "@/components/chapter-card";
 
 export const metadata = {
   title: "I Code It",
@@ -44,20 +43,14 @@ export const metadata = {
 export default function Tutorial() {
   return (
     <div className="max-w-4xl py-16 mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
-      <h1 className={`py-6`}>All Tutorials</h1>
+      <h1 className={`py-6`}>Chapters</h1>
 
       <hr />
 
       {allChapters
-        .sort((a, b) => compareDesc(a.date, b.date))
+        .sort((a, b) => a.order - b.order)
         .map((chapter) => (
-          <Link key={chapter._id} href={chapter.slug} className={`no-underline`}>
-            <h2
-              className={`my-2 hover:text-brand transition-colors duration-2`}
-            >
-              {chapter.title}
-            </h2>
-          </Link>
+          <ChapterCard key={chapter._id} chapter={chapter} />
         ))}
 
       <Subscribe />

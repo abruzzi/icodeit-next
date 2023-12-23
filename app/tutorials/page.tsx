@@ -10,7 +10,7 @@ import { TutorialCard } from "@/components/tutorial-card";
 export const metadata = {
   title: "I Code It",
   description:
-    "I Code It is focusing on maintainable React code and masterful use of frontend technologies like Refactoring and Test-Driven Development.",
+    "Explore our extensive collection of step-by-step web development tutorials. From basic fundamentals to advanced techniques, find the perfect guide to enhance your skills and efficiently tackle projects of any size. Ideal for developers at all levels seeking practical, actionable insights.",
   keywords:
     "Software Engineering, Developer growth, Maintainable React, React, Test-Driven Development, Frontend development, coding best practices, software design patterns, I Code It",
   author: "Juntao Qiu",
@@ -18,9 +18,7 @@ export const metadata = {
   openGraph: {
     title: "I Code It",
     description:
-      "In this blog, I share insights on software development, focusing on design principles and patterns to address\n" +
-      "        complex business challenges. Topics like refactoring, test-driven development, and pair programming are covered,\n" +
-      "        emphasizing how they contribute to more maintainable and enjoyable coding practices.",
+      "Explore our extensive collection of step-by-step web development tutorials. From basic fundamentals to advanced techniques, find the perfect guide to enhance your skills and efficiently tackle projects of any size. Ideal for developers at all levels seeking practical, actionable insights.",
     url: "https://icodeit.com.au/posts",
     // @ts-ignore
     type: "website",

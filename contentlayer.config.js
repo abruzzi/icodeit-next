@@ -7,7 +7,6 @@ import rehypeToc from "@jsdevtools/rehype-toc";
 
 import GithubSlugger from "github-slugger";
 
-
 import { rehypePrettyCodeOptions } from "./lib/rehype-pretty-code";
 import { rehypeTOCSettings } from "./lib/rehype-toc-options";
 
@@ -123,13 +122,18 @@ export const Chapter = defineDocumentType(() => ({
       type: "string",
       required: true,
     },
+    highlights: {
+      type: "list",
+      of: { type: "string" },
+      required: true,
+    },
     date: {
       type: "date",
       required: true,
     },
     order: {
       type: "number",
-      required: true
+      required: true,
     },
     tutorialId: { type: "string", required: true },
     category: {
@@ -152,9 +156,6 @@ export default makeSource({
   contentDirPath: "./content",
   documentTypes: [Post, Page, Tutorial, Chapter],
   mdx: {
-    rehypePlugins: [
-      rehypeSlug,
-      [rehypePrettyCode, rehypePrettyCodeOptions],
-    ],
+    rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions]],
   },
 });

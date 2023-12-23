@@ -1,66 +1,40 @@
 ---
 order: 1
 title: "Introduction"
-description: "Introduction"
+description: "Welcome to our '3 Web Designs in 3 Weeks' tutorial series! This complimentary course is designed to teach you essential skills for creating a static website. We'll go beyond basic HTML to develop a static page that's ready for production use"
 date: 2023-12-22T17:46:12+11:00
 tutorialId: "3-web-designs-in-3-weeks"
 next: "setup"
+highlights:
+  - Introduce the structure of this tutorial
+  - Highlights of the knowledge covered
 ---
 
-In week one, we will work together to implement a page in HTML and CSS. This [mockup](https://dribbble.com/shots/19038057-Game-News-Main-Page) by designer Roman Zakhareko about game news was published on Dirbbble. It was chosen because it contains many essential elements, such as the navigation bar, the hero banner, a list with images and text, etc. Understanding how these elements are implemented in HTML and CSS will help us to implement any other more complex pages in the future.
+Welcome to our '3 Web Designs in 3 Weeks' tutorial series! This complimentary course is designed to teach you essential skills for creating a static website. We'll go beyond basic HTML to develop a static page that's ready for production use.
+
+This course is structured into three distinct parts, each featuring a unique small project to be completed within a week. Throughout these projects, we'll cover a wide range of essential skills and some intermediate techniques vital for everyday web page development.
+
+For example, in our first project, we will work together to implement a page from [mockup](https://dribbble.com/shots/19038057-Game-News-Main-Page) by designer Roman Zakhareko. It's a web design about game news and was published on Dirbbble. It was chosen because it contains many essential elements, such as the navigation bar, the hero banner, a list with images and text, etc. Understanding how these elements are implemented in HTML and CSS will help us to implement any other more complex pages in the future.
 
 ![Design By Roman Zakhareko](/tutorials/3-web-designs-in-3-weeks/week-1/game-insider.png)
 
 In addition, this mockup is relatively simple in general and contains a limited amount of elements. This allows us to intersperse the implementation of the page with an introduction to some useful tools. Such as how to select colours from the mockup, how to use icons in HTML, how to edit code in real-time. The use and configuration of these tools is also crucial to implementing our other two designs in the following two weeks.
 
-After this chapter, you will be able to know: how to write HTML and CSS code in Visual Studio Code editor, how to debug styles in the browser, how to deconstruct a mockup, how to use `flex` layout and how to publish your work to the public.
+Here is what we will also cover in this course:
 
-## Tools
+- **HTML & CSS 101**: Gain fundamental knowledge in building simple static pages. Understand the basics of HTML for structuring web content and CSS for styling, setting a solid foundation for more advanced topics.
 
-> To do a good job, one must first use the right tools
+- **Flex Layout in CSS**: Dive into the flexible box layout, a powerful tool in CSS for designing complex layouts more easily and with less code. Understand how to control the arrangement of elements dynamically and create responsive designs.
 
-### Editors
+- **Grid Layout in CSS**: Explore CSS Grid Layout, a two-dimensional layout system for the web. Learn how to create more sophisticated and precise layouts, enhancing your ability to design complex web pages.
 
-In this book, we will be using [Visual Studio Code](https://code.visualstudio.com/) (hereafter referred to as Code) for writing and debugging code. While there are countless editing tools out there, I have found that Code with a few popular extensions makes writing HTML and CSS easy and fun. More importantly, it is free and small enough that you don't need expensive hardware to run it. Also, you can install extensions to make Code even more efficient and customisable just for you.
+- **Box Shadowing**: Master the technique of adding shadow effects to elements using CSS. This skill enhances the visual depth and emphasis of your web components, improving the overall aesthetics of your designs.
 
-After downloading the platform-specific installation package and installing it, you will get an interface that looks like this. (I will demonstrate with the Mac version in this book.)
+- **Semantic HTML**: Understand the importance of Semantic HTML for accessibility and SEO. Learn how to use HTML5 semantic elements to create meaningful, well-structured web content.
 
-![Visual Studio Code](/tutorials/3-web-designs-in-3-weeks/week-1/vscode.png)
+- **Mobile First Approach**: Embrace the mobile-first design philosophy. Learn to design websites for mobile devices initially and then scale up to larger screens, ensuring a seamless user experience across all devices.
 
-Before we can start, we need to install one Code extension: [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) (by Ritwick Dey). Once installed, Live Server will launch a local HTTP server and monitor your HTML/CSS changes so that the corresponding page in your browser will automatically refresh as soon as an edit is made.
+- **Responsive Design**: Gain expertise in creating web pages that adapt to different screen sizes and orientations. Learn responsive design techniques, including media queries and flexible grid layouts, to ensure your websites look great on any device.
 
-![Live Server](/tutorials/3-web-designs-in-3-weeks/week-1/live-server.png)
+- **CSS Variables**: Discover the power of CSS Variables (Custom Properties) for maintaining and managing styles. Learn how to create reusable, dynamic styles that make your CSS more efficient and easier to manage.
 
-After installation, you will see a new icon in the status bar.
-
-![Live Server Installed](/tutorials/3-web-designs-in-3-weeks/week-1/live-server-installed.png)
-
-Clicking on this icon will start a local HTTP service, and Live Server will launch your default browser and load the page.
-
-![Live Server Launched](/tutorials/3-web-designs-in-3-weeks/week-1/live-server-launched.png)
-
-### Colour picker (optional)
-
-We will need a colour picker as the mockup doesn't come with the colors. Depending on the platform, you may need to install different applications. On Mac, the built-in tool `Digital Colour Meter` is pretty good and does the job.
-
-![Color Picker](/tutorials/3-web-designs-in-3-weeks/week-1/color-picker.png)
-
-In practice, designers usually would share the colour palette with developers so that you don't have to inspect yourself. But at other times, such as when you wish to do some exploration or when you only have the mockup on hand, the colour picker is a could be handy.
-
-Well, that's all we need. Let's get started on our first page.
-
-### Browsers
-
-Today's browsers are extremely versatile. It can be a video player, a music player, a reader, an image viewer or an IDE! That's right, an `IDE`, and I'm not talking about an editor such as [codepen](https://codepen.io/), but inside it is a development environment itself.
-
-For example, in Chrome on Mac, you can open the DevTool by right-clicking on any web page and click `inspect` or just pressing `Cmd+Shift+I`.
-
-![Chrome Devtool](/tutorials/3-web-designs-in-3-weeks/week-1/chrome-devtools.png)
-
-Once in inspect mode, you can click on any element on the page to see the code. On the right-hand side, you can see the style used for the element, and you can modify them in place. Pretty amazing, right?
-
-For example, on the `Chrome` download page, you can inspect the download button and change the rounded blue button to pink and remove the rounded corners.
-
-![Chrome Download](/tutorials/3-web-designs-in-3-weeks/week-1/chrome-editing.png)
-
-During our process, we will frequently use the developer tools for debugging to see the effect in real-time. Once we are happy with our changes, we can then copy them back into the editor.
