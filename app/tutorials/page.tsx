@@ -4,7 +4,6 @@ import React from "react";
 
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/subscribe";
-import Link from "next/link";
 import { TutorialCard } from "@/components/tutorial-card";
 
 export const metadata = {
