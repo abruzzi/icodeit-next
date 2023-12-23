@@ -1,16 +1,11 @@
-import Link from "next/link";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
 import { ThemeProvider } from "@/components/supporting/theme-provider";
 import { Analytics } from "@/components/supporting/analytics";
-import { ModeToggle } from "@/components/mode-toggle";
-import { Logo } from "@/components/logo";
 import { BackToTop } from "@/components/back-to-top";
 import React from "react";
 
-import { FaGithub, FaLinkedin } from "react-icons/fa6";
-import { XIcon } from "react-share";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 
@@ -62,7 +57,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto pt-10 pb-20 px-4">
             <Header />
-            <main className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>{children}</main>
+            <main className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>
+              {children}
+            </main>
             <Footer />
           </div>
           <Analytics />
