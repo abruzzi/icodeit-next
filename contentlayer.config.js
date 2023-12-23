@@ -127,6 +127,14 @@ export const Chapter = defineDocumentType(() => ({
       of: { type: "string" },
       required: true,
     },
+    leading: {
+      type: "string",
+      required: true,
+    },
+    summary: {
+      type: "string",
+      required: true,
+    },
     date: {
       type: "date",
       required: true,

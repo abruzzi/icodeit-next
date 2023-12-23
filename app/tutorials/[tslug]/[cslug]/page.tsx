@@ -13,7 +13,7 @@ import { HiOutlineCheckBadge } from "react-icons/hi2";
 import { FaAngleRight, FaBookOpen } from "react-icons/fa6";
 import Link from "next/link";
 import { GrNext } from "react-icons/gr";
-import {MdKeyboardArrowRight} from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
 
 interface ChapterProps {
   params: {
@@ -112,31 +112,35 @@ export default async function Chapter({ params }: ChapterProps) {
       <Mdx code={chapter.body.code} />
 
       <div className={`flex flex-col items-center my-12`}>
-        <div aria-hidden="true"
+        <div
+          aria-hidden="true"
           className={`w-[1px] m-auto h-20 md:h-40 bg-gradient-to-t from-transparent via-brand to-transparent`}
         ></div>
         <div
           className={`w-28 h-28 rounded-full flex items-center justify-center bg-slate-100 text-slate-900 dark:bg-slate-700 dark:text-slate-500 text-4xl font-bold`}
         >
-          {chapter.order === 1 ? <FaBookOpen size={60} /> : <span>{chapter.order}</span>}
+          {chapter.order === 1 ? (
+            <FaBookOpen size={60} />
+          ) : (
+            <span>{chapter.order}</span>
+          )}
         </div>
-        {
-          chapter.order === 1 ? <div className={`text-center`}>
-            <h2 className={`text-3xl`}>Ready to get started?</h2>
-            <p>Now that you have been introduced to the course, let&apos;s dive in.</p>
-          </div> : <div>
-            <h2 className={`text-3xl`}>You have Completed Chapter {chapter.order}</h2>
-            <p>Congratulations!.</p>
-          </div>
-        }
 
+        <div className={`text-center`}>
+          <h2 className={`text-3xl`}>
+            {chapter.order === 1
+              ? "Ready to get started?"
+              : `You have Completed Chapter ${chapter.order}`}
+          </h2>
+          <p>{chapter.summary}</p>
+        </div>
       </div>
 
       <div
         className={`max-w-lg m-auto my-8 md:my-16 border p-8 border-slate-700 dark:border-slate-600 rounded`}
       >
         <p className="text-base font-light m-0 text-slate-700 dark:text-slate-400">
-          {chapter.description}
+          {chapter.leading}
         </p>
 
         {chapter.next && (
@@ -148,7 +152,7 @@ export default async function Chapter({ params }: ChapterProps) {
               }`}
             >
               <div className={`flex flex-row items-center gap-2`}>
-                <span>Start chapter {chapter.order+1}</span>
+                <span>Start chapter {chapter.order + 1}</span>
                 <MdKeyboardArrowRight size={32} className={`ml-auto`} />
               </div>
             </Link>
