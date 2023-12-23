@@ -1,8 +1,9 @@
-import rehypeReact, {Options} from "rehype-react";
-import * as prod from "react/jsx-runtime";
-import {unified} from "unified";
+import React from "react";
+
+import { unified } from "unified";
 import remarkParse from "remark-parse";
-import remarkToRehype from "remark-rehype";
+import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
 
 type ProductType = {
   categories: string[];
@@ -13,29 +14,21 @@ type ProductType = {
   coverSize?: "small" | "medium";
 };
 
-
 export const Product = ({
   link,
   title,
   cover,
-  categories,
   children,
   coverSize = "small",
 }: ProductType) => {
   let content;
 
-  const options: Options = {
-    Fragment: prod.Fragment,
-    jsx: prod.jsx,
-    jsxs: prod.jsxs,
-  };
-
   if (typeof children === "string") {
     content = unified()
       .use(remarkParse, { fragment: true })
-      .use(remarkToRehype)
-      .use(rehypeReact, options)
-      .processSync(children).result;
+      .use(remarkRehype)
+      .use(rehypeStringify)
+      .processSync(children).toString();
   } else {
     content = children;
   }
@@ -44,8 +37,10 @@ export const Product = ({
     <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto mx-auto gap-6">
       <div className="flex-shrink-0">
         <img
-          className={`${coverSize === 'small' ? "w-44" : "w-96"}  max-w-none object-cover rounded`}
-          width={coverSize === 'small' ? 176 : 384}
+          className={`${
+            coverSize === "small" ? "w-44" : "w-96"
+          }  max-w-none object-cover rounded`}
+          width={coverSize === "small" ? 176 : 384}
           src={cover}
           alt={title}
         />

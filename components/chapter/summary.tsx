@@ -31,23 +31,24 @@ const Congratulations = () => {
   return (
     <div className={`text-left`}>
       <p>
-        You've made remarkable progress, and I hope you feel proud of the skills
-        you've acquired. Your dedication and hard work have paid off, and you're
-        now equipped with valuable knowledge for your web development journey.
+        You have made remarkable progress, and I hope you feel proud of the
+        skills you have acquired. Your dedication and hard work have paid off,
+        and you are now equipped with valuable knowledge for your web
+        development journey.
       </p>
       <p>
-        As you continue to grow and apply what you've learned, I'd like to
-        extend an invitation to deepen your understanding even further. I've
+        As you continue to grow and apply what you have learned, I would like to
+        extend an invitation to deepen your understanding even further. I have
         written a book that complements the topics covered in this course,
         offering more insights and advanced techniques. This book is designed to
         be a valuable resource for you, providing detailed explanations and
-        practical examples that build upon the foundations we've established
+        practical examples that build upon the foundations we have established
         here.
       </p>
       <p>
-        You can find the book in the section following this course. Whether
-        you're looking to refine your skills or tackle more complex projects,
-        this book can be your guide to the next level of your web development
+        You can find the book in the section following this course. Whether you
+        are looking to refine your skills or tackle more complex projects, this
+        book can be your guide to the next level of your web development
         journey.
       </p>
       <p>

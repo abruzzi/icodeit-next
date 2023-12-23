@@ -3,25 +3,18 @@ import React from "react";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkToRehype from "remark-rehype";
-import rehypeReact from "rehype-react";
-import type { Options } from "rehype-react";
-import * as prod from "react/jsx-runtime";
+import rehypeStringify from "rehype-stringify";
 
 export const InfoBox = ({ children }: { children?: React.ReactNode }) => {
   let content;
-
-  const options: Options = {
-    Fragment: prod.Fragment,
-    jsx: prod.jsx,
-    jsxs: prod.jsxs,
-  };
 
   if (typeof children === "string") {
     content = unified()
       .use(remarkParse, { fragment: true })
       .use(remarkToRehype)
-      .use(rehypeReact, options)
-      .processSync(children).result;
+      .use(rehypeStringify)
+      .processSync(children)
+      .toString();
   } else {
     content = children;
   }

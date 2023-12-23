@@ -13,10 +13,14 @@ const RelatedBook = () => {
         cover="/products/books/3-designs-in-3-weeks.png"
         title="3 Web Designs in 3 Weeks: Bringing Your Web Design To Life"
         categories={[]}
-        description={`I wrote the book eight years ago and found some of the content were outdated, and recently I decided to rewrite it with the modern (also the most compatible) techniques. Just like the first edition, it has all the interactive ways of teaching and the real-world-based design reproducing, but with the latest front-end knowledge.`}
-      />
+      >
+        I wrote the book eight years ago and found some of the content were
+        outdated, and recently I decided to rewrite it with the modern (also the
+        most compatible) techniques. Just like the first edition, it has all the
+        interactive ways of teaching and the real-world-based design
+        reproducing, but with the latest front-end knowledge.
+      </Product>
     </>
-
   );
 };
 
