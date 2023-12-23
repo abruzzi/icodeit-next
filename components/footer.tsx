@@ -9,7 +9,7 @@ const Footer = () => {
     >
       <div className="mr-auto">&copy; 2023</div>
 
-      <nav className="flex justify-center space-x-10 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-6">
+      <nav className="flex justify-center space-x-4 lg:mt-0 lg:ml-12 lg:items-center lg:space-x-4">
         <a href="https://twitter.com/JuntaoQiu" target="_blank">
           <XIcon size={20} round />
         </a>

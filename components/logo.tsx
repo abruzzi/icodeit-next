@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export function Logo() {
-  const { theme } = useTheme();
+  const { theme = "light" } = useTheme();
 
   return (
     <Link href="/">
@@ -16,7 +16,5 @@ export function Logo() {
         height={48}
       />
     </Link>
-);
+  );
 }
-
-
