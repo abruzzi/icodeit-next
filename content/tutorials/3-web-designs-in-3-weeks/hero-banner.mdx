@@ -4,8 +4,13 @@ title: "Week 1: Implementing the Hero Banner"
 description: "Hero Banner"
 date: 2023-12-22T17:46:12+11:00
 tutorialId: "3-web-designs-in-3-weeks"
-prev: "introduction"
-next: "week-2"
+prev: "navigation"
+next: "recent-news"
+highlights:
+  - Advanced usage of flex layout
+  - Position relative and absolute
+summary: "Well done! You have finished 2 third of the project, keep it up."
+leading: "In the next chapter, we will thoroughly explore the Recent News section, focusing on utilizing the flex layout for the positioning of multiple items."
 ---
 
 ### Implementing the Hero Banner
@@ -57,7 +62,7 @@ To make the two `block-level` elements `brief` and `media` line up horizontally,
 
 Well, the horizontal arrangement is fine, but the width of the two parts seems to be uneven. The image part occupies more space, and the text is pushed to the left. We need them be half and half distributed:
 
-![Flex Initial Attemp](/tutorials/3-web-designs-in-3-weeks/week-1/hero-flex-init.png)
+![Flex Initial Attempt](/tutorials/3-web-designs-in-3-weeks/week-1/hero-flex-init.png)
 
 At this time, we need to use the `flex:1` rule for both elements in the container and set the width of `100%` for the image instead of the default width so that the image will fill the available width of its container (the `.game-cover`):
 
