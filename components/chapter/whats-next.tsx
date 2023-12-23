@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import React from "react";
 import { Chapter } from "contentlayer/generated";
-import { Product } from "@/components/product";
+import { Product } from "@/components/mdx/product";
 
 const RelatedBook = () => {
   return (

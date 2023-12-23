@@ -6,8 +6,6 @@ description: "The landscape of web UI development is fraught with challenges tha
 cover: "/posts/images/why-ui-is-so-hard/no-component-in-fe.png"
 ---
 
-import { InfoPanel } from '../../components/info-box';
-
 Web UI development might appear straightforward at first glance, but delve deeper and you'll discover a multitude of complexities that challenge even seasoned developers. This piece aims to dissect the inherent challenges of web UI development, from the discrepancy between web languages and the modern UI requirements, to intricate data management issues and asynchronous API calls. We'll also explore often-overlooked "unhappy paths" such as loading states and error handling, as well as broader architecture considerations encompassing security, performance, and accessibility.
 
 ## Navigating Language Mismatches
@@ -60,11 +58,11 @@ const quotes = [
 Let's beginging with implementing the feature with native DOM APIs.
 
 
-<InfoPanel>
+<InfoBox>
 **The Document Object Model (DOM)** is a programming interface for web documents. It represents the structure of a document as a tree of objects, where each object corresponds to a part of the page such as an HTML tag. Essentially, the DOM serves as a representation of the web page so that languages like JavaScript can interact with it to change the document structure, style, and content. 
 
 The DOM is not part of the `JavaScript` language, but rather a standard object-based representation of a web page, which can be manipulated using JavaScript. It allows for dynamic changes, enabling rich interactive web applications.
-</InfoPanel>
+</InfoBox>
 
 ## Using DOM API
 
@@ -163,9 +161,9 @@ Backbone.js, while offering a structured approach to building web applications, 
 
 Two-way data binding frameworks like AngularJS (1.x) sought to address these issues by providing a more declarative way to sync the view with the model. With two-way data binding, any changes to the model are automatically reflected in the view and vice versa, without the need for manual DOM manipulation or event handling for synchronization.
 
-<InfoPanel>
+<InfoBox>
 Two-way data binding is a mechanism where the **User Interface (UI)** fields are bound to model data dynamically, such that when a UI field changes, the model data changes with it and vice versa. This can significantly simplify how changes in your UI are reflected in your application state and how changes in your application state are reflected back in your UI.
-</InfoPanel>
+</InfoBox>
 
 Two-way data binding also had its downsides, such as performance issues on large applications and difficulties in debugging, as changes could be triggered from either the view or the model. This led to the adoption of a one-way data flow architecture in newer frameworks like React and Angular 2+, which offer greater control and predictability.
 
