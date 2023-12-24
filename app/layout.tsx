@@ -8,6 +8,7 @@ import React from "react";
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { GoogleAnalytics } from "@/components/supporting/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <Footer />
           </div>
           <Analytics />
+          <GoogleAnalytics />
           <BackToTop />
         </ThemeProvider>
       </body>
