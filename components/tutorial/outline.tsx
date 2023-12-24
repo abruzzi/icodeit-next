@@ -14,9 +14,13 @@ import Link from "next/link";
 
 import { CiCircleList } from "react-icons/ci";
 
-export function Outline({ chapters }: { chapters: Chapter[] }) {
+export function Outline({ chapters }: { chapters: Chapter[] | null }) {
+  if(!chapters || chapters.length === 0) {
+    return null;
+  }
+
   return (
-    <aside className={`hide md:block absolute top-20 -left-20`}>
+    <aside className={`hide md:block absolute top-24 -left-20`}>
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
           <Button isIconOnly>

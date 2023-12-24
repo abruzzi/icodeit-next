@@ -2,7 +2,7 @@ import React from "react";
 
 import { notFound } from "next/navigation";
 
-import { allChapters } from "contentlayer/generated";
+import { allChapters, allTutorials } from "contentlayer/generated";
 import { Metadata } from "next";
 import { Mdx } from "@/components/supporting/mdx-components";
 import { Subscribe } from "@/components/subscribe";
@@ -11,6 +11,7 @@ import { Highlight } from "@/components/chapter/highlight";
 import { WhatsNext } from "@/components/chapter/whats-next";
 import { Summary } from "@/components/chapter/summary";
 import { Outline } from "@/components/tutorial/outline";
+import { ChapterBreadcrumbs } from "@/components/chapter/breadcrumbs";
 
 interface ChapterProps {
   params: {
@@ -20,9 +21,9 @@ interface ChapterProps {
   };
 }
 
-async function getAllChaptersInCurrentTutorial(params: ChapterProps["params"]) {
+async function getAllChaptersInCurrentTutorial(tutorialId: string) {
   const chapters = allChapters.filter((chapter) => {
-    return chapter.tutorialId === params.tslug;
+    return chapter.tutorialId === tutorialId;
   });
 
   if (chapters.length === 0) {
@@ -30,6 +31,10 @@ async function getAllChaptersInCurrentTutorial(params: ChapterProps["params"]) {
   }
 
   return chapters;
+}
+
+async function getTutorialFromParams(tutorialId: string) {
+  return allTutorials.find((t) => t.tutorialId === tutorialId);
 }
 
 async function getChapterFromParams(params: ChapterProps["params"]) {
@@ -100,25 +105,31 @@ export default async function Chapter({ params }: ChapterProps) {
     notFound();
   }
 
-  const others = await getAllChaptersInCurrentTutorial(params);
+  const others = await getAllChaptersInCurrentTutorial(chapter.tutorialId);
+  const tutorial = await getTutorialFromParams(chapter.tutorialId);
 
   return (
-    <article className="relative max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
-      <ChapterHeader chapter={chapter} />
+    <>
+      <div className={`relative max-w-4xl`}>
+        <ChapterBreadcrumbs tutorial={tutorial} chapter={chapter} />
+        <Outline chapters={others} />
+      </div>
 
-      <Highlight chapter={chapter} />
+      <article className="relative max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+        <ChapterHeader chapter={chapter} />
 
-      <hr />
+        <Highlight chapter={chapter} />
 
-      {others && <Outline chapters={others} />}
+        <hr />
 
-      <Mdx code={chapter.body.code} />
+        <Mdx code={chapter.body.code} />
 
-      <Summary chapter={chapter} />
+        <Summary chapter={chapter} />
 
-      <WhatsNext chapter={chapter} />
+        <WhatsNext chapter={chapter} />
 
-      <Subscribe />
-    </article>
+        <Subscribe />
+      </article>
+    </>
   );
 }

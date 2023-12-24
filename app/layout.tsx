@@ -61,8 +61,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Providers>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <HeaderWithMenu />
-            <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto pt-10 pb-20 px-4">
-              <main className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>
+            <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto py-20 px-4">
+              <main>
                 {children}
               </main>
               <Footer />

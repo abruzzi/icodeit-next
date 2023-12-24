@@ -42,7 +42,7 @@ export const metadata = {
 
 export default function Tutorial() {
   return (
-    <div className="max-w-4xl py-16 mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+    <div className="max-w-4xl mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <h1 className={`py-6`}>Chapters</h1>
 
       <hr />
