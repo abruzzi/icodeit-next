@@ -12,13 +12,13 @@ type TokenType = "beginner" | "intermediate" | "advanced";
 const tokenColor = (type: TokenType) => {
   switch (type) {
     case "beginner": {
-      return "green";
+      return "bg-green-600 text-green-100";
     }
     case "intermediate": {
-      return "orange";
+      return "bg-orange-600 text-orange-100";
     }
     case "advanced": {
-      return "brand";
+      return "bg-brand text-white";
     }
   }
 };
@@ -26,9 +26,7 @@ const tokenColor = (type: TokenType) => {
 const Token = ({ type, content }: { type: TokenType; content: string }) => {
   return (
     <span
-      className={`text-xs font-light rounded  py-0.5 px-1 uppercase bg-${tokenColor(
-        type
-      )}-600 text-${tokenColor(type)}-100`}
+      className={`text-xs font-light rounded py-0.5 px-1 uppercase ${tokenColor(type)}`}
     >
       {content}
     </span>
