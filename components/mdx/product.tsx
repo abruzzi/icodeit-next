@@ -57,7 +57,7 @@ export const Product = ({
           </h3>
         </a>
 
-        <p className="text-base font-light">{content}</p>
+        {content}
         <a href={link} className={`text-brand no-underline`} target="_blank">
           Learn more...
         </a>

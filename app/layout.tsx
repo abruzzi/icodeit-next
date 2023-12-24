@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/components/supporting/theme-provider";
 import { Analytics } from "@/components/supporting/analytics";
 import { BackToTop } from "@/components/back-to-top";
 
-import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { GoogleAnalytics } from "@/components/supporting/google-analytics";
 
@@ -50,6 +49,8 @@ interface RootLayoutProps {
 }
 
 import { Providers } from "@/app/providers";
+import { HeaderWithMenu } from "@/components/header-with-menu";
+import { useRouter } from "next/router";
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
@@ -59,8 +60,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <Providers>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <HeaderWithMenu />
             <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto pt-10 pb-20 px-4">
-              <Header />
               <main className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>
                 {children}
               </main>
