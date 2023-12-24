@@ -1,10 +1,10 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import React from "react";
 
+import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/supporting/theme-provider";
 import { Analytics } from "@/components/supporting/analytics";
 import { BackToTop } from "@/components/back-to-top";
-import React from "react";
 
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -49,24 +49,28 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
+import { Providers } from "@/app/providers";
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body
         className={`subpixel-antialiased min-h-screen bg-no-repeat bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto pt-10 pb-20 px-4">
-            <Header />
-            <main className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <Analytics />
-          <GoogleAnalytics />
-          <BackToTop />
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto pt-10 pb-20 px-4">
+              <Header />
+              <main className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <Analytics />
+            <GoogleAnalytics />
+            <BackToTop />
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

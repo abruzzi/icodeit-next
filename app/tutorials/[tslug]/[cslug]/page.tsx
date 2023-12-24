@@ -10,6 +10,7 @@ import { ChapterHeader } from "@/components/chapter/chapter-header";
 import { Highlight } from "@/components/chapter/highlight";
 import { WhatsNext } from "@/components/chapter/whats-next";
 import { Summary } from "@/components/chapter/summary";
+import { Outline } from "@/components/tutorial/outline";
 
 interface ChapterProps {
   params: {
@@ -19,9 +20,21 @@ interface ChapterProps {
   };
 }
 
+async function getAllChaptersInCurrentTutorial(params: ChapterProps["params"]) {
+  const chapters = allChapters.filter((chapter) => {
+    return chapter.tutorialId === params.tslug;
+  });
+
+  if (chapters.length === 0) {
+    return null;
+  }
+
+  return chapters;
+}
+
 async function getChapterFromParams(params: ChapterProps["params"]) {
   const slug = `${params?.tslug}/${params?.cslug}`;
-  const chapter = allChapters.find((post) => post.slugAsParams === slug);
+  const chapter = allChapters.find((chapter) => chapter.slugAsParams === slug);
 
   if (!chapter) {
     return null;
@@ -42,7 +55,7 @@ export async function generateMetadata({
   const { description, title, date, cover } = chapter;
 
   const ogImage = {
-    url: cover ?? '/products/courses/maintainable-react-udemy.png',
+    url: cover ?? "/products/courses/maintainable-react-udemy.png",
   };
 
   return {
@@ -87,6 +100,8 @@ export default async function Chapter({ params }: ChapterProps) {
     notFound();
   }
 
+  const others = await getAllChaptersInCurrentTutorial(params);
+
   return (
     <article className="relative max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <ChapterHeader chapter={chapter} />
@@ -94,6 +109,8 @@ export default async function Chapter({ params }: ChapterProps) {
       <Highlight chapter={chapter} />
 
       <hr />
+
+      {others && <Outline chapters={others} />}
 
       <Mdx code={chapter.body.code} />
 
