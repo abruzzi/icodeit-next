@@ -42,28 +42,28 @@ export async function generateMetadata({
   const { description, title, date, cover } = chapter;
 
   const ogImage = {
-    url: cover,
+    url: cover ?? '/products/courses/maintainable-react-udemy.png',
   };
 
   return {
     title,
     description,
-    // openGraph: {
-    //   type: "article",
-    //   url: `/posts/${params.slug}`,
-    //   title,
-    //   description,
-    //   publishedTime: date,
-    //   images: [ogImage],
-    // },
-    // twitter: {
-    //   title,
-    //   description,
-    //   images: ogImage,
-    //   card: "summary_large_image",
-    // },
-    // robots: "index, follow",
-    // metadataBase: new URL("https://icodeit.com.au"),
+    openGraph: {
+      type: "article",
+      url: `/posts/${params?.tslug}/${params?.cslug}`,
+      title,
+      description,
+      publishedTime: date,
+      images: [ogImage],
+    },
+    twitter: {
+      title,
+      description,
+      images: ogImage,
+      card: "summary_large_image",
+    },
+    robots: "index, follow",
+    metadataBase: new URL("https://icodeit.com.au"),
   };
 }
 
