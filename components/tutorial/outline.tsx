@@ -5,17 +5,18 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
+  DropdownSection,
   DropdownTrigger,
 } from "@nextui-org/react";
 import React from "react";
 import { Chapter } from "contentlayer/generated";
 import Link from "next/link";
-import { TbSquareRoundedNumber1 } from "react-icons/tb";
+
 import { CiCircleList } from "react-icons/ci";
 
 export function Outline({ chapters }: { chapters: Chapter[] }) {
   return (
-    <aside className={`absolute top-20 -left-40`}>
+    <aside className={`absolute top-20 -left-20`}>
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
           <Button isIconOnly>
@@ -23,18 +24,27 @@ export function Outline({ chapters }: { chapters: Chapter[] }) {
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Other chapters of the tutorial">
-          {chapters
-            .sort((a, b) => a.order - b.order)
-            .map((other: Chapter) => (
-              <DropdownItem
-                startContent={<TbSquareRoundedNumber1 />}
-                key={other._id}
-              >
-                <Link href={other.slug} className={`no-underline`}>
-                  {other.title}
-                </Link>
-              </DropdownItem>
-            ))}
+          <DropdownSection title="Chapters outline">
+            {chapters
+              .sort((a, b) => a.order - b.order)
+              .map((other: Chapter) => (
+                <DropdownItem
+                  startContent={
+                    <span
+                      className={`flex items-center justify-center rounded-full w-4 h-4 text-xs font-light bg-slate-800 text-slate-100`}
+                    >
+                      {other.order}
+                    </span>
+                  }
+                  description={other.title}
+                  key={other._id}
+                >
+                  <Link href={other.slug} className={`no-underline text-sm`}>
+                    <div>{`Chapter ${other.order}`}</div>
+                  </Link>
+                </DropdownItem>
+              ))}
+          </DropdownSection>
         </DropdownMenu>
       </Dropdown>
     </aside>
