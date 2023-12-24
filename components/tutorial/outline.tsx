@@ -16,7 +16,7 @@ import { CiCircleList } from "react-icons/ci";
 
 export function Outline({ chapters }: { chapters: Chapter[] }) {
   return (
-    <aside className={`absolute top-20 -left-20`}>
+    <aside className={`hide md:block absolute top-20 -left-20`}>
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
           <Button isIconOnly>
