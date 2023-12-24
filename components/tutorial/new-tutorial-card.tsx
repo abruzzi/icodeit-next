@@ -7,6 +7,34 @@ import Link from "next/link";
 
 const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
 
+type TokenType = "beginner" | "intermediate" | "advanced";
+
+const tokenColor = (type: TokenType) => {
+  switch (type) {
+    case "beginner": {
+      return "green";
+    }
+    case "intermediate": {
+      return "orange";
+    }
+    case "advanced": {
+      return "brand";
+    }
+  }
+};
+
+const Token = ({ type, content }: { type: TokenType; content: string }) => {
+  return (
+    <span
+      className={`text-xs font-light rounded  py-0.5 px-1 uppercase bg-${tokenColor(
+        type
+      )}-600 text-${tokenColor(type)}-100`}
+    >
+      {content}
+    </span>
+  );
+};
+
 const NewTutorialCard = ({ tutorial }: { tutorial: Tutorial }) => {
   return (
     <div className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
@@ -31,11 +59,10 @@ const NewTutorialCard = ({ tutorial }: { tutorial: Tutorial }) => {
             <p className={`text-xs font-light py-2 m-0`}>
               {tutorial.description}
             </p>
-            <span
-              className={`text-xs font-light rounded  py-0.5 px-1 uppercase bg-green-600 text-green-100`}
-            >
-              {tutorial.level}
-            </span>
+            <Token
+              content={tutorial.level}
+              type={tutorial.level as TokenType}
+            />
           </div>
         </Link>
       </div>
