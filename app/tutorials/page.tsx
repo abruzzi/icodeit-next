@@ -4,35 +4,35 @@ import React from "react";
 
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/subscribe";
-import { TutorialCard } from "@/components/tutorial-card";
+import { TutorialCard } from "@/components/tutorial/tutorial-card";
+import { NewTutorialCard } from "@/components/tutorial/new-tutorial-card";
 
 export const metadata = {
-  title: "I Code It",
+  title: "I Code It - Elevate Your Web Development Skills",
   description:
-    "Explore our extensive collection of step-by-step web development tutorials. From basic fundamentals to advanced techniques, find the perfect guide to enhance your skills and efficiently tackle projects of any size. Ideal for developers at all levels seeking practical, actionable insights.",
+    "Dive into our rich library of web development tutorials at I Code It. Covering everything from the basics to advanced techniques, our step-by-step guides are tailored for developers of all levels. Sharpen your skills and confidently take on diverse projects with practical, real-world knowledge.",
   keywords:
-    "Software Engineering, Developer growth, Maintainable React, React, Test-Driven Development, Frontend development, coding best practices, software design patterns, I Code It",
+    "Web Development Tutorials, React Best Practices, Test-Driven Development, Advanced Frontend Techniques, Software Engineering Skills, Effective Coding, React Tutorials, Developer Skill Enhancement",
   author: "Juntao Qiu",
   canonical: "https://icodeit.com.au",
   openGraph: {
-    title: "I Code It",
+    title: "I Code It - Web Development Mastery",
     description:
-      "Explore our extensive collection of step-by-step web development tutorials. From basic fundamentals to advanced techniques, find the perfect guide to enhance your skills and efficiently tackle projects of any size. Ideal for developers at all levels seeking practical, actionable insights.",
-    url: "https://icodeit.com.au/posts",
+      "Embark on a journey to mastering web development with I Code It. From fundamental concepts to cutting-edge techniques, our tutorials provide actionable insights for developers eager to excel in their craft.",
+    url: "https://icodeit.com.au/tutorials",
     // @ts-ignore
     type: "website",
-    image: "/juntao.qiu.avatar.png", // Replace with the actual image URL
+    image: "/products/courses/maintainable-react-udemy.png", // Replace with the actual image URL
   },
   twitter: {
     // @ts-ignore
     card: "summary_large_image",
-    title:
-      "Juntao Qiu - I help developers write better code. Developer, Author, Creator.",
+    title: "Juntao Qiu - Guiding Developers to Excellence",
     description:
-      "Discover ways to grow as a developer with Juntao Qiu. Learn about writing maintainable, efficient code at I Code It.",
+      "Join Juntao Qiu at I Code It and transform your coding skills. Explore our extensive tutorials for practical, efficient, and maintainable software development.",
     url: "https://icodeit.com.au/posts",
     creator: "@JuntaoQiu",
-    image: "/juntao.qiu.avatar.png", // Replace with the actual Twitter image URL
+    image: "/products/courses/maintainable-react-udemy.png", // Replace with the actual Twitter image URL
   },
   charSet: "UTF-8",
   robots: "index, follow",
@@ -55,11 +55,15 @@ export default function Tutorials() {
 
       <hr />
 
-      {allTutorials
-        .sort((a, b) => compareDesc(a.date, b.date))
-        .map((tutorial) => (
-          <TutorialCard tutorial={tutorial} key={tutorial._id} />
-        ))}
+      <div className="container mx-auto">
+        <div className="flex flex-wrap -mx-2">
+          {allTutorials
+            .sort((a, b) => compareDesc(a.date, b.date))
+            .map((tutorial) => (
+              <NewTutorialCard tutorial={tutorial} key={tutorial._id} />
+            ))}
+        </div>
+      </div>
 
       <Subscribe />
     </div>

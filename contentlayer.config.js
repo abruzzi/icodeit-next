@@ -101,8 +101,15 @@ const Tutorial = defineDocumentType(() => ({
   fields: {
     title: { type: "string", required: true },
     description: { type: "string", required: true },
+    cover: {
+      type: "string",
+    },
     date: {
       type: "date",
+      required: true,
+    },
+    level: {
+      type: "string",
       required: true,
     },
   },
