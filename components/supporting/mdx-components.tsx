@@ -6,7 +6,14 @@ import { Challenge } from "@/components/mdx/challenge";
 import { Pre } from "@/components/code/pre";
 
 const components = {
-  Image,
+  img: (props: any) => {
+    return (
+      <figure>
+        <Image {...props} />
+        <figcaption className={`text-center italic`}>{props.alt}</figcaption>
+      </figure>
+    );
+  },
   InfoBox,
   Product,
   Challenge,

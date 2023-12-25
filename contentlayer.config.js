@@ -1,14 +1,11 @@
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypePrettyCode from "rehype-pretty-code";
 
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
-import rehypeToc from "@jsdevtools/rehype-toc";
 
 import GithubSlugger from "github-slugger";
 
 import { rehypePrettyCodeOptions } from "./lib/rehype-pretty-code";
-import { rehypeTOCSettings } from "./lib/rehype-toc-options";
 import { visit } from "unist-util-visit";
 
 /** @type {import('contentlayer/source-files').ComputedFields} */
@@ -169,38 +166,90 @@ export const Chapter = defineDocumentType(() => ({
   computedFields,
 }));
 
+import getImageSize from "image-size";
+
+const rehypeImageSize = (options) => {
+  return (tree) => {
+    // This matches all images that use the markdown standard format ![label](path).
+    visit(tree, { type: "element", tagName: "img" }, (node) => {
+      if (node.properties.width || node.properties.height) {
+        return;
+      }
+
+      const imagePath = `${options.base}/${node.properties.src}`;
+      const imageSize = getImageSize(imagePath);
+
+      if (options.resize) {
+        const max = options.max;
+        const aspectRatio = imageSize.width / imageSize.height;
+
+        let newWidth = imageSize.width;
+        let newHeight = imageSize.height;
+
+        if (newWidth > max || newHeight > max) {
+          if (aspectRatio >= 1) {
+            newWidth = max;
+            newHeight = Math.round(newWidth / aspectRatio);
+          } else {
+            newHeight = max;
+            newWidth = Math.round(newHeight * aspectRatio);
+          }
+        }
+
+        node.properties.width = newWidth;
+        node.properties.height = newHeight;
+      } else {
+        node.properties.width = imageSize.width;
+        node.properties.height = imageSize.height;
+      }
+    });
+  };
+};
+
 export default makeSource({
   contentDirPath: "./content",
   documentTypes: [Post, Page, Tutorial, Chapter],
   mdx: {
     rehypePlugins: [
       () => (tree) => {
-        visit(tree, (node) => {
-          if (node?.type === "element" && node?.tagName === "pre") {
-            const [codeEl] = node.children;
+        visit(tree, { type: "element", tagName: "pre" }, (node) => {
+          const [codeEl] = node.children;
 
-            if (codeEl.tagName !== "code") return;
+          if (codeEl.tagName !== "code") return;
 
-            node.raw = codeEl.children?.[0].value;
-          }
+          node.raw = codeEl.children?.[0].value;
         });
       },
+      [
+        rehypeImageSize,
+        { base: `${process.cwd()}/public`, resize: true, max: 860 },
+      ],
       rehypeSlug,
       [rehypePrettyCode, rehypePrettyCodeOptions],
       () => (tree) => {
-        visit(tree, (node) => {
-          if (node?.type === "element" && node?.tagName === "figure") {
-            if (!("data-rehype-pretty-code-figure" in node.properties)) {
-              return;
-            }
+        visit(tree, { type: "element", tagName: "figure" }, (node) => {
+          if (!("data-rehype-pretty-code-figure" in node.properties)) {
+            return;
+          }
 
-            for (const child of node.children) {
-              if (child.tagName === "pre") {
-                child.properties["raw"] = node.raw;
-              }
+          for (const child of node.children) {
+            if (child.tagName === "pre") {
+              child.properties["raw"] = node.raw;
             }
           }
         });
+      },
+      () => (tree) => {
+        visit(
+          tree,
+          { type: "element", tagName: "img" },
+          (node, index, parent) => {
+            if (parent?.type === "element" && parent.tagName === "p") {
+              parent.type = "element";
+              parent.tagName = "div";
+            }
+          }
+        );
       },
     ],
   },
