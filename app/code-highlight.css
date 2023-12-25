@@ -7,23 +7,35 @@ figure[data-rehype-pretty-code-figure] pre {
   overflow-x: auto;
   border-radius: 0;
 
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
   font-size: 0.875rem;
   line-height: 1.5rem;
+
+  padding: 1.25rem 0;
+}
+
+figure[data-rehype-pretty-code-figure] pre [data-line] {
+  padding: 0 1.25rem;
 }
 
 figcaption[data-rehype-pretty-code-title] {
   border-radius: 0.375rem 0.375rem 0 0;
 
-  background-color: rgb(255 228 230 / 0.1);
+  background-color: rgba(51 65 85 / .9);
+  color: rgb(226 232 240 / .9);
+
   padding: 0.5rem 0.75rem;
   font-size: 0.75rem;
   line-height: 1rem;
 }
 
+.dark figcaption[data-rehype-pretty-code-title] {
+  background-color: rgb(51 65 85);
+  color: rgb(226 232 240);
+}
+
+/* only show line-numbers explictly when we set `showLineNumbers` in mdx */
 code[data-line-numbers] {
-  counter-reset: lineNumber;
+  counter-reset: line;
 }
 
 code[data-line-numbers] .line::before {
@@ -37,27 +49,27 @@ code[data-line-numbers] .line::before {
   color: rgb(255 255 255 / 0.2);
 }
 
-code {
-  counter-reset: line;
-}
-
-code > [data-line]::before {
+code[data-line-numbers] > [data-line]::before {
   counter-increment: line;
   content: counter(line);
 
   display: inline-block;
   width: 1rem;
-  margin-right: 2rem;
+  margin-right: 1rem;
   text-align: right;
-  color: #797979;
+  color: #959595;
 }
 
-code[data-line-numbers-max-digits='2'] > [data-line]::before {
-  width: 2rem;
+.dark code[data-line-numbers] > [data-line]::before {
+  color: #333333;
 }
 
-code[data-line-numbers-max-digits='3'] > [data-line]::before {
-  width: 3rem;
+
+code[data-theme*=' '],
+code[data-theme*=' '] span[data-highlighted-line] {
+  background: #c8c8ff1a;
+  --tw-border-opacity: 1;
+  border-left-color: rgb(96 165 250/var(--tw-border-opacity))
 }
 
 code[data-theme*=' '],
@@ -72,10 +84,4 @@ code[data-theme*=' '] span {
     color: var(--shiki-dark);
     background-color: var(--shiki-dark-bg);
   }
-}
-
-[data-highlighted-line] {
-  background: #c8c8ff1a;
-  --tw-border-opacity: 1;
-  border-left-color: rgb(96 165 250/var(--tw-border-opacity))
 }

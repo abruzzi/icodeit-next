@@ -36,7 +36,7 @@ We can start with the happy path as that’s the easiest step and the most impor
 
 In test, the happy path for (initialised → ready) can be described as:
 
-```tsx title="DirectToBoot.test.tsx"
+```tsx title="DirectToBoot.test.tsx" showLineNumbers
 it("enables button when the order is ready", async () => {
     render(<DirectToBoot orderId="order-id"/>);
 
@@ -59,7 +59,7 @@ In my book I used `msw` as the mocking server, and it worked pretty well. I’m 
 
 For example, we can define a `get` API for checking the order status in the test. It intercepts requests send to `/api/orders/<id>` and always returns an object with `ready` status. 
 
-```tsx
+```tsx title="mock-server.ts" showLineNumbers {5-10}
 import { createServer } from "miragejs";
 
 const createMockServer = () => createServer({
@@ -76,7 +76,7 @@ const createMockServer = () => createServer({
 
 And then, we create a server at the beginning of each test, and shut it down at the end.
 
-```tsx
+```tsx title="DirectToBoot.test.tsx" {3,7} showLineNumbers
 describe("Direct To Boot", () => {
   beforeEach(() => {
     server = createMockServer();
