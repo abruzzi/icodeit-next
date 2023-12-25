@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import {MdContentCopy, MdDone} from "react-icons/md";
 
 export const CopyButton = ({ text }: { text: string }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -11,12 +12,12 @@ export const CopyButton = ({ text }: { text: string }) => {
 
     setTimeout(() => {
       setIsCopied(false);
-    }, 10000);
+    }, 3000);
   };
 
   return (
-    <button disabled={isCopied} onClick={copy}>
-      {isCopied ? "Copied!" : "Copy"}
+    <button disabled={isCopied} onClick={copy} className={`text-slate-500`}>
+      {isCopied ? <MdDone size={20} className={`text-green-500`} /> : <MdContentCopy size={20} />}
     </button>
   );
 };
