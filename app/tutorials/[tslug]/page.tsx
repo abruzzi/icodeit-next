@@ -1,53 +1,107 @@
-import { allChapters } from "@/.contentlayer/generated";
+import { allChapters, allTutorials } from "@/.contentlayer/generated";
 
 import React from "react";
 
 import { Subscribe } from "@/components/subscribe";
 import { ChapterCard } from "@/components/chapter-card";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-export const metadata = {
-  title: "I Code It",
-  description:
-    "I Code It is focusing on maintainable React code and masterful use of frontend technologies like Refactoring and Test-Driven Development.",
-  keywords:
-    "Software Engineering, Developer growth, Maintainable React, React, Test-Driven Development, Frontend development, coding best practices, software design patterns, I Code It",
-  author: "Juntao Qiu",
-  canonical: "https://icodeit.com.au",
-  openGraph: {
-    title: "I Code It",
-    description:
-      "In this blog, I share insights on software development, focusing on design principles and patterns to address\n" +
-      "        complex business challenges. Topics like refactoring, test-driven development, and pair programming are covered,\n" +
-      "        emphasizing how they contribute to more maintainable and enjoyable coding practices.",
-    url: "https://icodeit.com.au/posts",
-    // @ts-ignore
-    type: "website",
-    image: "/juntao.qiu.avatar.png", // Replace with the actual image URL
-  },
-  twitter: {
-    // @ts-ignore
-    card: "summary_large_image",
-    title:
-      "Juntao Qiu - I help developers write better code. Developer, Author, Creator.",
-    description:
-      "Discover ways to grow as a developer with Juntao Qiu. Learn about writing maintainable, efficient code at I Code It.",
-    url: "https://icodeit.com.au/posts",
-    creator: "@JuntaoQiu",
-    image: "/juntao.qiu.avatar.png", // Replace with the actual Twitter image URL
-  },
-  charSet: "UTF-8",
-  robots: "index, follow",
-  metadataBase: new URL("https://icodeit.com.au"),
-};
+interface TutorialProps {
+  params: {
+    tslug: string;
+  };
+}
 
-export default function Tutorial() {
+async function getTutorialFromParams(params: TutorialProps["params"]) {
+  const slug = `${params?.tslug}`;
+
+  const tutorial = allTutorials.find(
+    (tutorial) => tutorial.slugAsParams === slug
+  );
+
+  if (!tutorial) {
+    return null;
+  }
+
+  return tutorial;
+}
+
+async function getChaptersFromParams(params: TutorialProps["params"]) {
+  const slug = `${params?.tslug}`;
+  const chapters = allChapters.filter(
+    (chapter) => chapter.slugAsParams.split("/")[0] === slug
+  );
+
+  if (!chapters) {
+    return null;
+  }
+
+  return chapters;
+}
+
+export async function generateStaticParams(): Promise<
+  TutorialProps["params"][]
+> {
+  return allChapters.map((chapter) => {
+    let slugs = chapter.slugAsParams.split("/");
+    return {
+      tslug: slugs[0],
+    };
+  });
+}
+
+export async function generateMetadata({
+  params,
+}: TutorialProps): Promise<Metadata> {
+  const tutorial = await getTutorialFromParams(params);
+
+  if (!tutorial) {
+    return {};
+  }
+
+  const { description, title, date, cover } = tutorial;
+
+  const ogImage = {
+    url: cover ?? "/products/courses/maintainable-react-udemy.png",
+  };
+
+  return {
+    title,
+    description,
+    openGraph: {
+      type: "article",
+      url: `/tutorials/${params?.tslug}`,
+      title,
+      description,
+      publishedTime: date,
+      images: [ogImage],
+    },
+    twitter: {
+      title,
+      description,
+      images: ogImage,
+      card: "summary_large_image",
+    },
+    robots: "index, follow",
+    metadataBase: new URL("https://icodeit.com.au"),
+  };
+}
+
+export default async function Tutorial({ params }: TutorialProps) {
+  const chapters = await getChaptersFromParams(params);
+
+  if (!chapters) {
+    notFound();
+  }
+
   return (
     <div className="max-w-4xl mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
       <h1 className={`py-6`}>Chapters</h1>
 
       <hr />
 
-      {allChapters
+      {chapters
         .sort((a, b) => a.order - b.order)
         .map((chapter) => (
           <ChapterCard key={chapter._id} chapter={chapter} />
