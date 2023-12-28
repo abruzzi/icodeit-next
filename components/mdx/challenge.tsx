@@ -9,7 +9,7 @@ type ChallengeType = {
 const Challenge = ({ description, steps, title }: ChallengeType) => {
   return (
     <article
-      className={`bg-slate-300 text-slate-800 dark:bg-slate-800 dark:text-slate-300 p-6 rounded`}
+      className={`bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300 p-6 rounded`}
     >
       <h2 className={`m-0 p-0`}>{title}</h2>
       <p className={`py-2 text-base`}>{description}</p>

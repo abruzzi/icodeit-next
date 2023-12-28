@@ -1,6 +1,7 @@
 import { Merriweather } from "next/font/google";
 import React from "react";
 import { Chapter } from "contentlayer/generated";
+import { Divider } from "@/components/divider";
 
 const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
 
@@ -33,9 +34,7 @@ export function ChapterHeader({ chapter }: { chapter: Chapter }) {
         )}
       </div>
 
-      <div aria-hidden="true"
-           className={`w-[1px] m-auto h-20 md:h-40 bg-gradient-to-b from-transparent via-brand to-transparent`}
-      ></div>
+      <Divider />
     </div>
   );
 }

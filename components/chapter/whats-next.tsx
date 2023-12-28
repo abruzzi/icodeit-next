@@ -26,6 +26,30 @@ const RelatedBook = () => {
   );
 };
 
+const LinkButton = ({
+  href,
+  label,
+  icon,
+}: {
+  href: string;
+  label: string;
+  icon?: React.ReactNode;
+}) => {
+  return (
+    <div className={`text-center mt-6 font-normal`}>
+      <Link
+        className={`no-underline w-full md:w-48 inline-block mt-2 bg-slate-800 dark:bg-slate-200 text-slate-200 dark:text-slate-800 px-4 py-2 rounded-lg saturate-50 hover:saturate-100 hover:shadow-lg transition-all duration-200`}
+        href={href}
+      >
+        <div className={`flex flex-row items-center gap-2`}>
+          <span>{label}</span>
+          {icon}
+        </div>
+      </Link>
+    </div>
+  );
+};
+
 export function WhatsNext({
   chapter: { leading, next, order, slug },
 }: {
@@ -44,17 +68,11 @@ export function WhatsNext({
       </p>
 
       {next && (
-        <div className={`text-center mt-6 font-normal`}>
-          <Link
-            className={`no-underline w-full md:w-48 inline-block mt-2 bg-slate-800 dark:bg-slate-200 text-slate-200 dark:text-slate-800 px-4 py-2 rounded-lg saturate-50 hover:saturate-100 hover:shadow-lg transition-all duration-200`}
-            href={`${slug.split("/").slice(0, -1).join("/")}/${next}`}
-          >
-            <div className={`flex flex-row items-center gap-2`}>
-              <span>Start chapter {order + 1}</span>
-              <MdKeyboardArrowRight size={32} className={`ml-auto`} />
-            </div>
-          </Link>
-        </div>
+        <LinkButton
+          href={`${slug.split("/").slice(0, -1).join("/")}/${next}`}
+          label={`Start chapter ${order + 1}`}
+          icon={<MdKeyboardArrowRight size={32} className={`ml-auto`} />}
+        />
       )}
     </div>
   );

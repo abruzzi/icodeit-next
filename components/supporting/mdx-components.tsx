@@ -4,6 +4,7 @@ import { InfoBox } from "@/components/mdx/info-box";
 import { Product } from "@/components/mdx/product";
 import { Challenge } from "@/components/mdx/challenge";
 import { Pre } from "@/components/code/pre";
+import { Quiz } from "@/components/mdx/quiz";
 
 const components = {
   img: (props: any) => {
@@ -18,6 +19,7 @@ const components = {
   Product,
   Challenge,
   pre: Pre,
+  Quiz,
 };
 
 interface MdxProps {
