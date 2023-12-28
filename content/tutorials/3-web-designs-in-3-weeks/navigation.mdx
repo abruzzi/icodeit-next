@@ -148,7 +148,7 @@ For example, since `p` is a block-level element by default, it will be on its ow
 
 ![Block and Inline](/tutorials/3-web-designs-in-3-weeks/week-1/block-vs-inline.png)
 
-We can use `flex` layout to override this default behaviour. `flex` one of the layout machenism in CSS. I'm not going to cover all `flex` properties here (because that is almost a book in itself), and we will only cover a few common ones here.
+We can use `flex` layout to override this default behaviour. `flex` one of the layout mechanism in CSS. I'm not going to cover all `flex` properties here (because that is almost a book in itself), and we will only cover a few common ones here.
 
 First, to use the `flex` layout, we need a container element, and then set the container's `display` to `flex`:
 
@@ -244,6 +244,38 @@ Also, let's add some extra whitespace to the navigation bar to give him more bre
 Here is how the "final" navigation bar looks like now:
 
 ![Navigation List](/tutorials/3-web-designs-in-3-weeks/week-1/navigation-final.png)
+
+<Quiz
+  question={"Which CSS property aligns items horizontally in a Flex container?"}
+  options={[
+    {
+      label: "align-items",
+      value: "align-items",
+      description: "Aligns items along the cross axis."
+    },
+    {
+      label: "justify-content",
+      value: "justify-content",
+      description: "Aligns items along the main axis (horizontally for a row)."
+    },
+    {
+      label: "flex-direction",
+      value: "flex-direction",
+      description: "Defines the direction of flex items in the container."
+    },
+    {
+      label: "flex-wrap",
+      value: "flex-wrap",
+      description: "Allows flex items to wrap onto multiple lines."
+    }
+  ]}
+  answer={"justify-content"}
+  hint={"Think about how items are arranged within a flex container along its main axis."}
+  explanation={
+    "'justify-content' is the correct answer. It aligns flex items along the main axis of the flex container, which is horizontal when the flex direction is a row. This property is crucial for spacing and aligning items horizontally within a navigation bar."
+  }
+/>
+
 
 We are now very close to the mockup, although it's not pixel prefect. Even better, using the `flex` layout, our navbar will still work well on wider screens, like the button will always be on the right side of the page, pretty cool right?
 

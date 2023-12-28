@@ -18,12 +18,16 @@ const Correct = ({
 }) => {
   return (
     <div className={`text-center`}>
-      <p>{title}</p>
-      <p>{answer}</p>
+      <p className={`text-slate-500 dark:text-slate-400`}>{title}</p>
+      <p className={`font-bold`}>{answer}</p>
       <Chip variant="bordered" color="success">
         Correct
       </Chip>
-      {explanation && <p>{explanation}</p>}
+      {explanation && (
+        <p className={`text-slate-500 dark:text-slate-500 text-sm text-left`}>
+          {explanation}
+        </p>
+      )}
     </div>
   );
 };
@@ -41,16 +45,22 @@ const Wrong = ({
 }) => {
   return (
     <div className={`text-center`}>
-      <p>{title}</p>
-      <p>{answer}</p>
+      <p className={`text-slate-500 dark:text-slate-400`}>{title}</p>
+      <p className={`font-bold`}>{answer}</p>
       <Chip variant="bordered" color="warning">
         Not really
       </Chip>
-      {hint && <p>{hint}</p>}
-      <div className={`flex flex-row justify-end mt-4`}>
+      {hint && (
+        <p className={`text-slate-500 dark:text-slate-500 text-sm text-left`}>
+          {hint}
+        </p>
+      )}
+      <div className={`flex flex-row justify-start mt-4`}>
         <Button
           startContent={<MdKeyboardArrowLeft size={20} />}
           onClick={onBack}
+          color="primary"
+          variant="bordered"
         >
           Try again
         </Button>
@@ -63,17 +73,17 @@ const Initial = ({
   title,
   handleAnswerChange,
   onCheckAnswer,
-  questions,
+  options,
 }: {
   title: string;
   handleAnswerChange: (value: string) => void;
   onCheckAnswer: () => void;
-  questions: QuestionType[];
+  options: QuestionType[];
 }) => {
   return (
     <>
       <RadioGroup label={title} onValueChange={handleAnswerChange}>
-        {questions.map((question) => {
+        {options.map((question) => {
           return (
             <Radio
               key={question.value}
@@ -86,7 +96,7 @@ const Initial = ({
         })}
       </RadioGroup>
       <div className={`flex flex-row justify-end mt-4`}>
-        <Button color={"default"} onClick={onCheckAnswer}>
+        <Button color="primary" variant="bordered" onClick={onCheckAnswer}>
           Check answer
         </Button>
       </div>
@@ -101,13 +111,17 @@ export type QuestionType = {
 };
 
 const Quiz = ({
-  title,
-  questions,
+  question,
+  options,
   answer,
+  explanation,
+  hint,
 }: {
-  title: string;
+  question: string;
   answer: string;
-  questions: QuestionType[];
+  options: QuestionType[];
+  explanation: string;
+  hint: string;
 }) => {
   const [selected, setSelected] = useState<string>();
 
@@ -134,20 +148,27 @@ const Quiz = ({
       <Divider />
       <h2 className={`m-6 text-center`}>It is the time to take a quiz</h2>
       <div
-        className={`bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300 p-6 rounded`}
+        className={`bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 p-6 rounded`}
       >
         {status === "initial" && (
           <Initial
-            title={title}
+            title={question}
             handleAnswerChange={handleAnswerChange}
             onCheckAnswer={onCheckAnswer}
-            questions={questions}
+            options={options}
           />
         )}
 
-        {status === "correct" && <Correct title={title} answer={answer} />}
+        {status === "correct" && (
+          <Correct title={question} answer={answer} explanation={explanation} />
+        )}
         {status === "wrong" && (
-          <Wrong title={title} answer={selected} onBack={handleClickBank} />
+          <Wrong
+            title={question}
+            answer={selected}
+            onBack={handleClickBank}
+            hint={hint}
+          />
         )}
       </div>
       <Divider />
