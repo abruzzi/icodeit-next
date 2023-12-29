@@ -40,7 +40,7 @@ const NewTutorialCard = ({ tutorial }: { tutorial: Tutorial }) => {
         <Link href={tutorial.slug} className={`no-underline`}>
           <div className="w-full h-40 overflow-hidden">
             <Image
-              src={"/products/courses/maintainable-react-udemy.png"}
+              src={`${tutorial.cover}`}
               width={320}
               height={160}
               alt="Tutorial Cover"
@@ -48,7 +48,7 @@ const NewTutorialCard = ({ tutorial }: { tutorial: Tutorial }) => {
             />
           </div>
 
-          <div className="p-2 flex-grow">
+          <div className="p-4 flex-grow">
             <h3
               className={`${merriweather.className} font-semibold text-lg m-0`}
             >

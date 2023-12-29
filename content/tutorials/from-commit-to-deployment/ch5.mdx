@@ -1,3 +1,18 @@
+---
+order: 5
+title: "Test Automation"
+description: "Chapter 5 introduces automated testing in the development process, focusing on User Acceptance Testing (UAT) using Cypress. It guides through setting up Cypress, writing and running end-to-end tests, and ensuring that new features work as expected without breaking existing functionality. The chapter emphasizes the importance of automated testing in collaborative and complex projects."
+date: 2023-07-05T17:46:12+11:00
+tutorialId: "from-commit-to-deployment"
+next: "ch6"
+highlights:
+  - Setting up and using Cypress for User Acceptance Testing.
+  - Writing and running automated tests for the 'Quote of the Day' app.
+  - Importance of automated testing in maintaining code integrity.
+leading: "With a robust testing setup in place, we'll next explore advanced development techniques to further enhance our application."
+summary: "You've successfully integrated automated testing into your development workflow, a crucial step in ensuring the reliability and functionality of your application as it grows."
+---
+
 # Test automation
 
 As we start incorporating new features, every modification to the code raises a question - how do we ensure that our changes don't break existing features? If only one person develops the entire application, this might not pose a significant problem. However, as the features become more complex and other team members join, ensuring that each change doesn't break the whole application becomes an issue that requires prior planning.
@@ -112,6 +127,38 @@ Of course, we can define a new task `e2e` in package.json:
 
 Now we only need to input `npm run e2e` to automatically complete the function verification.
 
+
+<Quiz
+  question={"What is the primary role of Cypress in the application development process?"}
+  options={[
+    {
+      label: "Performance Optimization",
+      value: "performance-optimization",
+      description: "Improves the efficiency and speed of applications."
+    },
+    {
+      label: "UI Design",
+      value: "ui-design",
+      description: "Assists in designing user interfaces."
+    },
+    {
+      label: "Automated Testing",
+      value: "automated-testing",
+      description: "Runs automated tests to validate application functionality."
+    },
+    {
+      label: "Code Compilation",
+      value: "code-compilation",
+      description: "Converts source code into executable code."
+    }
+  ]}
+  answer={"automated-testing"}
+  hint={"Think about the tool used for verifying the correctness of app functionality."}
+  explanation={
+    "'Automated Testing' is the correct answer. Cypress is primarily used for conducting automated end-to-end tests to ensure that the application functions as expected."
+  }
+/>
+
 ## Testing User Interaction
 
 Next, we add another test to simulate a user clicking the "next" button and validate that the quote on the page is updated to a new one:
@@ -155,3 +202,13 @@ Our four tasks are:
 
 Typically, we would use libraries such as jest and react-testing-library to write unit tests in a React codebase. For the sake of clarity, we purposely left this out in our application. For more on test-driven development in front-end applications, you can refer to my free course: [Test-Driven Development With React](https://icodeit.thinkific.com/courses/test-driven-development-with-react), as well as the [book of the same name](https://www.amazon.com.au/Test-Driven-Development-React-Apply-Applications/dp/1484269713).
 
+
+<Product link="https://www.amazon.com/Test-Driven-Development-React-TypeScript-Maintainable/dp/1484296478/"
+         cover="/products/books/atdd-2nd.png" title="Test-Driven Development with React and TypeScript"
+         categories={[]}
+>
+  Apply Test-Driven principles to create scalable and maintainable React applications. This book covers a wide range of
+  topics, including setting up a testing environment and utilizing popular testing frameworks like **Cypress**,
+  **Jest**, and the React Testing Library. It also delves into valuable **refactoring** techniques, as well as enhancing
+  code maintainability and readability.
+</Product>

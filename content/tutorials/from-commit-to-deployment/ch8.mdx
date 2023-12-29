@@ -1,4 +1,17 @@
-# Implementing Continuous Delivery
+---
+order: 8
+title: "Implementing Continuous Delivery"
+description: "Chapter 8 explores the implementation of Continuous Integration (CI) and Continuous Delivery (CD) using GitHub Actions for the 'Quote of the Day' app. It covers automating the build, test, and deployment processes to ensure code correctness and seamless transition from development to production. The chapter emphasizes setting up GitHub Actions workflows, running automated tests with Cypress, packaging the app, and deploying it to GitHub Pages, thereby achieving a reliable and efficient development-to-deployment pipeline."
+date: 2023-07-08T17:46:12+11:00
+tutorialId: "from-commit-to-deployment"
+next: "ch9"
+highlights:
+  - Automating build, test, and deployment processes using GitHub Actions.
+  - Implementing Continuous Integration and Continuous Delivery principles.
+  - Ensuring application stability and quality with automated testing and linting.
+leading: "Moving forward, the tutorial will delve into more advanced development techniques, enhancing the application's functionality and user experience."
+summary: "With CI/CD practices in place, your development process is now more streamlined and reliable, ensuring the 'Quote of the Day' app performs optimally in production."
+---
 
 By the end of the previous chapter, we had established many automated mechanisms in our local development to ensure code correctness. Moreover, because all these configurations are stored in our code repository, all team members have nearly identical settings, making our development and packaging process nearly perfect.
 
@@ -286,6 +299,37 @@ Here we have defined a new GitHub Actions task named `cypress`, which is respons
 - `command: npm run e2e`: This parameter instructs the Cypress action to run the actual end to end test command.
 
 Excellent! With the support of these automated build scripts and workflows, each push will trigger this workflow, in which static checks and automated tests will be executed. This ensures that each code modification can generate a deployable **release-ready software**.
+
+<Quiz
+  question={"What is the main benefit of using Continuous Integration in software development?"}
+  options={[
+    {
+      label: "Enhancing security",
+      value: "enhancing-security",
+      description: "Focuses on improving the application's security."
+    },
+    {
+      label: "User interface design",
+      value: "user-interface-design",
+      description: "Aids in the development of the application's user interface."
+    },
+    {
+      label: "Frequent code integration",
+      value: "frequent-code-integration",
+      description: "Allows frequent integration of code changes and immediate feedback."
+    },
+    {
+      label: "Cost reduction",
+      value: "cost-reduction",
+      description: "Primarily aims at reducing the development costs."
+    }
+  ]}
+  answer={"frequent-code-integration"}
+  hint={"Consider a practice that helps in identifying integration issues quickly."}
+  explanation={
+    "'Frequent code integration' is the correct answer. Continuous Integration allows developers to integrate code changes frequently, ensuring that integration issues are detected and addressed early."
+  }
+/>
 
 Can we take this a step further? If all tests pass each time, and the acceptance test also passes, we can deploy the application to the production environment. This way, our new features can be used by real users!
 
