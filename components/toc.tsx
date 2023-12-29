@@ -9,7 +9,7 @@ type HeadingType = {
 
 export const TOC = ({post}: { post: Post }) => {
   return (
-    <nav className={`order-last hidden shrink-0 lg:block py-32 sticky`}>
+    <nav className={`order-last hidden shrink-0 md:block lg:block py-32 sticky`}>
       <h3 className={`text-brand uppercase tracking-wide`}>On this page</h3>
       <div>
         {post.headings.map((heading: HeadingType) => {

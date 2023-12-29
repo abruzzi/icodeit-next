@@ -91,8 +91,8 @@ export default async function PostPage({ params }: PostProps) {
   });
 
   return (
-    <>
-      <article className="max-w-sm md:max-w-3xl lg:max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+    <div className={`flex flex-col md:flex-row gap-6 lg:flex-row`}>
+      <article className="flex-shrink lg:flex-shrink-0 max-w-sm md:max-w-3xl lg:max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
         <time
           dateTime={post.date}
           className={`text-sm text-slate-700 dark:text-slate-400`}
@@ -116,6 +116,6 @@ export default async function PostPage({ params }: PostProps) {
         <Subscribe />
       </article>
       <TOC post={post} />
-    </>
+    </div>
   );
 }
