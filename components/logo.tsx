@@ -10,7 +10,7 @@ export function Logo() {
   return (
     <Link href="/">
       <Image
-        src={theme === "dark" ? "/logo-dark.png" : "/logo.png"}
+        src={theme === "dark" ? "/logo-dark.png" : "/logo-brand.png"}
         alt={"Logo"}
         width={70}
         height={48}

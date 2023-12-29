@@ -110,7 +110,7 @@ The above two commands:
 
 In the first version, we just need to display a static quote in index.html:
 
-```html
+```html title="index.html"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,7 +130,7 @@ In the first version, we just need to display a static quote in index.html:
 
 In the corresponding CSS file, we defined a text alignment style:
 
-```css
+```css title="style.css"
 body {
   display: flex;
   justify-content: center;
@@ -170,7 +170,7 @@ However, the current problem is that there is no content in the `dist` directory
 
 We can define a new task `build` in `package.json`. The content of this task is to copy the HTML and CSS from `src` to `dist`:
 
-```json
+```json title="package.json"
 "scripts": {
   "build": "cp src/* dist/"
 },
@@ -178,7 +178,7 @@ We can define a new task `build` in `package.json`. The content of this task is 
 
 Finally, we need to modify the `start` task as follows:
 
-```json
+```json title="package.json"
 "scripts": {
   "build": "cp src/* dist/",
   "start": "http-server dist -p 3000"

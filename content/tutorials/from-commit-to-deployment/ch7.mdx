@@ -65,7 +65,7 @@ Additionally, ESLint suggests using the `--fix` option to automatically resolve 
 
 Like other build tasks, we can add linting to `package.json` to simplify our work. Our updated scripts section now looks like this:
 
-```json
+```json  title="package.json"
 "scripts": {
   "e2e": "cypress run --spec cypress/e2e/*.spec.cy.js",
   "build": "esbuild src/index.jsx --bundle --outfile=dist/main.js",
@@ -128,7 +128,7 @@ This will complete the initialization and installation. Once the configuration i
 
 Now, when we (and other programmers in our team) run `npm install`, Husky gets installed. By default, Husky creates a `pre-commit` file in the `.husky` directory with the following content:
 
-```bash
+```bash title="pre-commit"
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -137,7 +137,7 @@ npm test
 
 We need to change `npm test` to `npm run lint`:
 
-```bash
+```bash title="pre-commit"
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 

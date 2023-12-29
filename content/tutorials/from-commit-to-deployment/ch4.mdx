@@ -27,7 +27,7 @@ npm install react react-dom --save
 
 Then, create a file named `app.jsx` in the `src` directory and modify its content to:
 
-```jsx
+```jsx title="app.jsx"
 import React from 'react';
 
 const App = () => {
@@ -44,7 +44,7 @@ This code defines a React component named "App". This function component does no
 
 To use this component, we need another file, `index.jsx`, which reads as follows:
 
-```jsx
+```jsx title="index.jsx"
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './app';
@@ -66,7 +66,7 @@ Here's a detailed explanation of this code:
 
 Now, we don't need hard-coded HTML files anymore. We only need to define an element with the id 'root':
 
-```html
+```html title="index.html"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,7 +132,7 @@ This is a command line instruction to call the `esbuild` bundling tool, bundling
 
 Now in the `dist/main.js` file, all the code is recognizable JavaScript to the browser. However, we don't want to manually input this command in the command line every time. We can modify the build task in package.json.
 
-```json
+```json title="package.json"
 "scripts": {
   "build": "esbuild src/index.jsx --bundle --outfile=dist/main.js",
   "start": "http-server dist -p 3000"
@@ -179,7 +179,7 @@ After running `npm run build` again, we can see a file named `main.css` generate
 
 The content of the revised `index.html` file becomes:
 
-```html
+```html title="index.html" {7,11}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -236,7 +236,7 @@ const quotes = [
 
 First, we define an array of quotes, each element containing a `content` field and an `author` field. Then modify `App.jsx` to the following content:
 
-```jsx
+```jsx title="App.jsx"
 const App = () => {
   const [index, setIndex] = useState(0);
 

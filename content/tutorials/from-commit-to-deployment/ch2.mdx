@@ -68,7 +68,7 @@ Additionally, you can define your own commands, usually in two ways:
     
 2. **Shell Scripts**: You can create a Shell script file, and write a series of commands within it. This file is equivalent to a new command. You need to grant execution rights to the file, and then it can be executed like any regular command. For instance, you can create a file named `hello.sh`:
 
-    ```bash
+    ```bash title="hello.sh"
     #!/bin/sh
     
     echo "Hello, world!"
@@ -85,7 +85,7 @@ Additionally, you can define your own commands, usually in two ways:
 
 In this book, we will primarily discuss and use the second method: Shell scripts. In a script, you can define many different commands, like downloading a file in the first step, parsing the file in the second step, and triggering another action based on a field in the file in the third step, etc.
 
-```bash
+```bash title="worker.sh"
 #!/bin/bash
 
 # Define directory and file name

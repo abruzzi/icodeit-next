@@ -48,7 +48,7 @@ These workflows can be triggered by various GitHub events, such as push, pull re
 
 Below is a simple example of a GitHub Actions workflow. It runs unit tests every time code is pushed to the main branch:
 
-```yml
+```yml title=".github/workflows/build.yml"
 name: Run tests
 
 on:
@@ -106,7 +106,7 @@ touch .github/workflows/build.yml
 
 In `.github/workflows/build.yml`, we first define a job named `build`, which contains four steps: checkout code, set up the Node.js environment, install dependencies, and run `npm run build`.
 
-```yml
+```yml title=".github/workflows/build.yml"
 name: Build Quote Application
 
 on:
@@ -146,7 +146,7 @@ As can be seen, our workflow runs successfully. We can expand on this `test`, ad
 
 We can make some minor adjustments to the `build.yml` file to run `npm run build` after the tests are completed, which compiles the source code and generates a package.
 
-```yml
+```yml title=".github/workflows/build.yml"
 name: Build Quote Application
 
 on:
@@ -197,7 +197,7 @@ Running acceptance tests is generally complex. We need to start the http-server 
 
 We need to add a new job in the `build.yml` file:
 
-```yml
+```yml title=".github/workflows/build.yml"
 cypress:
     needs: build
     runs-on: ubuntu-latest
@@ -225,7 +225,7 @@ We defined a new GitHub Actions job named `cypress`, which is responsible for ru
 
 We can make some simple modifications to our `build.yml` so that after the tests have been completed, `npm run build` is executed to compile the source code and create a package.
 
-```yml
+```yml title=".github/workflows/build.yml"
 name: Build Quote Application
 
 on:
@@ -274,7 +274,7 @@ Normally, running acceptance tests is a complex process: we need to start the ht
 
 We need to add a new task to `build.yml`:
 
-```yml
+```yml title=".github/workflows/build.yml"
 cypress:
     needs: build
     runs-on: ubuntu-latest
@@ -349,7 +349,7 @@ Since our application is a pure frontend program, it does not need to deploy its
 
 We hope to complete a release after the acceptance tests pass. We need to define a new deploy task as follows:
 
-```yml
+```yml title=".github/workflows/build.yml"
 deploy:
     name: Deploy Application
     runs-on: ubuntu-latest
@@ -377,7 +377,7 @@ Also, in the `build` step, besides using `actions/upload-artifact@v3`, we need t
 
  action to package for Github Pages:
 
-```yml
+```yml title=".github/workflows/build.yml"
 - name: Upload pages artifact
   uses: actions/upload-pages-artifact@v1
   with:
@@ -402,7 +402,7 @@ So we need to enable the `beta` option for Github Actions:
 
 Besides, as the deployment needs to modify our code repository, we need to specify write permissions for `build.yml`.
 
-```yml
+```yml title=".github/workflows/build.yml"
 permissions:
   contents: read
   pages: write
@@ -415,7 +415,7 @@ With this, our application can finally be deployed successfully. Notice the depe
 
 And the final `build.yml` config is：
 
-```yml
+```yml title=".github/workflows/build.yml"
 name: Build Quote Application
 
 on:

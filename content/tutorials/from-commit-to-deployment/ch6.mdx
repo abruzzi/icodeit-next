@@ -69,7 +69,7 @@ The command above limits the results to three quotes, thus preventing excessive 
 
 On the frontend, we can use `fetch` to send the request and then render the data as before. We need to use `useEffect` in our App.jsx:
 
-```jsx
+```jsx title="App.jsx"
 const App = () => {
   const [quotes, setQuotes] = useState([]);
 
@@ -127,7 +127,7 @@ In Cypress, we can use the `cy.intercept()` method to intercept network requests
 
 For example:
 
-```js
+```js  title="quote-of-the-day.spec.cy.js"
 cy.intercept('GET', '/quotes/1', {
   statusCode: 200,
   body: {
@@ -142,7 +142,7 @@ In the code above, the `cy.intercept()` method intercepts all GET requests to `/
 
 For our test code, we need to make the following modifications in `quote-of-the-day.spec.cy.js`:
 
-```js
+```js title="quote-of-the-day.spec.cy.js"
 describe("quote of the day spec", () => {
   beforeEach(() => {
     cy.intercept('GET', 'https://api.quotable.io/quotes/random*', {
@@ -175,7 +175,7 @@ With the protection of tests, we can make some structural adjustments to the cur
 
 We can move the part that fetches network data to a separate custom hook and store it in a new file `useFetchQuotes.js`:
 
-```js
+```js title="useFetchQuotes.js"
 import { useEffect, useState } from "react";
 
 const useFetchQuotes = () => {
@@ -214,7 +214,7 @@ This code defines a custom React Hook named `useFetchQuotes`, which fetches thre
 
 Then in App.jsx, we can directly use the loading status and quotes array provided by this hook. For the JSX part, we can also extract a new component `Quote` to make the code clearer and more concise:
 
-```jsx
+```jsx title="Quote.jsx"
 import React from "react";
 
 const Quote = ({ quote }) => {
@@ -233,7 +233,7 @@ export { Quote };
 
 As such, the revised App.jsx will be simplified to:
 
-```jsx
+```jsx title="App.jsx"
 const App = () => {
   const [index, setIndex] = useState(0);
   const { loading, quotes } = useFetchQuotes();
