@@ -10,6 +10,7 @@ type ProductType = {
   link: string;
   title: string;
   cover: string;
+  learnMoreLink?: string;
   children?: React.ReactNode;
   coverSize?: "small" | "medium";
 };
@@ -18,6 +19,7 @@ export const Product = ({
   link,
   title,
   cover,
+  learnMoreLink,
   children,
   coverSize = "small",
 }: ProductType) => {
@@ -28,7 +30,8 @@ export const Product = ({
       .use(remarkParse, { fragment: true })
       .use(remarkRehype)
       .use(rehypeStringify)
-      .processSync(children).toString();
+      .processSync(children)
+      .toString();
   } else {
     content = children;
   }
@@ -58,7 +61,12 @@ export const Product = ({
         </a>
 
         {content}
-        <a href={link} className={`text-brand no-underline`} target="_blank">
+
+        <a
+          href={learnMoreLink ? learnMoreLink : link}
+          className={`text-brand no-underline`}
+          target="_blank"
+        >
           Learn more...
         </a>
       </div>
