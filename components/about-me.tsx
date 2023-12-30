@@ -25,7 +25,7 @@ const AboutMe = () => {
         <a
           href="https://juntao.substack.com/"
           target="_blank"
-          className={`w-full md:w-40 text-center no-underline inline-block mt-2 text-lg uppercase tracking-wide border-none px-6 py-2 rounded-full bg-gradient-to-br from-brand to-indigo-400 hover:bg-gradient-to-tl hover:shadow-lg transition-all duration-200 border-brand`}
+          className={`w-full md:w-40 text-center no-underline inline-block mt-2 text-lg uppercase tracking-wide border-none px-6 py-2 rounded-full transition-all duration-200 ease-in-out  bg-gradient-to-br from-brand to-indigo-400 hover:bg-gradient-to-bl hover:shadow-lg border-brand`}
         >
           Subscribe
         </a>

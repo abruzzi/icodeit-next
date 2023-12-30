@@ -4,6 +4,7 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import {ArrowRightIcon} from "@nextui-org/shared-icons";
 
 type ProductType = {
   categories: string[];
@@ -22,6 +23,7 @@ export const Product = ({
   learnMoreLink,
   children,
   coverSize = "small",
+  categories,
 }: ProductType) => {
   let content;
 
@@ -37,7 +39,7 @@ export const Product = ({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto mx-auto gap-6">
+    <div className="flex flex-col md:flex-row items-center w-full sm:w-auto mx-auto gap-6 my-4">
       <div className="flex-shrink-0">
         <img
           className={`${
@@ -62,13 +64,29 @@ export const Product = ({
 
         {content}
 
-        <a
-          href={learnMoreLink ? learnMoreLink : link}
-          className={`text-brand no-underline`}
-          target="_blank"
-        >
-          Learn more...
-        </a>
+        <div className={`flex flex-col md:flex-row items-center`}>
+          <div className={`hidden md:flex`}>
+            {categories.map((cat) => (
+              <span
+                key={cat}
+                className={`${cat === 'coming soon' ? 'border-green-800 dark:border-green-300' : 'border-slate-100 dark:border-slate-700'} text-slate-600 dark:text-slate-300  rounded-full border py-1 px-2 text-xs font-light mr-2`}
+              >
+                {cat}
+              </span>
+            ))}
+          </div>
+
+          <a
+            href={learnMoreLink ? learnMoreLink : link}
+            className={`no-underline rounded border py-1 px-2 border-slate-200 dark:border-slate-600 ml-auto hover:text-brand hover:border-brand transition-colors duration-200`}
+            target="_blank"
+          >
+            <div className={`flex flex-row items-center gap-1`}>
+              Learn more <ArrowRightIcon />
+            </div>
+
+          </a>
+        </div>
       </div>
     </div>
   );
