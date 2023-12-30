@@ -85,3 +85,8 @@ code[data-theme*=' '] span {
     background-color: var(--shiki-dark-bg);
   }
 }
+
+mark[data-highlighted-chars] {
+  background-color: #e23e5750;
+  border-radius: 0.25rem;
+}
