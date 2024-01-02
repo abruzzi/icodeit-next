@@ -4,7 +4,7 @@
         <description><![CDATA[I Code It is focusing on maintainable React code and masterful use of frontend technologies like Refactoring and Test-Driven Development.]]></description>
         <link>https://icodeit.com.au</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sat, 30 Dec 2023 00:22:58 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 02 Jan 2024 07:36:05 GMT</lastBuildDate>
         <atom:link href="https://icodeit.com.au/rss.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[Implementing Dynamic Import and Code Splitting]]></title>
@@ -33,6 +33,13 @@
             <link>https://icodeit.com.au/posts/the-2nd-edition-of-atdd</link>
             <guid isPermaLink="true">https://icodeit.com.au/posts/the-2nd-edition-of-atdd</guid>
             <pubDate>Thu, 07 Sep 2023 06:09:59 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Modularizing React Applications with Established UI Patterns]]></title>
+            <description><![CDATA[Established UI patterns are often underutilized in the frontend development world, despite their proven effectiveness in solving complex problems in UI design. This article explores the application of established UI building patterns to the React world, with a refactoring journey code example to showcase the benefits. The emphasis is placed on how layering architecture can help organize the React application for improved responsiveness and future changes.]]></description>
+            <link>https://icodeit.com.au/posts/modularizing-react-apps</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/modularizing-react-apps</guid>
+            <pubDate>Thu, 16 Feb 2023 04:46:12 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Test-Driven Development Mini Course]]></title>
