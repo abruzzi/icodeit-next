@@ -56,5 +56,8 @@
     "unified": "^11.0.4",
     "unist-util-visit": "^5.0.0",
     "yarn": "^1.22.21"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.0.4"
   }
 }

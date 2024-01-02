@@ -5,5 +5,4 @@ import { Spinner } from "@nextui-org/react";
 
 export const Subscribe = dynamic(() => import("./async-sub-stack"), {
   loading: () => <Spinner />,
-  ssr: false,
 });
