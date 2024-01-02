@@ -7,7 +7,6 @@ import { Analytics } from "@/components/supporting/analytics";
 import { BackToTop } from "@/components/design-system/back-to-top";
 
 import { Footer } from "@/components/design-system/footer";
-import { GoogleAnalytics } from "@/components/supporting/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -62,13 +61,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <HeaderWithMenu />
             <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto py-20 px-4">
-              <main>
-                {children}
-              </main>
+              <main>{children}</main>
               <Footer />
             </div>
             <Analytics />
-            <GoogleAnalytics />
             <BackToTop />
           </ThemeProvider>
         </Providers>
