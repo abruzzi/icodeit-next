@@ -9,8 +9,10 @@ import { Quiz } from "@/components/mdx/quiz";
 const components = {
   img: (props: any) => {
     return (
-      <figure className={`rounded p-2 border border-slate-100 dark:border-slate-700`}>
-        <Image className={`m-auto`} {...props} />
+      <figure
+        className={`rounded p-2 border border-slate-100 dark:border-slate-700`}
+      >
+        <Image className={`m-auto`} alt={props.alt} {...props} />
         <figcaption className={`text-center italic`}>{props.alt}</figcaption>
       </figure>
     );

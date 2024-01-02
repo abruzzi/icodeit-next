@@ -39,6 +39,7 @@ const BackToTop = () => {
       initial="hide"
       animate={controls}
       onClick={scrollToTop}
+      aria-label="Scroll to top"
     >
       <BiUpArrowAlt size={16} />
     </motion.button>

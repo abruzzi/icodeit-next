@@ -4,7 +4,8 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
-import {ArrowRightIcon} from "@nextui-org/shared-icons";
+import { ArrowRightIcon } from "@nextui-org/shared-icons";
+import Image from "next/image";
 
 type ProductType = {
   categories: string[];
@@ -41,11 +42,12 @@ export const Product = ({
   return (
     <div className="flex flex-col md:flex-row items-center w-full sm:w-auto mx-auto gap-6 my-4">
       <div className="flex-shrink-0">
-        <img
+        <Image
           className={`${
             coverSize === "small" ? "w-44" : "w-96"
           }  max-w-none object-cover rounded`}
           width={coverSize === "small" ? 176 : 384}
+          height={coverSize === "small" ? 267 : 212}
           src={cover}
           alt={title}
         />
@@ -69,7 +71,11 @@ export const Product = ({
             {categories.map((cat) => (
               <span
                 key={cat}
-                className={`${cat === 'coming soon' ? 'border-green-800 dark:border-green-300' : 'border-slate-100 dark:border-slate-700'} text-slate-600 dark:text-slate-300  rounded-full border py-1 px-2 text-xs font-light mr-2`}
+                className={`${
+                  cat === "coming soon"
+                    ? "border-green-800 dark:border-green-300"
+                    : "border-slate-100 dark:border-slate-700"
+                } text-slate-600 dark:text-slate-300  rounded-full border py-1 px-2 text-xs font-light mr-2`}
               >
                 {cat}
               </span>
@@ -84,7 +90,6 @@ export const Product = ({
             <div className={`flex flex-row items-center gap-1`}>
               Learn more <ArrowRightIcon />
             </div>
-
           </a>
         </div>
       </div>

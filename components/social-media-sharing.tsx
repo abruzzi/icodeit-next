@@ -17,6 +17,7 @@ const SocialMediaSharing = ({ post }: { post: Post }) => {
         title={post.title}
         summary={post.description}
         url={`https://icodeit.com.au${post.slug}`}
+        aria-label="Share on LinkedIn"
       >
         <FaLinkedin size={20} />
       </LinkedinShareButton>
@@ -24,6 +25,7 @@ const SocialMediaSharing = ({ post }: { post: Post }) => {
       <TwitterShareButton
         url={`https://icodeit.com.au${post.slug}`}
         title={post.title}
+        aria-label="Share on Twitter(X)"
       >
         <XIcon size={20} round />
       </TwitterShareButton>
