@@ -1,6 +1,6 @@
-import { allPosts } from "@/.contentlayer/generated";
-
 import React from "react";
+
+import { allPosts } from "@/.contentlayer/generated";
 
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/subscribe";
@@ -62,7 +62,6 @@ export default function Posts() {
       </p>
 
       <hr />
-
       {allPosts
         .sort((a, b) => compareDesc(a.date, b.date))
         .map((post) => (
