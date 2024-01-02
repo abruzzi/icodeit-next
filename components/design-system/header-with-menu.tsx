@@ -11,8 +11,8 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@nextui-org/react";
-import { Logo } from "@/components/logo";
-import { ModeToggle } from "@/components/mode-toggle";
+import { Logo } from "@/components/design-system/logo";
+import { ModeToggle } from "@/components/supporting/mode-toggle";
 import { usePathname } from "next/navigation";
 
 function HeaderWithMenu() {

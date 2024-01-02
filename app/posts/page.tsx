@@ -3,8 +3,8 @@ import React from "react";
 import { allPosts } from "@/.contentlayer/generated";
 
 import { compareDesc } from "date-fns";
-import { Subscribe } from "@/components/subscribe";
-import { PostCard } from "@/components/post-card";
+import { Subscribe } from "@/components/design-system/subscribe";
+import { PostCard } from "@/components/design-system/post-card";
 
 export const metadata = {
   title: "I Code It",

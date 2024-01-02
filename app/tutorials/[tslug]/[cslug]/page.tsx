@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { allChapters, allTutorials } from "contentlayer/generated";
 import { Metadata } from "next";
 import { Mdx } from "@/components/supporting/mdx-components";
-import { Subscribe } from "@/components/subscribe";
+import { Subscribe } from "@/components/design-system/subscribe";
 import { ChapterHeader } from "@/components/chapter/chapter-header";
 import { Highlight } from "@/components/chapter/highlight";
 import { WhatsNext } from "@/components/chapter/whats-next";

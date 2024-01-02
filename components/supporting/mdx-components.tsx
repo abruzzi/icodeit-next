@@ -3,7 +3,7 @@ import { useMDXComponent } from "next-contentlayer/hooks";
 import { InfoBox } from "@/components/mdx/info-box";
 import { Product } from "@/components/mdx/product";
 import { Challenge } from "@/components/mdx/challenge";
-import { Pre } from "@/components/code/pre";
+import { Pre } from "@/components/mdx/code/pre";
 import { Quiz } from "@/components/mdx/quiz";
 
 const components = {

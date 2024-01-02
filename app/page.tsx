@@ -4,11 +4,11 @@ import { allPosts } from "@/.contentlayer/generated";
 import Link from "next/link";
 
 import { compareDesc } from "date-fns";
-import { SubTitle } from "@/components/sub-title";
-import { PostCard } from "@/components/post-card";
-import { AboutMe } from "@/components/about-me";
+import { SubTitle } from "@/components/design-system/sub-title";
+import { PostCard } from "@/components/design-system/post-card";
+import { AboutMe } from "@/components/design-system/about-me";
 import { Product } from "@/components/mdx/product";
-import { Subscribe } from "@/components/subscribe";
+import { Subscribe } from "@/components/design-system/subscribe";
 
 export default function Home() {
   return (

@@ -7,11 +7,11 @@ import { Merriweather } from "next/font/google";
 
 import { formatRelative } from "date-fns";
 import React from "react";
-import { Subscribe } from "@/components/subscribe";
+import { Subscribe } from "@/components/design-system/subscribe";
 import readingDuration from "reading-duration";
-import { SocialMediaSharing } from "@/components/social-media-sharing";
-import { AuthorInfo } from "@/components/author-info";
-import { TOC } from "@/components/toc";
+import { SocialMediaSharing } from "@/components/post/social-media-sharing";
+import { AuthorInfo } from "@/components/post/author-info";
+import { TOC } from "@/components/post/toc";
 
 interface PostProps {
   params: {

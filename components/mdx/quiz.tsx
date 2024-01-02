@@ -3,7 +3,7 @@
 import { Button, Chip, Radio, RadioGroup } from "@nextui-org/react";
 import React, { useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { Divider } from "@/components/divider";
+import { Divider } from "@/components/design-system/divider";
 
 type QuizStatus = "initial" | "correct" | "wrong";
 

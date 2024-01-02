@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { allPages, Page } from "contentlayer/generated";
 
 import { Mdx } from "@/components/supporting/mdx-components";
-import { Subscribe } from "@/components/subscribe";
+import { Subscribe } from "@/components/design-system/subscribe";
 import React from "react";
 
 interface PageProps {

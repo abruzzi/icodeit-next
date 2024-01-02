@@ -4,9 +4,9 @@ import React from "react";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/supporting/theme-provider";
 import { Analytics } from "@/components/supporting/analytics";
-import { BackToTop } from "@/components/back-to-top";
+import { BackToTop } from "@/components/design-system/back-to-top";
 
-import { Footer } from "@/components/footer";
+import { Footer } from "@/components/design-system/footer";
 import { GoogleAnalytics } from "@/components/supporting/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -49,7 +49,7 @@ interface RootLayoutProps {
 }
 
 import { Providers } from "@/app/providers";
-import { HeaderWithMenu } from "@/components/header-with-menu";
+import { HeaderWithMenu } from "@/components/design-system/header-with-menu";
 import { useRouter } from "next/router";
 
 export default function RootLayout({ children }: RootLayoutProps) {

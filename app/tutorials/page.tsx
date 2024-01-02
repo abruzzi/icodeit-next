@@ -3,7 +3,7 @@ import { allTutorials } from "@/.contentlayer/generated";
 import React from "react";
 
 import { compareDesc } from "date-fns";
-import { Subscribe } from "@/components/subscribe";
+import { Subscribe } from "@/components/design-system/subscribe";
 import { TutorialCard } from "@/components/tutorial/tutorial-card";
 import { NewTutorialCard } from "@/components/tutorial/new-tutorial-card";
 

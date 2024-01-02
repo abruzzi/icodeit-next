@@ -1,6 +1,6 @@
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/design-system/logo";
 import Link from "next/link";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggle } from "@/components/supporting/mode-toggle";
 import React from "react";
 
 const Header = () => {

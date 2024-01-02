@@ -1,5 +1,5 @@
 import React from "react";
-import { SubTitle } from "@/components/sub-title";
+import { SubTitle } from "@/components/design-system/sub-title";
 
 const AsyncSubStack = ({}) => {
   return (

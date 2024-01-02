@@ -2,8 +2,8 @@ import { allChapters, allTutorials } from "@/.contentlayer/generated";
 
 import React from "react";
 
-import { Subscribe } from "@/components/subscribe";
-import { ChapterCard } from "@/components/chapter-card";
+import { Subscribe } from "@/components/design-system/subscribe";
+import { ChapterCard } from "@/components/design-system/chapter-card";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
