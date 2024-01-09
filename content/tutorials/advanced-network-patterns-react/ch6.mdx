@@ -1,0 +1,53 @@
+---
+order: 6
+title: "Prefetching"
+description: "This chapter introduces the foundational concepts and objectives of the course 'From Commit to Deployment.' It outlines the journey from coding to deployment, covering key practices in modern software development."
+date: 2024-01-10T19:38:12+11:00
+tutorialId: "advanced-network-patterns-react"
+highlights:
+  - How to use SWR for data fetching
+  - Use preload to load data earlier
+leading: "Next, we'll delve into the basics of command line tools, a cornerstone of automation tasks in efficient software development."
+summary: "With an understanding of the course structure and key concepts, you're all set to dive into the world of modern software development. Let's begin this educational journey together!"
+draft: true
+---
+
+## Preload
+
+```jsx
+yarn add swr
+```
+
+```tsx
+const fetcher = (...args) => fetch(...args).then(res => res.json())
+```
+
+```tsx file="src/profile.tsx"
+import useSWR from 'swr'
+
+function Profile () {
+  const { data, error, isLoading } = useSWR('/api/user/123', fetcher)
+
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
+
+  // render data
+  return <div>hello {data.name}!</div>
+}
+```
+
+![Request JS bundle and data in parallel](/tutorials/advanced-network-patterns-react/ch6/parallel-lazy-load.png)
+
+If we visualise it now you can see that the data and JavaScript can load separately and there would improve the overall interactivity greatly.
+
+![Request JS bundle and data in parallel](/tutorials/advanced-network-patterns-react/ch6/parallel-lazy-load-vis.png)
+
+## Summary
+
+We have tried a few ways to explore the common problems and solutions in network, async programming.
+
+- Try to parallel network requests when possible
+- Try to split code when it’s not critical for initial rendering
+- Prefetch data when the lazy-loaded component need data so we can parallel the data and JS bundle together
+
+This is all I have for the first part of the tutorial, and in the next part we’ll look into what we can do with the server side technology, what are some of the patterns there and how can we make the application performance even better. Stay tuned.

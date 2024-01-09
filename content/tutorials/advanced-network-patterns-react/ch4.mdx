@@ -1,0 +1,185 @@
+---
+order: 4
+title: "Enhance the Friends List"
+description: "This chapter introduces the foundational concepts and objectives of the course 'From Commit to Deployment.' It outlines the journey from coding to deployment, covering key practices in modern software development."
+date: 2024-01-10T19:38:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch5"
+highlights:
+  - Implementing UserDetailCard with NextUI
+  - Parallel request
+  - When dependence is inevitable
+leading: "Next, we'll delve into the basics of command line tools, a cornerstone of automation tasks in efficient software development."
+summary: "With an understanding of the course structure and key concepts, you're all set to dive into the world of modern software development. Let's begin this educational journey together!"
+draft: true
+---
+
+## User detail popover
+
+Let’s keep explore what other cases in a typical frontend application. With these new scenarios we can see more patterns and potential ways of performance improvement.
+
+Imagine we want to enhance the feature of current Profile page, when user click on one of the friend avatar, we’ll show a popover with another network request `/users/1/details`. In the details we will show a few links and enable more interactions (you probably have already see it in Twitter or Linkedin before).
+
+![User Detail Popover](/tutorials/advanced-network-patterns-react/ch4/user-detail-popover.png)
+
+To concentrate on the topic, I won’t spend more time on implementing the popover itself, we’ll use a few components from `nextui` for the popover behaviour and `UserDetailCard.`
+
+<InfoBox>
+  NextUI is a UI library for React that helps you build beautiful and accessible user interfaces. Created on top of Tailwind CSS and React Aria.
+  Although it sounds related to Next.js, and even the Website looks similar, but it is an independent community project and is not related to Vercel.
+</InfoBox>
+
+## A popover component
+
+> Popover is a non-modal dialog that floats around its disclosure. It's commonly used for displaying additional rich content on top of something.
+
+```tsx
+import React from "react";
+import {Popover, PopoverTrigger, PopoverContent, Button} from "@nextui-org/react";
+
+export default function App() {
+  return (
+    <Popover placement="right">
+      <PopoverTrigger>
+        <Button>Open Popover</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="px-1 py-2">
+          <div className="text-small font-bold">Popover Content</div>
+          <div className="text-tiny">This is the popover content</div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+```
+
+When you click the "Open Popover" button, a popover box appears to the right. The content of the popover includes a header with bold text "Popover Content" and a smaller descriptive text saying "This is the popover content." The popover is styled with some padding and font styling.
+
+## The trigger
+
+We can define the `Friend` component as a trigger, just wrap it around `PopoverTrigger` as following:
+
+```tsx title="src/friend.tsx"
+import { User } from "../types";
+import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
+import { Brief } from "./brief.tsx";
+
+import UserDetailCard from "./user-detail-card.tsx";
+
+export const Friend = ({ user }: { user: User }) => {
+  return (
+    <Popover placement="bottom" showArrow offset={10}>
+      <PopoverTrigger>
+        <button>
+          <Brief user={user} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <UserDetailCard id={user.id} />
+      </PopoverContent>
+    </Popover>
+  );
+};
+```
+
+Where the `Brief` component accepts a `User` and render its details:
+
+```tsx title="src/brief.tsx"
+export function Brief({user}: { user: User }) {
+  return (
+    <div>
+      <div>
+        <img
+          src={`https://i.pravatar.cc/150?u=${user.id}`}
+          alt={`User ${user.name} avatar`}
+          width={32}
+          height={32}
+        />
+      </div>
+      <div>
+        <div>{user.name}</div>
+        <p>{user.bio}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+So when a `Brief` is clicked, we will open a popover.
+
+## UserDetailCard (fetching)
+
+We will create `UserDetailCard` component, it accepts an `id` and will fetch user details information that contains
+
+```ts title="types.ts"
+export type UserDetail = {
+  id: string;
+  name: string;
+  bio: string;
+  twitter: string;
+  homepage: string;
+};
+```
+
+We can use our reusable `get` function to fetch details from `/users/<id>/details` endpoint:
+
+```tsx title="src/user-detail-card.tsx"
+export function UserDetailCard({ id }: { id: string }) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [detail, setDetail] = useState<UserDetail | undefined>();
+
+  useEffect(() => {
+    const fetchFeeds = async () => {
+      setLoading(true);
+      const data = await get<UserDetail>(`/users/${id}/details`);
+
+      setLoading(false);
+      setDetail(data);
+    };
+
+    fetchFeeds();
+  }, [id]);
+
+  if (loading || !detail) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <Card shadow="none">
+      <CardHeader>
+        <div>
+          <Avatar
+            isBordered
+            radius="full"
+            size="md"
+            src={`https://i.pravatar.cc/150?u=${detail.id}`}
+          />
+          <div>
+            <h4>{detail.name}</h4>
+            <p>{detail.twitter}</p>
+          </div>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <p>{detail.bio}</p>
+      </CardBody>
+      <CardFooter>
+        <div>
+          <p>
+            <a href={detail.homepage}>{detail.homepage}</a>
+          </p>
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+
+export default UserDetailCard;
+```
+
+It looks fine so far, but if we inspect the network we can see that the overall bytes send to client side is growing, as more new third party library added to the code, we can expect it keep growing. And the worst thing is that not all users are using the popover, maybe they only want to look into the feeds and then navigate away from the page, that means the JS bundles and CSS for the popover and `UserDetailCard` are all wasted.
+
+![More data transferred through network](/tutorials/advanced-network-patterns-react/ch4/network-inspect-incresing-load.png)
+
+Can we delay these data loading at when it’s required, like when a user actually clicked a `Friend` avatar, we start to load the corresponding JS bundle for the `UserDetailCard`, and then we request `/users/1/details` for more details.

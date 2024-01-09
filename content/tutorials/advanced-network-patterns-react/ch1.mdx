@@ -1,0 +1,148 @@
+---
+order: 1
+title: "Introduction"
+description: "This chapter introduces the foundational concepts and objectives of the course 'From Commit to Deployment.' It outlines the journey from coding to deployment, covering key practices in modern software development."
+date: 2024-01-10T19:38:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch2"
+highlights:
+  - Install and config vite & Tailwind CSS
+  - Make sure we have everything ready to proceed with the rest of the tutorial
+leading: "Next, we'll delve into the basics of command line tools, a cornerstone of automation tasks in efficient software development."
+summary: "With an understanding of the course structure and key concepts, you're all set to dive into the world of modern software development. Let's begin this educational journey together!"
+---
+
+In this tutorial we are going to explore several different patterns to perform network request in React applications. Even though it’s React, most of the concepts, challenges and solutions are applicable in other frontend library or frontend frameworks as well.
+
+We’ll start from a simple user profile, and gradually adding more cases to make it more complicated and talk about problems and solutions you would see in large applications. The main goal is to demystifying the challenging and often overlooked performance pitfalls in frontend applications.
+
+I’m using React as example here, but these patterns also apply to all other frontend library or frameworks, they are pretty universal and can help you to navigate in cases you might encounter in your particular usage.
+
+I assume you have some basic knowledge of React, at least you’re fairly familiar with JSX, and a few common Hooks like `useState` and `useEffect`.
+
+The key takeaways of this tutorial are:
+
+- understand well the problem - why network is hard to get right
+- the most misunderstood but wildly used pattern
+- how to make async service call less painful
+- what are the alternatives for better user experiences
+- how to leverage different strategy in both frontend and backend
+- what is future looks like (the server side work)
+
+## Setting up the environment
+
+We're going to use vite as the scaffolding tool to generate the structure of the application, use the following command to create a React with TypeScript enabled.
+
+```shell
+npm create vite@latest react-network-advanced -- --template react-ts
+cd react-network-advanced
+```
+
+Let's clean up the generated template file, open up the `src/App.tsx`, and put the following code:
+
+```html
+function App() {
+  return (
+      <div className="max-w-3xl m-auto my-4 text-slate-800">
+        <h1 className="text-4xl py-4 mb-4 tracking-wider font-bold">Profile</h1>
+      </div>
+  );
+}
+
+export default App;
+```
+
+We are going to use `Tailwind Css` for styling in this tutorial.
+
+<InfoBox>
+  Tailwind is a utility-first CSS framework packed with classes like flex, pt-4, text-center and rotate-90 that can be composed to build any design, directly in your markup.
+</InfoBox>
+
+To install Tailwind, go to the `react-network-advanced` folder we created above, and execute the following command in Terminal (if you're on Mac OS)
+
+```shell
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+And then you will need to config `Tailwind` to allow it scan `index.html` and all `tsx` files under `src` folder.
+
+```js title="tailwind.config.js" {3-6}
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+Lastly, you will need to use `@tailwind` directives in `src/index.css` to actually enable it:
+
+```css title="src/index.css"
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+I prefer to make the background a bit gray, so I'll add the following line in `src/index.css`
+
+```css title="src/index.css"
+body {
+  background-color: #fefefe;
+}
+```
+
+With these changes in place, let's launch the application now in command line:
+
+```shell
+npm run dev
+```
+
+It by default will launch your React application on "http://localhost:5173/", And in your browser, you should be able to see the text `Profile`
+
+![Check Vite and Tailwind CSS are working together](/tutorials/advanced-network-patterns-react/ch1/vite-tailwind-setup.png)
+
+## Setting up the backend service
+
+We are going to call some API endpoints in the course of the tutorial, I have published them into a [Github repo](https://github.com/abruzzi/mock-server-network-react-tutorial), go ahead and clone the repo to your local (assume it's in folder: `mock-server-network-react-tutorial`.
+
+Run the following command to launch the mock server:
+
+```shell
+cd mock-server-network-react-tutorial
+yarn start
+```
+
+You would be able to see something like this in your console:
+
+```shell
+yarn run v1.22.19
+$ node index.js
+Mock server listening at http://localhost:1573
+```
+
+And if you try to access the one of the following API endpoint:
+
+```shell
+curl http://localhost:1573/users/u1
+```
+
+Or if you prefer, you could use `jq` to format the output, which is a bit easier to read (`curl http://localhost:1573/users/u1 | jq .`). And you should be able to see response like the following:
+
+```json
+{
+  "id": "u1",
+  "name": "Juntao Qiu",
+  "bio": "Developer, Educator, Author",
+  "interests": [
+    "Technology",
+    "Outdoors",
+    "Travel"
+  ]
+}
+```

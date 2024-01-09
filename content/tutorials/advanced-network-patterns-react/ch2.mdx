@@ -1,0 +1,257 @@
+---
+order: 2
+title: "Fetching 101"
+description: "This chapter introduces the foundational concepts and objectives of the course 'From Commit to Deployment.' It outlines the journey from coding to deployment, covering key practices in modern software development."
+date: 2024-01-10T19:38:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch3"
+highlights:
+  - data fetching with Hook useEffect
+  - The problem about multiple requests
+leading: "Next, we'll delve into the basics of command line tools, a cornerstone of automation tasks in efficient software development."
+summary: "With an understanding of the course structure and key concepts, you're all set to dive into the world of modern software development. Let's begin this educational journey together!"
+---
+
+Let’s start from the simplest possible case in a React application. Think of a profile page, where a login user can see their profile. We’ll need to make a API call to fetch the user information by their ID.
+
+The API endpoint returns some basic information, and it designed to have some delay so we can later on see how slow APIs can impact the performance in frontend.
+
+```jsx
+curl http://localhost:1573/users/u1
+```
+
+And we could get the following response:
+
+```jsx
+{
+  "id": "u1",
+  "name": "Juntao Qiu",
+  "bio": "Developer, Educator, Author",
+  "interests": [
+    "Technology",
+    "Outdoors",
+    "Travel"
+  ]
+}
+```
+
+Typically, we would put such data fetch logic inside a `useEffect` call, React will trigger the effect once it’s done the initial render.
+
+```tsx tile="src/profile.tsx"
+const Profile = ({ id }: { id: string }) => {
+  const [user, setUser] = useState<User | undefined>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const data = await get<User>(`/users/${id}`);
+      setUser(data);
+    };
+
+    fetchUser();
+  }, [id]);
+
+  return (
+    <div>
+      {user && user.name}
+    </div>
+  );
+};
+```
+
+While the `get` is only a simple wrapper of native `fetch`you might want to replace it with `axios.get` or whatever you prefer here.
+
+```ts title="utils.ts"
+const baseurl = "http://localhost:1573";
+
+async function get<T>(url: string): Promise<T> {
+  const response = await fetch(`${baseurl}${url}`);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  return await response.json() as Promise<T>;
+}
+
+export { get };
+```
+
+And we can then update `App.tsx` into the following code to render `Profile` component:
+
+```tsx title="App.tsx"
+import { Profile } from "./src/profile.tsx";
+
+function App() {
+  return (
+    <div className="max-w-3xl m-auto my-4 text-slate-800">
+      <h1 className="text-4xl py-4 mb-4 tracking-wider font-bold">Profile</h1>
+      <div className="rounded border p-6 border-slate-300">
+        <Profile id="u1" />
+      </div>
+    </div>
+  );
+}
+
+export default App;
+```
+
+And if we visualise the rendering sequence with time, it would be something like the following diagram.
+
+![Fetch and then render](/tutorials/advanced-network-patterns-react/ch2/fetch-then-render.png)
+
+In the diagram above, when user typed in the url in the browser and pressed `Enter`, the browser will download the initial HTML first, as it parsing the HTML it found resources links like `JS` and style `CSS`. It then blocked and download them, parse and execute JS bundles, parse `CSS` to build `CSSOM` and so on.
+
+<InfoBox>
+  Actually HTML will be parsed in the streaming manner, meaning once it get some bytes it started to parse to form the DOM, it don’t wait until all the HTML are downloaded, but we’ll simplify it in the illustration above - let’s assume it download the whole HTML and then build the DOM for such a simple application.
+  More details can be found in [Rendering on the Web](https://web.dev/articles/rendering-on-the-web), [Client-side rendering of HTML and interactivity](https://web.dev/articles/client-side-rendering-of-html-and-interactivity), and [Populating the page: how browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work)
+</InfoBox>
+
+And as it execute JS bundle, React kicks in and take over to render and then perform the DOM manipulation (`document.createElement` …), then it sees an `useEffect` and it perform an network request. And it does nothing until the data returned from server, and it do another re-render with the data.
+
+This is a typical flow and happens every second in your browser when you access an React application.
+
+To make the user experience a bit better, we can add a `Spinner` component when data is loading, and an `Error` when something went wrong (the backend isn’t responding, or user doesn’t exist, for example).
+
+Then the code changed a little bit with two new states:
+
+```tsx title="src/profile.tsx"
+const Profile = ({ id }: { id: string }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | undefined>();
+
+  const [user, setUser] = useState<User | undefined>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const data = await get<User>(`/users/${id}`);
+        setUser(data);
+      } catch (e) {
+        setError(e as Error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Something went wrong...</div>;
+  }
+
+  return (
+    <>
+      {user && user.name}
+    </>
+  );
+};
+```
+
+The structure of the component should be familiar to you if you have done React application before, nothing should be surprising so far.
+
+Of course, we probably want to display something more than just the username typically, let’s make a new component for the user information called `About`, and add a few simple styles to make it looks good:
+
+<InfoBox>
+  I’m using Tailwind CSS for styling, but as you might know it will make the code snippet super long and hard to read, so I removed it from the code snippet. If you want to see how I style them, please head to the corresponding code repo here.
+</InfoBox>
+
+```tsx title="src/about.tsx"
+const About = ({ user }: { user: User }) => {
+  return (
+    <div>
+      <div>
+        <img
+          src={user.avatar}
+          alt={`User ${user.name} Avatar`}
+        />
+      </div>
+      <div>
+        <div>{user.name}</div>
+        <p>{user.bio}</p>
+      </div>
+    </div>
+  );
+};
+```
+
+And it renders perfectly when data is correct:
+
+![User basic is fetched and rendered correctly](/tutorials/advanced-network-patterns-react/ch2/fetched-about.png)
+
+All right, we now have this simple Profile page, where the data is retrieved from backend API - which deliberately have 1.5 seconds delay before it send anything back to frontend.
+
+## User’s friends list
+
+Now let’s think of the user’s friends list - normally it would store in another table, thus has a separate API endpoint, let’s say there is a `/users/<id>/friends` and we will call that endpoint in another component `Friends`.
+
+```tsx title="src/friends.tsx"
+const Friends = ({ id }: { id: string }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      setLoading(true);
+      const data = await get<User>(`/users/${id}/friends`);
+      setLoading(false);
+      setUsers(data);
+    };
+
+    fetchFriends();
+  }, [id]);
+
+  if(loading) {
+    return <div>Loading...</div>
+  }
+
+  return (
+    <div>
+      <h2>Friends</h2>
+      <div>
+        {users.map((user) => (
+          <div>
+            <img
+              src={`https://i.pravatar.cc/150?u=${user.id}`}
+              alt={`User ${user.name} avatar`}
+            />
+            <span>{user.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export { Friends };
+```
+
+The above code is pretty similar with the `Profile` component itself, which does the following things:
+
+- define `data`, `loading` and `error` as state
+- use fetch function in `useEffect` to get data
+- when the data is loading, show an indicator
+- when it’s error, show an error
+- and when everything goes well, we render the actual list
+
+In the `Profile` component, we can use the `Friends` component like a regular React component.
+
+```tsx title="src/profile.tsx"
+const Profile = () => {
+	//...
+
+	return (
+    <>
+      {user && <About user={user} />}
+      <Friends id={id} />
+    </>
+  );
+}
+```
+
+If you don’t look closely, the above code might looks fine. But when you think of time with the code all together, you should see something isn’t quite right here. For example, what happens if the `/friends` API also takes 1.5 seconds to return? How long it takes to show everything on the page. A simple maths would tell you that `1.5 + 1.5 = 3` seconds in total.

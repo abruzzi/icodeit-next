@@ -1,0 +1,84 @@
+---
+order: 5
+title: "Lazy load and Suspense"
+description: "This chapter introduces the foundational concepts and objectives of the course 'From Commit to Deployment.' It outlines the journey from coding to deployment, covering key practices in modern software development."
+date: 2024-01-10T19:38:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch6"
+highlights:
+  - Request Waterfall
+  - Parallel request
+  - When dependence is inevitable
+leading: "Next, we'll delve into the basics of command line tools, a cornerstone of automation tasks in efficient software development."
+summary: "With an understanding of the course structure and key concepts, you're all set to dive into the world of modern software development. Let's begin this educational journey together!"
+draft: true
+---
+
+Lazy loading in React is a technique that allows components to be loaded dynamically and on-demand, rather than at the initial page load. This can improve performance, especially for larger applications, by reducing the amount of code that needs to be downloaded, parsed, and executed when the app first loads. React.lazy function is used in conjunction with Suspense to render a dynamic import as a regular component. This feature enables better user experiences and more efficient resource usage.
+
+An example would be:
+
+```tsx
+import React, { Suspense, lazy } from 'react';
+
+// Lazy load the component
+const LazyComponent = lazy(() => import('./LazyComponent'));
+
+function App() {
+  return (
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyComponent />
+      </Suspense>
+    </div>
+  );
+}
+
+export default App;
+```
+
+In this example, LazyComponent is dynamically imported using lazy(). The Suspense component from React wraps around LazyComponent, providing a fallback UI (here it's a simple loading message) to display while LazyComponent is being loaded. When LazyComponent is needed and rendered for the first time, it's loaded on demand, which can improve the performance of your application by splitting the code into smaller chunks.
+
+Based on the theory here, we can modify our `src/friend.tsx` to the following:
+
+```tsx title="src/friend.tsx" {3,6,17-19}
+import { User } from "../types";
+import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
+import React, { Suspense } from "react";
+import { Brief } from "./brief.tsx";
+
+const UserDetailCard = React.lazy(() => import("./user-detail-card.tsx"));
+
+export const Friend = ({ user }: { user: User }) => {
+  return (
+    <Popover placement="bottom" showArrow offset={10}>
+      <PopoverTrigger>
+        <button>
+          <Brief user={user} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Suspense fallback={<div>Loading...</div>}>
+          <UserDetailCard id={user.id} />
+        </Suspense>
+      </PopoverContent>
+    </Popover>
+  );
+};
+```
+
+```jsx
+const UserDetailCard = React.lazy(() => import("./user-detail-card.tsx"));
+```
+
+```jsx
+
+<Suspense fallback={<div>Loading...</div>}>
+  <UserDetailCard id={user.id} />
+</Suspense>
+```
+
+![Waterfall with lazy load](/tutorials/advanced-network-patterns-react/ch5/waterfall-lazy-load.png)
+
+
+![Waterfall with lazy load](/tutorials/advanced-network-patterns-react/ch5/waterfall-lazy-load-vis.png)

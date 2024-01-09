@@ -29,6 +29,7 @@ async function getTutorialFromParams(params: TutorialProps["params"]) {
 
 async function getChaptersFromParams(params: TutorialProps["params"]) {
   const slug = `${params?.tslug}`;
+
   const chapters = allChapters.filter(
     (chapter) => chapter.slugAsParams.split("/")[0] === slug
   );

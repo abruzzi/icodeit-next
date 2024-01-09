@@ -156,6 +156,10 @@ export const Chapter = defineDocumentType(() => ({
     cover: {
       type: "string",
     },
+    draft: {
+      type: "boolean",
+      default: false,
+    },
     prev: {
       type: "string",
     },

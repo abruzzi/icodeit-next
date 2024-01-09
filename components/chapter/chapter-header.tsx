@@ -17,6 +17,7 @@ export function ChapterHeader({ chapter }: { chapter: Chapter }) {
           </div>
           <div>
             <span>Chapter {chapter.order}</span>
+            {chapter.draft ? <span className={`uppercase bg-orange-600 text-slate-100 rounded px-2 text-sm ml-2 font-normal`}>draft</span> : undefined}
             <h1 className={`m-0 p-0 ${merriweather.className}`}>
               {chapter.title}
             </h1>
