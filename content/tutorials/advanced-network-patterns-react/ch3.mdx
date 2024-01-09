@@ -1,16 +1,16 @@
 ---
 order: 3
-title: "Fetching resources in parallel"
-description: "This chapter introduces the foundational concepts and objectives of the course 'From Commit to Deployment.' It outlines the journey from coding to deployment, covering key practices in modern software development."
+title: "Fetching Resources in Parallel"
+description: "Chapter 3 tackles the challenge of optimizing network requests in React applications. It focuses on implementing parallel data fetching strategies to minimize the impact of the network waterfall effect, enhancing application performance and user experience."
 date: 2024-01-10T19:38:12+11:00
 tutorialId: "advanced-network-patterns-react"
 next: "ch4"
 highlights:
-  - Request Waterfall
-  - Parallel request
-  - When dependence is inevitable
-leading: "Next, we'll delve into the basics of command line tools, a cornerstone of automation tasks in efficient software development."
-summary: "With an understanding of the course structure and key concepts, you're all set to dive into the world of modern software development. Let's begin this educational journey together!"
+  - Understanding and mitigating the request waterfall effect.
+  - Implementing parallel requests for efficiency.
+  - Handling dependencies in network requests.
+leading: "In the next chapter, we explore further optimization strategies and delve into more complex scenarios of network fetching in React."
+summary: "By mastering parallel requests and managing dependencies in network calls, this chapter sets the foundation for building faster and more responsive React applications. Join us as we continue to navigate the intricate world of advanced network patterns in React."
 ---
 
 And it is the very first problem. The order of the render is: initially in `Profile` component, `useEffect` kicks off a network request, but the data will return in 1.5 seconds, before the data is fetched we show a loading indicator.
