@@ -13,10 +13,9 @@ leading: "In the next chapter, we'll explore more advanced networking patterns a
 summary: "This chapter is a deep dive into optimizing React applications using Lazy Load and Suspense. It provides practical examples and insights into improving load times and overall application efficiency."
 draft: true
 ---
+Lazy loading in React is a strategy to dynamically load components on-demand, improving performance for larger applications by minimizing the initial code load. React's `lazy` function, used alongside `Suspense`, renders dynamic imports as regular components, enhancing user experience and resource efficiency.
 
-Lazy loading in React is a technique that allows components to be loaded dynamically and on-demand, rather than at the initial page load. This can improve performance, especially for larger applications, by reducing the amount of code that needs to be downloaded, parsed, and executed when the app first loads. React.lazy function is used in conjunction with Suspense to render a dynamic import as a regular component. This feature enables better user experiences and more efficient resource usage.
-
-An example would be:
+Consider this implementation:
 
 ```tsx
 import React, { Suspense, lazy } from 'react';
@@ -37,9 +36,13 @@ function App() {
 export default App;
 ```
 
-In this example, LazyComponent is dynamically imported using lazy(). The Suspense component from React wraps around LazyComponent, providing a fallback UI (here it's a simple loading message) to display while LazyComponent is being loaded. When LazyComponent is needed and rendered for the first time, it's loaded on demand, which can improve the performance of your application by splitting the code into smaller chunks.
+Here, `LazyComponent` is dynamically imported using `lazy()`. The `Suspense` component wraps around `LazyComponent`, providing a fallback UI during its loading phase. When `LazyComponent` is needed, it loads on demand, improving performance by splitting the code into smaller chunks.
 
-Based on the theory here, we can modify our `src/friend.tsx` to the following:
+<InfoBox>
+  Code splitting is a technique in React that enables splitting your code into various bundles, which can then be loaded on demand or in parallel. This is particularly beneficial for improving the performance of large applications. When a user navigates to a part of your application that requires a component or library, only then does the necessary bundle get loaded, significantly reducing the initial load time of the application. This is especially useful for users with slower internet connections or on mobile devices. React's `lazy` function, coupled with `Suspense`, provides a straightforward way to implement code splitting, leading to more efficient resource usage and enhanced user experience.
+</InfoBox>
+
+Applying this concept, we've updated the `Friend` component in `src/friend.tsx` to use `React.lazy` for importing `UserDetailCard`. This change ensures that `UserDetailCard` loads only when necessary:
 
 ```tsx title="src/friend.tsx" {3,6,17-19}
 import { User } from "../types";
@@ -67,9 +70,15 @@ export const Friend = ({ user }: { user: User }) => {
 };
 ```
 
-```jsx
+The code defines a `Friend` component in React that displays user information using a popover. It imports user-related types and components from `@nextui-org/react` and a local `Brief` component for displaying a summary of the user.
+
+The `UserDetailCard` component is dynamically imported using `React.lazy` for performance efficiency, loading only when needed.
+
+```tsx
 const UserDetailCard = React.lazy(() => import("./user-detail-card.tsx"));
 ```
+
+Within the `Friend` component, a `Popover` is set up with its trigger wrapping a button that shows the `Brief` user summary. When clicked, the popover displays, containing the `UserDetailCard` within a `Suspense` component. This setup ensures a loading fallback is shown while the `UserDetailCard` loads, providing detailed user information based on the user's ID. This approach optimizes loading performance by fetching detailed user data only when the popover is activated.
 
 ```jsx
 
@@ -78,7 +87,16 @@ const UserDetailCard = React.lazy(() => import("./user-detail-card.tsx"));
 </Suspense>
 ```
 
+<InfoBox>
+  `Suspense` is a React component that lets your components “wait” for something before rendering. Initially introduced for React.lazy (lazy loading of components), its use has expanded to include data fetching and other asynchronous operations. `Suspense` provides a way to specify a fallback UI – for example, a loading indicator – that shows up while waiting for the component to load or data to be fetched. This helps in creating smoother user experiences in React applications, as it allows for more control over what gets displayed during the waiting period of an asynchronous operation. The integration of `Suspense` with lazy loading and other React features reflects the framework's ongoing evolution to meet modern web development needs.
+</InfoBox>
+
+This lazy loading approach is evident in the network panel of devtools, where two requests are made upon clicking `Friend`: one for the JavaScript bundle of `UserDetailCard`, and another for the user's details from the API.
+
 ![Waterfall with lazy load](/tutorials/advanced-network-patterns-react/ch5/waterfall-lazy-load.png)
 
+Visualizing the request process, we see a sequence similar to the network waterfall discussed in Chapter 2:
 
-![Waterfall with lazy load](/tutorials/advanced-network-patterns-react/ch5/waterfall-lazy-load-vis.png)
+![Waterfall with lazy load visualized](/tutorials/advanced-network-patterns-react/ch5/waterfall-lazy-load-vis.png)
+
+This observation leads to a question: is it possible to parallelize these requests to further reduce delays? Exploring this possibility could unlock more performance enhancements, especially in complex application structures.
