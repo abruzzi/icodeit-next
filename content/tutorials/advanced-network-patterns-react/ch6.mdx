@@ -12,18 +12,30 @@ leading: "As we conclude this tutorial, we reflect on the key lessons learned an
 summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
 draft: true
 ---
+We're introducing a package named `SWR` in this chapter, which will streamline our data fetching process and implement a `preload` feature.
 
-## Preload
+<InfoBox>
+  SWR, standing for Stale-While-Revalidate, is a caching strategy from Vercel, designed for efficient data fetching in React applications. It first delivers stale data from the cache (if available), then revalidates by fetching fresh data in the background. This approach enhances speed and user experience, as users see immediate data, albeit potentially stale. SWR automatically updates the data once fresh content is available and intelligently handles background updating, automatic revalidation, and error retries. It's ideal for data that frequently changes, where brief displays of slightly outdated information are acceptable.
+</InfoBox>
+
+## Implementing SWR for Preloading
+
+First, let's add `swr` to our project:
 
 ```jsx
 yarn add swr
 ```
 
+To use `swr`, we define a `fetcher` function, which is essentially a wrapper around the native `fetch` method:
+
 ```tsx
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 ```
 
-```tsx file="src/profile.tsx"
+Let's see `swr` in action within the `Profile` component:
+
+```tsx
+// src/profile.tsx
 import useSWR from 'swr'
 
 function Profile () {
@@ -37,18 +49,85 @@ function Profile () {
 }
 ```
 
+Here, `useSWR` fetches and returns user data, handling loading states and errors seamlessly.
+
+## Integrating `preload` with SWR
+
+Preloading with SWR is a technique to fetch and cache data before it's actually needed in the UI. This is done to improve the user experience by reducing the loading time when the user eventually requests that data. The idea is to proactively fetch data in the background, leveraging SWR's efficient caching and revalidation strategy.
+
+Here's a revised approach to implement preloading in a React component with SWR:
+
+```jsx
+import { preload } from "swr";
+
+function Component({ user }) {
+  const handleMouseEnter = () => {
+    preload(`/api/user/${user.id}/details`, fetcher);
+  };
+
+  return (
+    <div onMouseEnter={handleMouseEnter}>
+      {/* Render the rest of the component */}
+    </div>
+  );
+}
+```
+
+In this implementation, the `preload` function is used to initiate a data fetch using SWR. It doesn't directly return or use the fetched data but relies on SWR's caching mechanism.
+
+<InfoBox>
+  SWR optimizes data fetching in React with an efficient caching strategy. On the initial data fetch, SWR stores the response in a cache using the fetch URL as the key. For subsequent requests with the same key, SWR first checks this cache. If the cached data is recent (within the deduping interval), it's used immediately, reducing network requests. Meanwhile, SWR revalidates the data in the background to ensure freshness, updating the cache and UI if new data is fetched. This approach leads to faster load times and a seamless user experience, especially for frequently updated data.
+</InfoBox>
+
+
+When the `Component` component detects a mouse entering its area (via `onMouseEnter`), it calls `preload`. This proactively fetches and caches the detailed user data for that friend. Later, when the component that actually needs to display this data is rendered, the data will be retrieved from the SWR cache, making it available immediately if it's within the deduping interval.
+
+This method of preloading with SWR is particularly useful for scenarios where you can predict which data the user will need next, thereby subtly improving the responsiveness and fluidity of the user experience.
+
+Let's now modify the `Friend` component:
+
+```tsx
+// src/friend.tsx
+export const Friend = ({ user }: { user: User }) => {
+  const handleMouseEnter = () => {
+    preload(`/user/${user.id}/details`, () => getUserDetail(user.id));
+  };
+
+  return (
+    <Popover placement="bottom" showArrow offset={10}>
+      <PopoverTrigger>
+        <button onMouseEnter={handleMouseEnter}>
+          <Brief user={user} />
+        </button>
+      </PopoverTrigger>
+      {/* existing logic */}
+    </Popover>
+  );
+};
+```
+
+In `UserDetailCard`, we utilize `useSWR` for fetching user details:
+
+```tsx
+// src/user-detail-card.tsx
+import useSWR from "swr";
+import { getUserDetail } from "../api.ts";
+
+export function UserDetailCard({ id }: { id: string }) {
+  const { data: detail, isLoading: loading } = useSWR(
+    `/user/${id}/details`,
+    () => getUserDetail(id)
+  );
+
+  //...
+}
+```
+
+With this setup, hovering over a `Friend` triggers a preloading of the network call to `/user/<id>/details`. Clicking on it renders the detailed information. SWR handles caching and revalidation, enhancing the user experience.
+
 ![Request JS bundle and data in parallel](/tutorials/advanced-network-patterns-react/ch6/parallel-lazy-load.png)
 
-If we visualise it now you can see that the data and JavaScript can load separately and there would improve the overall interactivity greatly.
+Visualizing this, we see separate and parallel loading of data and the JavaScript bundle, significantly improving interactivity.
 
 ![Request JS bundle and data in parallel](/tutorials/advanced-network-patterns-react/ch6/parallel-lazy-load-vis.png)
 
-## Summary
-
-We have tried a few ways to explore the common problems and solutions in network, async programming.
-
-- Try to parallel network requests when possible
-- Try to split code when it’s not critical for initial rendering
-- Prefetch data when the lazy-loaded component need data so we can parallel the data and JS bundle together
-
-This is all I have for the first part of the tutorial, and in the next part we’ll look into what we can do with the server side technology, what are some of the patterns there and how can we make the application performance even better. Stay tuned.
