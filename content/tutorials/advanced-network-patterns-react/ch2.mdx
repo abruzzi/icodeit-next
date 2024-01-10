@@ -12,18 +12,21 @@ highlights:
 leading: "The next chapter will further explore complex data fetching scenarios, addressing performance challenges in frontend applications."
 summary: "This chapter lays the groundwork for mastering network requests in React. It provides a practical example of fetching and rendering data, setting the stage for more advanced patterns and performance considerations in subsequent chapters."
 ---
+### Starting Simple in React Data Fetching
 
-Let’s start from the simplest possible case in a React application. Think of a profile page, where a login user can see their profile. We’ll need to make a API call to fetch the user information by their ID.
+Imagine a simple React application: a profile page where a logged-in user can view their profile. To achieve this, we need to fetch the user's information from an API using their ID.
 
-The API endpoint returns some basic information, and it designed to have some delay so we can later on see how slow APIs can impact the performance in frontend.
+The API endpoint we'll use returns basic user information. It's designed to include a delay, allowing us to later examine how slow API responses can impact frontend performance.
 
-```jsx
+Consider this API call:
+
+```shell
 curl http://localhost:1573/users/u1
 ```
 
-And we could get the following response:
+And the expected response:
 
-```jsx
+```json
 {
   "id": "u1",
   "name": "Juntao Qiu",
@@ -36,9 +39,11 @@ And we could get the following response:
 }
 ```
 
-Typically, we would put such data fetch logic inside a `useEffect` call, React will trigger the effect once it’s done the initial render.
+In a typical React setup, we would handle this data fetching within a `useEffect` call. React triggers this effect after completing the initial render.
 
-```tsx tile="src/profile.tsx"
+Here's how you might implement this in `src/profile.tsx`:
+
+```tsx title="src/profile.tsx" {4-11}
 const Profile = ({ id }: { id: string }) => {
   const [user, setUser] = useState<User | undefined>();
 
@@ -59,7 +64,9 @@ const Profile = ({ id }: { id: string }) => {
 };
 ```
 
-While the `get` is only a simple wrapper of native `fetch`you might want to replace it with `axios.get` or whatever you prefer here.
+The `get` function is a straightforward wrapper around the native `fetch`. You can replace it with `axios.get` or any other preferred method.
+
+Here's the utility function in `utils.ts`:
 
 ```ts title="utils.ts"
 const baseurl = "http://localhost:1573";
@@ -77,7 +84,7 @@ async function get<T>(url: string): Promise<T> {
 export { get };
 ```
 
-And we can then update `App.tsx` into the following code to render `Profile` component:
+To render the `Profile` component, update `App.tsx` as follows:
 
 ```tsx title="App.tsx"
 import { Profile } from "./src/profile.tsx";
@@ -96,26 +103,23 @@ function App() {
 export default App;
 ```
 
-And if we visualise the rendering sequence with time, it would be something like the following diagram.
+Visualizing the rendering sequence over time, it would look something like this diagram:
 
 ![Fetch and then render](/tutorials/advanced-network-patterns-react/ch2/fetch-then-render.png)
 
-In the diagram above, when user typed in the url in the browser and pressed `Enter`, the browser will download the initial HTML first, as it parsing the HTML it found resources links like `JS` and style `CSS`. It then blocked and download them, parse and execute JS bundles, parse `CSS` to build `CSSOM` and so on.
+When a user accesses a React application, a typical flow begins with the browser downloading the initial HTML. As it parses the HTML, it encounters links to resources like JS and CSS. This process involves downloading, parsing, and executing JS bundles, building the CSSOM, and so on.
 
 <InfoBox>
-  Actually HTML will be parsed in the streaming manner, meaning once it get some bytes it started to parse to form the DOM, it don’t wait until all the HTML are downloaded, but we’ll simplify it in the illustration above - let’s assume it download the whole HTML and then build the DOM for such a simple application.
-  More details can be found in [Rendering on the Web](https://web.dev/articles/rendering-on-the-web), [Client-side rendering of HTML and interactivity](https://web.dev/articles/client-side-rendering-of-html-and-interactivity), and [Populating the page: how browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work)
+  Note: HTML parsing is usually done in a streaming manner, meaning it starts as soon as some bytes are received rather than waiting for the entire HTML to download. For simplicity, our illustration assumes the entire HTML is downloaded before DOM construction. More details can be found in [Rendering on the Web](https://web.dev/articles/rendering-on-the-web), [Client-side rendering of HTML and interactivity](https://web.dev/articles/client-side-rendering-of-html-and-interactivity), and [Populating the page: how browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work).
 </InfoBox>
 
-And as it execute JS bundle, React kicks in and take over to render and then perform the DOM manipulation (`document.createElement` …), then it sees an `useEffect` and it perform an network request. And it does nothing until the data returned from server, and it do another re-render with the data.
+As JavaScript executes, React begins rendering and manipulating the DOM, then triggers a network request through `useEffect`. It waits until data returns from the server before re-rendering with the new data.
 
-This is a typical flow and happens every second in your browser when you access an React application.
+To enhance user experience, we can introduce a `Spinner` component during data loading and an `Error` component for handling issues like unresponsive backends or nonexistent users.
 
-To make the user experience a bit better, we can add a `Spinner` component when data is loading, and an `Error` when something went wrong (the backend isn’t responding, or user doesn’t exist, for example).
+With these additions, the `Profile` component now includes additional states:
 
-Then the code changed a little bit with two new states:
-
-```tsx title="src/profile.tsx"
+```tsx title="src/profile.tsx" {2,3,23-25,27-29}
 const Profile = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | undefined>();
@@ -154,12 +158,12 @@ const Profile = ({ id }: { id: string }) => {
 };
 ```
 
-The structure of the component should be familiar to you if you have done React application before, nothing should be surprising so far.
+This structure should be familiar if you've worked with React before.
 
-Of course, we probably want to display something more than just the username typically, let’s make a new component for the user information called `About`, and add a few simple styles to make it looks good:
+Next, let's add more than just the username. We'll create an `About` component to display user information, adding simple styles for visual appeal.
 
 <InfoBox>
-  I’m using Tailwind CSS for styling, but as you might know it will make the code snippet super long and hard to read, so I removed it from the code snippet. If you want to see how I style them, please head to the corresponding code repo here.
+  For brevity, I'm omitting Tailwind CSS from the code snippets. You can view the full styled components in the corresponding code repository.
 </InfoBox>
 
 ```tsx title="src/about.tsx"
@@ -181,15 +185,15 @@ const About = ({ user }: { user: User }) => {
 };
 ```
 
-And it renders perfectly when data is correct:
+When data is correctly fetched, it renders as shown:
 
-![User basic is fetched and rendered correctly](/tutorials/advanced-network-patterns-react/ch2/fetched-about.png)
+![User basic information fetched and rendered](/tutorials/advanced-network-patterns-react/ch2/fetched-about.png)
 
-All right, we now have this simple Profile page, where the data is retrieved from backend API - which deliberately have 1.5 seconds delay before it send anything back to frontend.
+We now have a basic Profile page, retrieving data from a backend API intentionally delayed by 1.5 seconds.
 
-## User’s friends list
+### Implementing the User's Friends List
 
-Now let’s think of the user’s friends list - normally it would store in another table, thus has a separate API endpoint, let’s say there is a `/users/<id>/friends` and we will call that endpoint in another component `Friends`.
+Consider the user's friends list, typically stored in a separate table and accessed via a different API endpoint. For example, `/users/<id>/friends`. We'll fetch this data in a new component, `Friends`.
 
 ```tsx title="src/friends.tsx"
 const Friends = ({ id }: { id: string }) => {
@@ -232,15 +236,9 @@ const Friends = ({ id }: { id: string }) => {
 export { Friends };
 ```
 
-The above code is pretty similar with the `Profile` component itself, which does the following things:
+The structure of the `Friends` component mirrors that of `Profile`: managing state, fetching data in `useEffect`, and rendering based on loading, error, and successful data retrieval states.
 
-- define `data`, `loading` and `error` as state
-- use fetch function in `useEffect` to get data
-- when the data is loading, show an indicator
-- when it’s error, show an error
-- and when everything goes well, we render the actual list
-
-In the `Profile` component, we can use the `Friends` component like a regular React component.
+We can incorporate `Friends` into the `Profile` component like any regular React component:
 
 ```tsx title="src/profile.tsx"
 const Profile = () => {
@@ -255,4 +253,4 @@ const Profile = () => {
 }
 ```
 
-If you don’t look closely, the above code might looks fine. But when you think of time with the code all together, you should see something isn’t quite right here. For example, what happens if the `/friends` API also takes 1.5 seconds to return? How long it takes to show everything on the page. A simple maths would tell you that `1.5 + 1.5 = 3` seconds in total.
+At first glance, this implementation seems fine. However, if you consider the time taken for each API call, you might spot a potential issue. What if the `/friends` API also takes 1.5 seconds to respond? The total time to display the full page would be 3 seconds.
