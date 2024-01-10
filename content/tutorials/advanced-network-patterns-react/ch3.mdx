@@ -12,32 +12,31 @@ highlights:
 leading: "In the next chapter, we explore further optimization strategies and delve into more complex scenarios of network fetching in React."
 summary: "By mastering parallel requests and managing dependencies in network calls, this chapter sets the foundation for building faster and more responsive React applications. Join us as we continue to navigate the intricate world of advanced network patterns in React."
 ---
+The first issue we encounter is with the rendering order. Initially, in the `Profile` component, `useEffect` triggers a network request. However, since data takes 1.5 seconds to return, we display a loading indicator in the meantime.
 
-And it is the very first problem. The order of the render is: initially in `Profile` component, `useEffect` kicks off a network request, but the data will return in 1.5 seconds, before the data is fetched we show a loading indicator.
+Once the data arrives, we render the `About` section, and a similar process occurs in the `Friends` component. Here, `useEffect` initiates another network request, waiting for the data to return.
 
-And when data returns, we render `About`, and then in `Friends` we have the exact same flow, the `useEffect` in `Friends` kicks off another network request, and wait for the data to come back.
-
-If we visualise the request timeline, it would be something like this:
+Visualizing the request timeline, it looks like this:
 
 ![The request waterfall issue](/tutorials/advanced-network-patterns-react/ch3/request-waterfall.png)
 
-There are three rendering above, after first render, the page shows a `loading...` and nothing else, and it kick off `/users/u1`request, and when data comes back from server side, it shows the `About` section of the profile, and when it renders `Friends`, because the data isn’t available it shows a `loading...` in `Friends` section, and it sends out `/users/u1/friends`, and when data returns it does the third rendering.
+The process involves three renderings. After the first render, the page displays a `loading...` message while initiating the `/users/u1` request. When the server responds, the `About` section is displayed. As `Friends` renders, lacking available data, it shows a `loading...` message in its section and sends out the `/users/u1/friends` request. Upon receiving this data, the third rendering occurs.
 
-It might be easy to identify in our current setup, but imagine the component could be nested deeper than just one level, think about using `Friends` component in another page, or another section way down the tree - it’s then hard to see the problem by just reading the code statically.
+This sequence might be obvious in our current setup, but consider more complex scenarios. Imagine the `Friends` component nested deeper in the component tree or used in different pages or sections. In such cases, identifying the problem by statically reading the code becomes challenging.
 
-The problem could go worth when we have more nested component following the same `useEffect` + `loading` + `error` pattern, it could leads accumulate performance issues:
+The situation worsens with more nested components following the same `useEffect` + `loading` + `error` pattern, potentially leading to cumulative performance issues:
 
 ![Request waterfall could be even worse](/tutorials/advanced-network-patterns-react/ch3/more-waterfall.png)
 
-The page will be slower and slower over time - as the component tree keep growth.
+Over time, as the component tree grows, the page becomes increasingly slower.
 
-However, you might be thinking can we kick off the data fetching at the same time, so we only have to wait response only once.
+However, one might wonder if initiating data fetching simultaneously could mitigate this wait time.
 
-## Sending request in parallel
+## Sending Requests in Parallel
 
-We can solve the issue through sending parallel request, and it’s pretty easy to achieve. In `Profile` we could start both request with a `Promise.all` and pass the fetched data `friends` list to `Friends` component.
+We can address this issue by sending parallel requests. In the `Profile` component, we can start both requests simultaneously using `Promise.all`, passing the fetched `friends` list to the `Friends` component:
 
-```tsx title="src/profile.tsx"
+```tsx title="src/profile.tsx" {11-14}
 const Profile = ({ id }: { id: string }) => {
 	//...
   const [user, setUser] = useState<User | undefined>();
@@ -72,12 +71,12 @@ export { Profile };
 ```
 
 <InfoBox>
-  The `Promise.all()` static method takes an iterable of promises as input and returns a single Promise. This returned promise fulfills when all of the input's promises fulfill (including when an empty iterable is passed), with an array of the fulfillment values. It rejects when any of the input's promises rejects, with this first rejection reason.
+  The `Promise.all()` static method accepts an iterable of promises, returning a single Promise. This promise resolves when all input promises fulfill (including for an empty iterable), resulting in an array of fulfillment values. If any input promises reject, the returned promise rejects with the first rejection reason.
 </InfoBox>
 
-And we will need to change `Friends` into a presentational component, meaning it only response on data (`users` list) passed in - not anymore sending request itself:
+Consequently, we modify `Friends` into a presentational component, responding only to the passed `users` list, rather than making its own requests:
 
-```tsx title="src/friends.tsx"
+```tsx title="src/friends.tsx" /users/1-2
 const Friends = ({ users }: { users: User[] }) => {
   return (
     <div>
@@ -100,21 +99,19 @@ const Friends = ({ users }: { users: User[] }) => {
 export { Friends };
 ```
 
-And now the overall waiting time would be `max(1.5, 1.5) = 1.5` seconds, which is pretty impressive, right?
+Now, the total wait time is reduced to `max(1.5, 1.5) = 1.5` seconds, a significant improvement:
 
 ![Send requests in parallel](/tutorials/advanced-network-patterns-react/ch3/parallel-requests.png)
 
-Now the only issue is if one of the request returns faster, we still need to wait until the other returns - which in some extreme case can be a problem, but let’s accept that flaw for now and we can explore it in the following chapters.
+The only remaining issue is the potential wait for the slower request in extreme cases. We'll accept this limitation for now and explore solutions in subsequent chapters.
 
-## Request dependency
+## Request Dependency
 
-Parallel request can solve multiple independent requests problem and speed up the page load, when the requests can be parallel. However, not all the requests can be parallel, sometimes we need information from one request to make the following request.
+Parallel requests expedite the loading of independent data. However, some requests depend on others. For example, we might need to fetch user information first and use the `interests` array from the response to retrieve recommended feeds for the user. This sequential dependency necessitates a return to the initial approach.
 
-For example, we need to fetch user information first, and in the response, there is a section `interests` array, and we’ll use this array to fetch recommended feeds for this user. In other words, the second request has to wait until the first request resolved.
+In the `Feeds` component, we define loading, error, and data states, and `useEffect` initiates network fetching after the initial render:
 
-That means we will go back to the old path, in `Feeds` component, we define loading, error and data and `useEffect` to kick off network fetching after the initial render, etc.
-
-```tsx title="src/feeds.tsx"
+```tsx title="src/feeds.tsx" {2,3,5-15}
 const Feeds = ({ category }: { category: string }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [feeds, setFeeds] = useState<Feed[]>([]);
@@ -151,9 +148,9 @@ const Feeds = ({ category }: { category: string }) => {
 };
 ```
 
-And in the `Profile` we use `Feeds` as following:
+In the `Profile` component, we include `Feeds` as follows:
 
-```tsx title="src/profile.tsx"
+```tsx title="src/profile.tsx" {5}
 return (
     <>
       {user && <About user={user} />}
@@ -163,12 +160,12 @@ return (
   );
 ```
 
-So now the `About` and `Friends` will be loading at first, and as soon as `user` available, we use the `interests[0]` to fetch feeds, and it might take another 1 second or so until we can show it. The overall waiting time would be `max(1.5, 1.5) + 1 = 2.5` seconds.
+Initially, `About` and `Friends` load, and as soon as the `user` data is available, we use `interests[0]` to fetch feeds, potentially taking another second. The overall wait time amounts to `max(1.5, 1.5) + 1 = 2.5` seconds.
 
 ![The UI after all components are rendered](/tutorials/advanced-network-patterns-react/ch3/profile-friends-feeds.png)
 
-In such case, the network request is mixed with parallel and sequential, and it performant a bit better than the initial one.
+This approach combines parallel and sequential requests, yielding better performance than the initial method.
 
-![The mix of parallel request and sequential request](/tutorials/advanced-network-patterns-react/ch3/mixed-parallel-and-sequential.png)
+![The mix of parallel and sequential requests](/tutorials/advanced-network-patterns-react/ch3/mixed-parallel-and-sequential.png)
 
-The `feeds` request has to wait for the slowest one of the previous two to finish, and before that there is a big `spinner` shows up. The current solution looks fine, I mean that’s what it is, we anyways need data to populate the UI at run time for that particular user, right?
+The `feeds` request must wait for the completion of the previous two requests, displaying a large `spinner` in the interim. While this solution is functional, we must consider the runtime data requirements for each specific user.
