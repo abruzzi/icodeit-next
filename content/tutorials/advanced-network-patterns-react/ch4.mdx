@@ -9,29 +9,75 @@ highlights:
   - Leveraging NextUI for dynamic UI components.
   - Efficient data fetching for enhanced features.
   - Balancing performance with interactive design.
-leading: "In the next chapter, we'll dive into more complex data fetching scenarios and learn to balance interactive design with optimal performance."
+leading: "In the next chapter, we'll dive into code splitting and lazy load to reduce the initial load, that also the foundation of React concurrent we'll learn later."
 summary: "With the introduction of advanced UI elements and thoughtful data fetching strategies, this chapter elevates the user experience in React applications, paving the way for more engaging and efficient frontend designs."
-draft: true
 ---
+Let's delve further into typical frontend application scenarios, uncovering new patterns and potential avenues for performance improvement.
 
-## User detail popover
-
-Let’s keep explore what other cases in a typical frontend application. With these new scenarios we can see more patterns and potential ways of performance improvement.
-
-Imagine we want to enhance the feature of current Profile page, when user click on one of the friend avatar, we’ll show a popover with another network request `/users/1/details`. In the details we will show a few links and enable more interactions (you probably have already see it in Twitter or Linkedin before).
+Consider enhancing the current Profile page. Suppose a user clicks on a friend's avatar, and we display a popover with additional details fetched from a `/users/1/details` endpoint. This feature, common in platforms like Twitter or LinkedIn, adds depth to user interaction.
 
 ![User Detail Popover](/tutorials/advanced-network-patterns-react/ch4/user-detail-popover.png)
 
-To concentrate on the topic, I won’t spend more time on implementing the popover itself, we’ll use a few components from `nextui` for the popover behaviour and `UserDetailCard.`
+To maintain focus on our main topic, I'll skip the detailed implementation of the popover itself. Instead, we'll utilize components from `nextui` for the popover behavior and `UserDetailCard.`
 
 <InfoBox>
-  NextUI is a UI library for React that helps you build beautiful and accessible user interfaces. Created on top of Tailwind CSS and React Aria.
-  Although it sounds related to Next.js, and even the Website looks similar, but it is an independent community project and is not related to Vercel.
+  NextUI is a React UI library built on top of Tailwind CSS and React Aria, offering beautiful and accessible user interfaces. Despite its name similarity and website design, it's an independent community project and is not affiliated with Vercel or Next.js.
 </InfoBox>
 
-## A popover component
+## Install and config NextUI
 
-> Popover is a non-modal dialog that floats around its disclosure. It's commonly used for displaying additional rich content on top of something.
+Firstly, let's install NextUI into our project:
+
+```shell
+yarn add @nextui-org/react framer-motion
+```
+
+And the we will need to edit `tailwind.config.cjs`
+
+```js title="tailwind.config.cjs" {1,8,13,14}
+const {nextui} = require("@nextui-org/react");
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./index.html",
+    "./src/**/*.{jsx,tsx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  darkMode: "class",
+  plugins: [nextui()],
+}
+```
+
+And finally we'll need to wrap the Application with a `NextUIProvider`:
+
+```tsx tilte="App.tsx" {1,5,12}
+import {NextUIProvider} from "@nextui-org/react";
+
+function App() {
+  return (
+    <NextUIProvider>
+        <div>
+        <h1>Profile</h1>
+        <div>
+          <Profile id="u1" />
+        </div>
+      </div>
+    </NextUIProvider>
+  );
+}
+```
+
+Next let's implement the popover component with `Friend`.
+
+### Implementing a Popover Component
+
+A popover is a non-modal dialog that appears adjacent to its trigger element. It's often used to display additional rich content.
+
+Here's a basic implementation using `@nextui-org/react`:
 
 ```tsx
 import React from "react";
@@ -54,11 +100,11 @@ export default function App() {
 }
 ```
 
-When you click the "Open Popover" button, a popover box appears to the right. The content of the popover includes a header with bold text "Popover Content" and a smaller descriptive text saying "This is the popover content." The popover is styled with some padding and font styling.
+Clicking the "Open Popover" button reveals a popover box to the right. This box contains a header "Popover Content" in bold, followed by a descriptive text. It's styled with padding and font adjustments for better presentation.
 
-## The trigger
+### The Trigger Component
 
-We can define the `Friend` component as a trigger, just wrap it around `PopoverTrigger` as following:
+The `Friend` component can act as a trigger for the popover. We wrap it with `PopoverTrigger` as follows:
 
 ```tsx title="src/friend.tsx"
 import { User } from "../types";
@@ -83,7 +129,7 @@ export const Friend = ({ user }: { user: User }) => {
 };
 ```
 
-Where the `Brief` component accepts a `User` and render its details:
+The `Brief` component accepts a `User` object and renders its details:
 
 ```tsx title="src/brief.tsx"
 export function Brief({user}: { user: User }) {
@@ -106,11 +152,11 @@ export function Brief({user}: { user: User }) {
 }
 ```
 
-So when a `Brief` is clicked, we will open a popover.
+A click on the `Brief` component activates the popover.
 
-## UserDetailCard (fetching)
+### UserDetailCard Component (Fetching Data)
 
-We will create `UserDetailCard` component, it accepts an `id` and will fetch user details information that contains
+`UserDetailCard` is designed to fetch and display user details. The user detail includes:
 
 ```ts title="types.ts"
 export type UserDetail = {
@@ -122,9 +168,10 @@ export type UserDetail = {
 };
 ```
 
-We can use our reusable `get` function to fetch details from `/users/<id>/details` endpoint:
+We use our reusable `get` function to fetch these details from the `/users/<id>/details` endpoint:
 
-```tsx title="src/user-detail-card.tsx"
+
+```tsx title="src/user-detail-card.tsx" {5-15}
 export function UserDetailCard({ id }: { id: string }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [detail, setDetail] = useState<UserDetail | undefined>();
@@ -178,8 +225,8 @@ export function UserDetailCard({ id }: { id: string }) {
 export default UserDetailCard;
 ```
 
-It looks fine so far, but if we inspect the network we can see that the overall bytes send to client side is growing, as more new third party library added to the code, we can expect it keep growing. And the worst thing is that not all users are using the popover, maybe they only want to look into the feeds and then navigate away from the page, that means the JS bundles and CSS for the popover and `UserDetailCard` are all wasted.
+This implementation appears efficient. However, a network inspection reveals increasing data transfer to the client as more third-party libraries are integrated. The additional JavaScript and CSS for the popover and `UserDetailCard` could be unnecessary for users who don't interact with these features.
 
-![More data transferred through network](/tutorials/advanced-network-patterns-react/ch4/network-inspect-incresing-load.png)
+![More data transferred through network](/tutorials/advanced-network-patterns-react/ch4/network-inspect-increasing-load.png)
 
-Can we delay these data loading at when it’s required, like when a user actually clicked a `Friend` avatar, we start to load the corresponding JS bundle for the `UserDetailCard`, and then we request `/users/1/details` for more details.
+Is it possible to delay loading these resources until needed? For instance, only loading the `UserDetailCard` JS bundle when a user clicks on a `Friend` avatar, followed by a request to `/users/1/details` for detailed information.
