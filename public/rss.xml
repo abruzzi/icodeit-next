@@ -4,8 +4,15 @@
         <description><![CDATA[I Code It is focusing on maintainable React code and masterful use of frontend technologies like Refactoring and Test-Driven Development.]]></description>
         <link>https://icodeit.com.au</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Wed, 10 Jan 2024 10:57:33 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 12 Jan 2024 22:59:14 GMT</lastBuildDate>
         <atom:link href="https://icodeit.com.au/rss.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[Interview with Packt on my new book React Anti-Patterns]]></title>
+            <description><![CDATA[As an application grows and more code is added, the initial loading time can become noticeably longer. This delay, sometimes lasting several seconds, can frustrate users. To avoid this, it's essential to optimize loading times.]]></description>
+            <link>https://icodeit.com.au/posts/interview-with-packt</link>
+            <guid isPermaLink="true">https://icodeit.com.au/posts/interview-with-packt</guid>
+            <pubDate>Wed, 10 Jan 2024 10:46:12 GMT</pubDate>
+        </item>
         <item>
             <title><![CDATA[Implementing Dynamic Import and Code Splitting]]></title>
             <description><![CDATA[As an application grows and more code is added, the initial loading time can become noticeably longer. This delay, sometimes lasting several seconds, can frustrate users. To avoid this, it's essential to optimize loading times.]]></description>

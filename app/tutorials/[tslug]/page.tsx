@@ -1,11 +1,12 @@
-import { allChapters, allTutorials } from "@/.contentlayer/generated";
-
 import React from "react";
 
 import { Subscribe } from "@/components/design-system/subscribe";
 import { ChapterCard } from "@/components/design-system/chapter-card";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { TutorialIntro } from "@/components/tutorial/tutorial-intro";
+
+import { allChapters, allTutorials } from "contentlayer/generated";
 
 interface TutorialProps {
   params: {
@@ -90,15 +91,18 @@ export async function generateMetadata({
 }
 
 export default async function Tutorial({ params }: TutorialProps) {
+  const tutorial = await getTutorialFromParams(params);
   const chapters = await getChaptersFromParams(params);
 
-  if (!chapters) {
+  if (!tutorial || !chapters) {
     notFound();
   }
 
   return (
     <div className="max-w-4xl mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
-      <h1 className={`py-6`}>Chapters</h1>
+      <h1 className={`py-6`}>{tutorial.title}</h1>
+
+      <TutorialIntro tutorial={tutorial} />
 
       <hr />
 
