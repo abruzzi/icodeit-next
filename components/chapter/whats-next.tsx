@@ -1,26 +1,22 @@
 import Link from "next/link";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import React from "react";
-import { Chapter } from "contentlayer/generated";
+import { Chapter, Tutorial } from "contentlayer/generated";
 import { Product } from "@/components/mdx/product";
 
-const RelatedBook = () => {
+type ProductType = {
+  title: string;
+  cover: string;
+  link: string;
+  description: string;
+};
+
+const RelatedBook = ({ title, cover, link, description }: ProductType) => {
   return (
     <>
       <hr />
-      <Product
-        link="https://leanpub.com/3webdesignsin3weeks"
-        cover="/products/books/3-designs-in-3-weeks.png"
-        title="3 Web Designs in 3 Weeks: Bringing Your Web Design To Life"
-        categories={[]}
-      >
-        <p>
-          I wrote the book eight years ago and found some of the content were
-          outdated, and recently I decided to rewrite it with the modern (also
-          the most compatible) techniques. Just like the first edition, it has
-          all the interactive ways of teaching and the real-world-based design
-          reproducing, but with the latest front-end knowledge.
-        </p>
+      <Product link={link} cover={cover} title={title} categories={[]}>
+        <p>{description}</p>
       </Product>
     </>
   );
@@ -52,11 +48,20 @@ const LinkButton = ({
 
 export function WhatsNext({
   chapter: { leading, next, order, slug },
+  tutorial,
 }: {
   chapter: Chapter;
+  tutorial: Tutorial;
 }) {
   if (!next) {
-    return <RelatedBook />;
+    return (
+      <RelatedBook
+        title={tutorial.relatedProductTitle}
+        cover={tutorial.relatedProductCover}
+        link={tutorial.relatedProductLink}
+        description={tutorial.relatedProductDescription}
+      />
+    );
   }
 
   return (

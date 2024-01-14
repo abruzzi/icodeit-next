@@ -112,6 +112,22 @@ const Tutorial = defineDocumentType(() => ({
       type: "string",
       required: true,
     },
+    relatedProductTitle: {
+      type: "string",
+      required: true,
+    },
+    relatedProductLink: {
+      type: "string",
+      required: true,
+    },
+    relatedProductDescription: {
+      type: "string",
+      required: true,
+    },
+    relatedProductCover: {
+      type: "string",
+      required: true,
+    }
   },
   computedFields,
 }));

@@ -126,7 +126,7 @@ export default async function Chapter({ params }: ChapterProps) {
 
         <Summary chapter={chapter} />
 
-        <WhatsNext chapter={chapter} />
+        <WhatsNext chapter={chapter} tutorial={tutorial} />
 
         <Subscribe />
       </article>

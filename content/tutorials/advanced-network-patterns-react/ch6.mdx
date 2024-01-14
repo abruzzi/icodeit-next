@@ -12,6 +12,17 @@ leading: "As we conclude this tutorial, we reflect on the key lessons learned an
 summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
 draft: true
 ---
+
+In the last chapter, we explored how lazy loading and the Suspense API can defer the loading of larger, performance-impacting chunks, thereby enhancing the initial load speed and user experience. This approach, leveraging lazy loading, successfully reduced unnecessary requests and improved overall performance. Yet, as we wrapped up the chapter, a question arose: could we further optimize this?
+
+Now, in this chapter, our focus shifts to employing the preload technique to accelerate user interactions even more. Our specific goal is to boost performance when users access the `UserDetail`.
+
+<InfoBox title="Understanding Preload in JavaScript">
+  Preloading in JavaScript is a technique used to instruct the browser to load certain resources early in the page lifecycle. This is particularly useful for resources that are needed soon after the initial page load, but not immediately. By preloading these resources, you can ensure they are available right when needed, thus reducing load times and improving user interactivity. Preloading is often used for images, scripts, stylesheets, and other critical assets that contribute to smoother user experiences. Implementing preload can be a strategic choice in web development to enhance the performance and responsiveness of web applications.
+</InfoBox>
+
+## Introducing SWR
+
 We're introducing a package named `SWR` in this chapter, which will streamline our data fetching process and implement a `preload` feature.
 
 <InfoBox>
@@ -57,7 +68,7 @@ Preloading with SWR is a technique to fetch and cache data before it's actually 
 
 Here's a revised approach to implement preloading in a React component with SWR:
 
-```jsx
+```tsx {1,4-6,9}
 import { preload } from "swr";
 
 function Component({ user }) {
@@ -86,8 +97,7 @@ This method of preloading with SWR is particularly useful for scenarios where yo
 
 Let's now modify the `Friend` component:
 
-```tsx
-// src/friend.tsx
+```tsx title="src/friend.tsx" {2-4,9}
 export const Friend = ({ user }: { user: User }) => {
   const handleMouseEnter = () => {
     preload(`/user/${user.id}/details`, () => getUserDetail(user.id));
@@ -130,4 +140,17 @@ With this setup, hovering over a `Friend` triggers a preloading of the network c
 Visualizing this, we see separate and parallel loading of data and the JavaScript bundle, significantly improving interactivity.
 
 ![Request JS bundle and data in parallel](/tutorials/advanced-network-patterns-react/ch6/parallel-lazy-load-vis.png)
+
+Here's a rephrased summary and introduction:
+
+To recap our progress, let’s review key strategies we've employed to enhance performance:
+
+- Initially load only essential content by splitting and employing lazy loading.
+- Whenever feasible, execute network requests in parallel.
+- Implement preloading to retrieve data ahead of user interaction with components.
+- For any third-party libraries, consider code splitting into separate bundles and apply lazy loading as needed.
+
+By applying these methods, we've significantly boosted our application's performance. But so far, our focus has been predominantly on frontend optimizations. What if we broaden our perspective? Can we streamline our application further by shifting more data fetching to the backend? Or is it possible to pre-render content, updating it only as necessary on the frontend?
+
+These considerations lead us into backend techniques, which will be our focus in upcoming chapters. We'll explore and discuss Server Side Rendering, Static Site Generation, and React Server Components. We'll delve into how and when to use these approaches to ensure our application is performance-optimized before it even reaches the client side. Stay tuned for more insights.
 
