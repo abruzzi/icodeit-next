@@ -24,7 +24,7 @@ export default function Home() {
         cover="/products/books/react-anti-patterns-cover.jpg"
         title="React Anti-Patterns"
         learnMoreLink="https://www.icodeit.com.au/react-anti-patterns"
-        categories={["coming soon", "intermediate"]}
+        categories={["new", "intermediate"]}
       >
         <p>
           Take your React development skills to the next level by examining

@@ -72,7 +72,7 @@ export const Product = ({
               <span
                 key={cat}
                 className={`${
-                  cat === "coming soon"
+                  cat === "new"
                     ? "border-green-800 dark:border-green-300"
                     : "border-slate-100 dark:border-slate-700"
                 } text-slate-600 dark:text-slate-300  rounded-full border py-1 px-2 text-xs font-light mr-2`}
