@@ -55,13 +55,13 @@ module.exports = {
 And finally we'll need to wrap the Application with a `NextUIProvider`:
 
 ```tsx tilte="App.tsx" {1,5,12}
-import {NextUIProvider} from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/react";
 
 function App() {
   return (
     <NextUIProvider>
-        <div>
-        <h1>Profile</h1>
+      <div>
+      <h1>Profile</h1>
         <div>
           <Profile id="u1" />
         </div>
@@ -102,7 +102,7 @@ export default function App() {
 
 Clicking the "Open Popover" button reveals a popover box to the right. This box contains a header "Popover Content" in bold, followed by a descriptive text. It's styled with padding and font adjustments for better presentation.
 
-### The Trigger Component
+### Define a Trigger Component
 
 The `Friend` component can act as a trigger for the popover. We wrap it with `PopoverTrigger` as follows:
 
@@ -225,8 +225,12 @@ export function UserDetailCard({ id }: { id: string }) {
 export default UserDetailCard;
 ```
 
+If we could visualise the current component tree
+
+![Component Tree with User Detail Card](/tutorials/advanced-network-patterns-react/ch4/component-tree-user-detail.png)
+
 This implementation appears efficient. However, a network inspection reveals increasing data transfer to the client as more third-party libraries are integrated. The additional JavaScript and CSS for the popover and `UserDetailCard` could be unnecessary for users who don't interact with these features.
 
 ![More data transferred through network](/tutorials/advanced-network-patterns-react/ch4/network-inspect-increasing-load.png)
 
-Is it possible to delay loading these resources until needed? For instance, only loading the `UserDetailCard` JS bundle when a user clicks on a `Friend` avatar, followed by a request to `/users/1/details` for detailed information.
+Is it possible to delay loading these resources until needed? For instance, only loading the `UserDetailCard` JS bundle when a user clicks on a `Friend` avatar, followed by a request to `/users/1/details` for detailed information. Let's find out in the next chapter.

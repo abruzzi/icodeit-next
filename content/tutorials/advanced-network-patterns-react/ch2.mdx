@@ -254,3 +254,4 @@ const Profile = () => {
 ```
 
 At first glance, this implementation seems fine. However, if you consider the time taken for each API call, you might spot a potential issue. What if the `/friends` API also takes 1.5 seconds to respond? The total time to display the full page would be 3 seconds.
+

@@ -13,6 +13,17 @@ leading: "In the next chapter, we'll explore more advanced networking patterns a
 summary: "This chapter is a deep dive into optimizing React applications using Lazy Load and Suspense. It provides practical examples and insights into improving load times and overall application efficiency."
 draft: true
 ---
+
+At the end of the previous chapter, we noticed that the page now has more bytes to load initially, which might not fair for user who don't hover on a Friend component - they still need to pay for the extra network requests and JavaScript bundles.
+
+We could delay such extra (not immediate useful) content into another request as late as possible (maybe never if the users don't ask). For example, we could split `UserDetailCard` (and its dependency) into a separate JavaScript bundle and load it whenever the user hover on it.
+
+![Separate UserDetailCard as another bundle](/tutorials/advanced-network-patterns-react/ch5/component-tree-lazy-user-detail.png)
+
+Let's see how to implement it in React with lazy load and suspense.
+
+## Lazy Loading
+
 Lazy loading in React is a strategy to dynamically load components on-demand, improving performance for larger applications by minimizing the initial code load. React's `lazy` function, used alongside `Suspense`, renders dynamic imports as regular components, enhancing user experience and resource efficiency.
 
 Consider this implementation:
@@ -94,6 +105,82 @@ Within the `Friend` component, a `Popover` is set up with its trigger wrapping a
 This lazy loading approach is evident in the network panel of devtools, where two requests are made upon clicking `Friend`: one for the JavaScript bundle of `UserDetailCard`, and another for the user's details from the API.
 
 ![Waterfall with lazy load](/tutorials/advanced-network-patterns-react/ch5/waterfall-lazy-load.png)
+
+
+Analysis the current bundles, it doesn't seem help a lot:
+
+![Bundle size analysis](/tutorials/advanced-network-patterns-react/ch5/bundle-size-analytics.png)
+
+Note in the chart above, the thin slice on the left hand side it the `UserDetailCard`, while the big one on the right is everything else. And if we look closely we'll find the biggest one is `framer-motion` - a package that adding the animation in React - shipped within NextUI. Obviously we don't really need animation for everything, it only used when the popover shows up.
+
+We could further split the `Friend` into a separate bundle with NextUI components, and leave the index lightweight.
+
+So firstly we don't import `Friend` in `Friends`, instead we lazy load it with suspense:
+
+```tsx title="Friends" {5,13-15}
+import { User } from "../types.ts";
+import React, { Suspense } from "react";
+import { FriendSkeleton } from "../misc/friend-skeleton.tsx";
+
+const Friend = React.lazy(() => import("./friend.tsx"));
+
+const Friends = ({ users }: { users: User[] }) => {
+  return (
+    <div className="py-4">
+      <h2 className="text-lg text-slate-900 tracking-wider">Friends</h2>
+      <div className="flex flex-row pt-4 gap-4">
+        {users.map((user) => (
+          <Suspense fallback={<FriendSkeleton />}>
+            <Friend user={user} key={user.id} />
+          </Suspense>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export { Friends };
+```
+
+And in the `Profile.tsx`, we will remove `NextUIProvider` and add it as a wrapper to `Friend`, because we don't need NextUI for the whole application but the popover in `Friend`.
+
+```tsx title="src/friend.tsx" {2, 6, 19}
+//...
+const UserDetailCard = React.lazy(() => import("./user-detail-card.tsx"));
+
+const Friend = ({ user }: { user: User }) => {
+  return (
+    <NextUIProvider>
+      <Popover placement="bottom" showArrow offset={10}>
+        <PopoverTrigger>
+          <button>
+            <Brief user={user} />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="max-w-[240px] min-w-[200px] max-h-40 min-h-32">
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserDetailCard id={user.id} />
+          </Suspense>
+        </PopoverContent>
+      </Popover>
+    </NextUIProvider>
+  );
+};
+
+export default Friend;
+```
+
+With these updates, our new analysis reveals that we have three distinct bundles: `UserDetail`, `Friend`, and `Profile`.
+
+![Bundle size analysis after splitting Friend](/tutorials/advanced-network-patterns-react/ch5/bundle-size-analytics-nextui.png)
+
+The largest bundle, shown in blue, corresponds to the `Friend` component. The smaller, red-tinted one at the top-left is the `UserDetailCard`, and the green-tinted one represents the `Profile` component.
+
+This is a significant improvement. Now, the loading process works as follows: When the `Profile` component initiates parallel requests for `/users/u1` and `/users/u1/friends`, we display skeleton screens for the About section and the Friends list. As the friends data arrives and the `Friends` component starts rendering, the browser concurrently downloads the related bundle. During this time, a `FriendSkeleton` is displayed, transitioning to the `Friend` component once the bundle is fully downloaded.
+
+Moreover, if the user doesn't hover over a `Friend`, there's no additional action. The `UserDetail` data is fetched only when the user hovers over a `Friend`, optimizing resource loading and enhancing performance.
+
+## The potential issue
 
 Visualizing the request process, we see a sequence similar to the network waterfall discussed in Chapter 2:
 

@@ -22,6 +22,8 @@ Visualizing the request timeline, it looks like this:
 
 The process involves three renderings. After the first render, the page displays a `loading...` message while initiating the `/users/u1` request. When the server responds, the `About` section is displayed. As `Friends` renders, lacking available data, it shows a `loading...` message in its section and sends out the `/users/u1/friends` request. Upon receiving this data, the third rendering occurs.
 
+![The component tree of About + Friends](/tutorials/advanced-network-patterns-react/ch3/component-tree-waterfall.png)
+
 This sequence might be obvious in our current setup, but consider more complex scenarios. Imagine the `Friends` component nested deeper in the component tree or used in different pages or sections. In such cases, identifying the problem by statically reading the code becomes challenging.
 
 The situation worsens with more nested components following the same `useEffect` + `loading` + `error` pattern, potentially leading to cumulative performance issues:
@@ -104,6 +106,8 @@ Now, the total wait time is reduced to `max(1.5, 1.5) = 1.5` seconds, a signific
 ![Send requests in parallel](/tutorials/advanced-network-patterns-react/ch3/parallel-requests.png)
 
 The only remaining issue is the potential wait for the slower request in extreme cases. We'll accept this limitation for now and explore solutions in subsequent chapters.
+
+![The only async component now is Profile](/tutorials/advanced-network-patterns-react/ch3/component-tree-parallel.png)
 
 ## Request Dependency
 
