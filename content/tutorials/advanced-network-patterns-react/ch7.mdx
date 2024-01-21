@@ -16,15 +16,19 @@ draft: true
 
 The idea is that we can send request from backend and assembling final HTML all together, so client side can save some time on request network again (especially when each request take some overhead time on establishing network connection, etc.)
 
-> SSR
->
+<InfoBox>
+  Server-Side Rendering (SSR) is a web development technique where the server generates the complete HTML of a webpage in response to a user's request. This process takes place each time a user accesses a URL or refreshes their browser. The server executes the necessary JavaScript code, renders all the dynamic content, and then sends this fully prepared HTML to the user's browser. Although this method involves some processing time on the server, it allows the browser to display a fully rendered page more quickly compared to waiting for client-side JavaScript to render content. SSR enhances user experience, particularly for the initial page load, and improves the website's search engine optimization by ensuring all content is immediately accessible.
+</InfoBox>
 
 From now on, I’m going to use Next.js for SSR, although there are many other alternatives like Remix or so (you can even build your own SSR solution, but that would out of scope of this article).
 
 If you don’t familiar with Next.js, it’s recommended to walk through at least the dashboard tutorial it provides. You might want to follow the tutorial and have a play with it, and come back later.
 
-> some next.js definition
->
+<InfoBox>
+  Next.js is an open-source web development framework built on top of Node.js, enabling developers to build server-rendered React applications with ease. It was created by Vercel (formerly Zeit) and is designed to simplify the process of building universal, web applications with React.
+
+  The primary goal of Next.js is to provide a straightforward and efficient way to build performant, scalable, and user-friendly web applications. It focuses on enhancing the developer experience with features like automatic code splitting, server-side rendering (SSR), static site generation (SSG), and built-in CSS support. Next.js aims to streamline the process of building complex React applications, making them more accessible to a broader range of developers.
+</InfoBox>
 
 Let’s define a `getUserBasicInfo` in backend a dynamic routing in Next.js `app/user/[id]/page.tsx`
 
@@ -38,6 +42,15 @@ async function getUserBasicInfo(id: string) {
   return { user, friends };
 }
 ```
+
+<InfoBox>
+  In version 13, Next.js introduced a new App Router built on **React Server Components**, which supports shared layouts, nested routing, loading states, error handling, and more.
+
+  The system is based on the file system, meaning that the routes are determined by the file structure in the "app" directory of your Next.js project. And there are some convention to following,
+
+  Read more on [Routing Fundamentals](https://nextjs.org/docs/app/building-your-application/routing) and
+  [Pages and Layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts).
+</InfoBox>
 
 And then in the `Page` component, we can call this function to get all data and then send to frontend:
 
@@ -58,6 +71,8 @@ interface PageProps {
 }
 ```
 
+In Next.js, `app/user/[id]/page.tsx` represents a dynamic route within the `app` directory. The `[id]` part indicates a variable segment in the URL, which can change based on the user ID. For example, accessing `/user/123` would render the `page.tsx` component for the user with ID 123. This file structure is used for creating pages that change content based on the URL parameter, like displaying different user profiles.
+
 While the `Profile` is defined as a simple presentational component, note how we removed the `loading` and all the status:
 
 ```tsx
@@ -74,16 +89,10 @@ const Profile = ({ user, friends }: { user: User; friends: User[] }) => {
 
 We didn’t change the behaviour of `Feeds` though, as that’s some less critical information in such context (and also I would like to show the comparison here too), so we use it as a `Client` component - meaning it behaves as a normal traditional React component:
 
-```tsx {1}
+```tsx title="components/feeds.tsx" {1, 9-22}
 'use client';
 
 import { useEffect, useState } from "react";
-
-type Feed = {
-  id: string;
-  title: string;
-  description: string;
-};
 
 const Feeds = ({ category }: { category: string }) => {
   const [loading, setLoading] = useState<boolean>(false);

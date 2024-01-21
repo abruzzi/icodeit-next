@@ -119,8 +119,7 @@ export const Friend = ({ user }: { user: User }) => {
 
 In `UserDetailCard`, we utilize `useSWR` for fetching user details:
 
-```tsx
-// src/user-detail-card.tsx
+```tsx title="src/user-detail-card.tsx"
 import useSWR from "swr";
 import { getUserDetail } from "../api.ts";
 
@@ -141,8 +140,6 @@ With this setup, hovering over a `Friend` triggers a preloading of the network c
 Visualizing this, we see separate and parallel loading of data and the JavaScript bundle, significantly improving interactivity.
 
 ![Request JS bundle and data in parallel](/tutorials/advanced-network-patterns-react/ch6/parallel-lazy-load-vis.png)
-
-Here's a rephrased summary and introduction:
 
 To recap our progress, let’s review key strategies we've employed to enhance performance:
 
