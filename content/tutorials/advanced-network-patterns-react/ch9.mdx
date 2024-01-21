@@ -1,0 +1,47 @@
+---
+order: 9
+title: "Enhance User Experience with Skeleton Components"
+description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
+date: 2024-01-21T17:00:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch10"
+highlights:
+  - Implementing SWR for optimized data fetching
+  - Strategic use of preload for earlier data loading
+  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
+leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
+summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+draft: true
+---
+
+One “small” thing we haven’t dived deep here is the `loading` indicator, which is important to give users some visual feedback, tell them there are something happening at the moment.
+
+We could use a skeleton component for indicating that we don’t have anything to show but it should be something like this. And we also can have a spinner showing that we have triggered some data fetching and it’s now loading.
+
+## Skeleton
+
+Create a skeleton and show it while the content are generating is useful. It helps to let users know there is something going on and roughly the shape of the final result looks like - a list, an avatar, a simple description or so with only a few simple shapes.
+
+```jsx
+function AboutSkeleton() {
+  return (
+    <div className="flex flex-row gap-2 pb-4 items-center animate-pulse">
+      <div>
+        <div className="w-12 h-12 rounded-full animate-pulse bg-slate-300" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="text-2xl font-bold w-20 h-6 bg-slate-200" />
+        <p className="text-xs w-24 h-2 bg-slate-200" />
+      </div>
+    </div>
+  );
+}
+```
+
+It renders as a placeholder, you don’t have to put it 100% accurate - it should have the rough shape of the actual component. However, making it close to the height of the actual component could make less CLS(Cumulative Layout Shift).
+
+![Untitled](/tutorials/advanced-network-patterns-react/ch9/about-skeleton.png)
+
+
+[Check this out](https://www.youtube.com/watch?v=g5u9LzKydAA)
+

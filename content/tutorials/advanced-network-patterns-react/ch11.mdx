@@ -1,0 +1,162 @@
+---
+order: 11
+title: "Lazy load and preload in Next.js"
+description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
+date: 2024-01-21T17:00:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch12"
+highlights:
+  - Implementing SWR for optimized data fetching
+  - Strategic use of preload for earlier data loading
+  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
+leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
+summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+draft: true
+---
+
+## Lazy load (dynamic load) in Next.js
+
+Lets emphasis again that our goal is to improve the performance of initial render, and one aspect is that we should reduce the load of the initial render. In any product, there are many features has only a few people are really using, think of your phone, you might have installed dozens of apps, but only a few are used daily. And in one of such app, only a few features are used frequently than others.
+
+Same thing in web application, and it doesn’t make much sense for a user to load extra 3M bytes of JavaScript of a feature they never touched. How can we achieve that on-demand loading then.
+
+We could use code split and lazy load. It’s pretty mature feature in nowadays web world. A modal dialog, a dropdown list or context menu are all good usages.
+
+Let’s think of our example, now we’re showing some information of a friend of current user, but what if we want to see more.
+
+But not every user would do that, right? We could lazy load the popover content - whenever a user click one `Friend` , we start to download the `UserDetailCard`:
+
+```jsx
+const UserDetailCard = dynamic(() => import("./user-detail-card"));
+
+export const Friend = ({ user }: { user: User }) => {
+  return (
+    <NextUIProvider>
+      <Popover placement="bottom" showArrow offset={10}>
+        <PopoverTrigger>
+          <button>
+            <Image
+              src={`https://i.pravatar.cc/150?u=${user.id}`}
+              alt={`User ${user.name} avatar`}
+              className="w-8 h-8 rounded-full"
+              width={32}
+              height={32}
+            />
+            <span className="text-xs text-slate-700">{user.name}</span>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent>
+					<UserDetailCard id={user.id} />
+        </PopoverContent>
+      </Popover>
+    </NextUIProvider>
+  );
+};
+```
+
+And in the `UserDetailCard` we could do the skeleton just like above:
+
+```jsx
+async function UserDetailCard({ id }: { id: string }) {
+  const detail = await getUserDetail(id);
+
+  return (
+    <Card>
+      <CardHeader>
+        <div>
+          <Avatar src={detail.avatar} />
+          <div>
+            <h4>{detail.name}</h4>
+            <h5>{detail.twitter}</h5>
+          </div>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <p>{detail.bio}</p>
+      </CardBody>
+      <CardFooter>
+        <div>
+          <p>
+            <Link href={detail.homepage}>{detail.homepage}</Link>
+          </p>
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+```
+
+And when we click a `Friend` you can see there is an additional request send (for a JavaScript chunk), and then following a network request.
+
+![Code Split with lazy loading](/tutorials/advanced-network-patterns-react/ch11/network-waterfall-code-split.png)
+
+Can we do even better? That leads us to the next, and our final topic - preload.
+
+## Lazy load + preload
+
+What if we can load the data for the user a bit earlier, so whenever a user click to open the popover, the data is already there - so we could enhance the user experience even better.
+
+> Preload
+>
+
+```jsx
+export const Friend = ({ user }: { user: User }) => {
+  const handleHover = () => {
+    preload(user.id);
+  };
+
+  return (
+    <NextUIProvider>
+      <Popover placement="bottom" showArrow offset={10}>
+        <PopoverTrigger>
+          <button
+            tabIndex={0}
+            onMouseEnter={handleHover}
+          >
+						{/* the user info */}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <Suspense fallback={<Loading />}>
+            <UserDetailCard id={user.id} />
+          </Suspense>
+        </PopoverContent>
+      </Popover>
+    </NextUIProvider>
+  );
+};
+```
+
+While the `preload` is defined as :
+
+```jsx
+export const getUserDetail = cache(async (id: string) => {
+  return await get<UserDetail>(`/users/${id}/details`);
+});
+
+export const preload = (id: string) => {
+  void getUserDetail(id);
+};
+```
+
+Note how the network tab now the data is downloaded before JavaScript chunk downloads.
+
+![Preload data when user hover](/tutorials/advanced-network-patterns-react/ch11/preload-on-hover.png)
+
+To avoid it preload every time when user hover on the `Friend`, we could maintain a simple `Set` internally:
+
+```jsx
+const preloadedUserIds = new Set();
+
+export const getUserDetail = cache(async (id: string) => {
+  preloadedUserIds.add(id);
+  return await get<UserDetail>(`/users/${id}/details`);
+});
+
+export const preload = (id: string) => {
+  if(!preloadedUserIds.has(id)) {
+    void getUserDetail(id);
+  }
+};
+```
+

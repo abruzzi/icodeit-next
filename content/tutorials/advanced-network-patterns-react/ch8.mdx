@@ -1,0 +1,75 @@
+---
+order: 8
+title: "Static Site Generation"
+description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
+date: 2024-01-21T17:00:12+11:00
+next: "ch9"
+tutorialId: "advanced-network-patterns-react"
+highlights:
+  - Implementing SWR for optimized data fetching
+  - Strategic use of preload for earlier data loading
+  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
+leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
+summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+draft: true
+---
+
+The request we have seen so far are all runtime requests, meaning we wouldn’t know before the client actually request such data, like profile for user `u1`. On the contrast, there is a different type of request, we can know them before user even send the request - such as  advertisements that are universal to everyone who landed on the page, some announcement information (holiday discount or so for a product site), we should not generate such information at run time.
+
+> Static Site Generation (blog)
+>
+
+These type of data can be created before user even request them, at build time - when the JSX are built into HTML.
+
+Actually you can easily achieve that behaviour if you’re using a static router, meaning a router that doesn’t need any runtime information. In our `Home` page, we only show a list of advertisements for example (might be a few links). At build time, Next.js found that the `getAds` call doesn’t need anything from the router, so it will by default call the API and build static HTML for us.
+
+```tsx {2}
+export default async function Home() {
+	const ads = await getAds();
+  return (<Ads ads={ads} />);
+}
+```
+
+So when user access `/`, there is nearly no latency for render the HTML result, just like a static website.
+
+![The Advertisement screen](/tutorials/advanced-network-patterns-react/ch8/ads.png)
+
+However, our `/user/<id>` is a bit different as it does require request time information to call the backend API, such as `/users/u1/friends`.
+
+## Mix SSR and SG
+
+In Next.js you can actually mix these two in dynamic routing. For example, we might want to pre-generate some information for some `user` (like the one who has many connections) before they even open the page - we can do that with `generateStaticParams`.
+
+```tsx
+export function generateStaticParams() {
+  return [{ id: "u1" }, { id: "u2" }, { id: "u3" }];
+}
+
+export default async function Page({ params }: PageProps) {
+  return <Profile id={params.id} />;
+}
+```
+
+You can think of it like at build time, Next.js will invoke ``generateStaticParams`` and use the result to render all the result pages:
+
+```tsx
+generateStaticParams().forEach(param => <Page params={params} />)
+```
+
+And the result is generated in HTML (and a bit coordinate JS), so when users on the list open the page, the content is already there and it’s blaze fast to see all the results.
+
+![The Profile is already generated in build time](/tutorials/advanced-network-patterns-react/ch8/profile-static-generated.png)
+
+In such case, there is no need to make any data request in frontend, the diagram would be something like this:
+
+![Static Generated before user even request the page](/tutorials/advanced-network-patterns-react/ch8/network-static-generated.png)
+
+However, in reality it’s not feasible to request all the data at build time. At one hand the data request might be huge to build and store if you have large number of users, and secondly the data is only a snapshot of the time when it’s build - meaning it’s might have changed by user want to see them, and thirdly request like “search” or “trending” needs to be real-time so we have to build the response at run time.
+
+That require us to mix the Static Generation, Server Side Render and data fetching parallel all together, that would be something like the following illustration:
+
+![Mixed of Sever-Side Rendering and Static Site Generation](/tutorials/advanced-network-patterns-react/ch8/network-ssr-and-static-generated.png)
+
+In the initial rendering,  before `page load` we have some non-real-time data (user bio, friends list, etc) generated already on static HTML, and based on each request we might use `Server Side Render` to request on the backend (which is normally faster) and compose all the new HTML required.
+
+And then user interaction triggers some more request and we fetch again for the following re-render.

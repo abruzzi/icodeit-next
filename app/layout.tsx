@@ -49,7 +49,6 @@ interface RootLayoutProps {
 
 import { Providers } from "@/app/providers";
 import { HeaderWithMenu } from "@/components/design-system/header-with-menu";
-import { useRouter } from "next/router";
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (

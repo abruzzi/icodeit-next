@@ -1,0 +1,147 @@
+---
+order: 7
+title: "Server Side Rendering"
+description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
+date: 2024-01-21T17:00:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch8"
+highlights:
+  - Implementing SWR for optimized data fetching
+  - Strategic use of preload for earlier data loading
+  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
+leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
+summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+draft: true
+---
+
+The idea is that we can send request from backend and assembling final HTML all together, so client side can save some time on request network again (especially when each request take some overhead time on establishing network connection, etc.)
+
+> SSR
+>
+
+From now on, I’m going to use Next.js for SSR, although there are many other alternatives like Remix or so (you can even build your own SSR solution, but that would out of scope of this article).
+
+If you don’t familiar with Next.js, it’s recommended to walk through at least the dashboard tutorial it provides. You might want to follow the tutorial and have a play with it, and come back later.
+
+> some next.js definition
+>
+
+Let’s define a `getUserBasicInfo` in backend a dynamic routing in Next.js `app/user/[id]/page.tsx`
+
+```tsx
+async function getUserBasicInfo(id: string) {
+  const [user, friends] = await Promise.all([
+    get<User>(`/users/${id}`),
+    get<User[]>(`/users/${id}/friends`),
+  ]);
+
+  return { user, friends };
+}
+```
+
+And then in the `Page` component, we can call this function to get all data and then send to frontend:
+
+```tsx {2}
+export default async function Page({ params }: PageProps) {
+  const { user, friends } = await getUserBasicInfo(params.id);
+  return (<Profile user={user} friends={friends} />);
+}
+```
+
+The PageProps is defined:
+
+```tsx
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+```
+
+While the `Profile` is defined as a simple presentational component, note how we removed the `loading` and all the status:
+
+```tsx
+const Profile = ({ user, friends }: { user: User; friends: User[] }) => {
+  return (
+    <>
+      <About user={user} />
+      <Friends users={friends} />
+      <Feeds category={user.interests[0]} />
+    </>
+  );
+};
+```
+
+We didn’t change the behaviour of `Feeds` though, as that’s some less critical information in such context (and also I would like to show the comparison here too), so we use it as a `Client` component - meaning it behaves as a normal traditional React component:
+
+```tsx {1}
+'use client';
+
+import { useEffect, useState } from "react";
+
+type Feed = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+const Feeds = ({ category }: { category: string }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [feeds, setFeeds] = useState<Feed[]>([]);
+
+  useEffect(() => {
+    const fetchFeeds = async () => {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:1573/articles/${category}`
+      );
+      const data = await response.json();
+
+      setLoading(false);
+      setFeeds(data);
+    };
+
+    fetchFeeds();
+  }, [category]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h2>Your Feeds</h2>
+      <div>
+        {feeds.map((feed) => (
+          <>
+            <h3>{feed.title}</h3>
+            <p>{feed.description}</p>
+          </>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export { Feeds };
+```
+
+Note how we use `use client` directive to mark it as a client component.
+
+And now when we load the page, initially it is a bit slow, and then we see `About` and `Friends` all together, and immediately we see `loading` for the feeds, and finally when feeds returns we can see all the content.
+
+![Feeds are in loading while About and Friends are ready](/tutorials/advanced-network-patterns-react/ch7/feeds-is-loading.png)
+
+You might be wondering what is the point to move these request from frontend to backend. There are a few advantages:
+
+- Normally the server side is closer to where the data is stored than frontend, so it’s normally faster to get the data
+- It’s easier to caching (and control) these data in server side
+- more security in backend
+- server machine are more powerful
+- It’s more secure (like, use of API key or token in backend) and frontend is transparent of such setups
+
+And if we visualise this type of code, it looks like:
+
+![Server Side Rendering](/tutorials/advanced-network-patterns-react/ch7/server-side-rendering.png)
+
+The initial load might take a bit more time, but after that the application is responsible and don’t have to load any data, that means better user experience. The generated data can be cached also in different levels, so the next time when we request the same data we can save some time.

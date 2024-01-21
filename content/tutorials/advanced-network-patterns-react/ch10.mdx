@@ -1,0 +1,80 @@
+---
+order: 10
+title: "Thew new Suspense API"
+description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
+date: 2024-01-21T17:00:12+11:00
+tutorialId: "advanced-network-patterns-react"
+next: "ch11"
+highlights:
+  - Implementing SWR for optimized data fetching
+  - Strategic use of preload for earlier data loading
+  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
+leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
+summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+draft: true
+---
+
+## Suspense + fallback
+
+> Suspense
+>
+
+With React suspense, we could make the UI much more responsive - you can think of the whole component tree is break down into a few slots (and each slot is independent). Whenever part of the data is ready (in server side), the data was streamed to frontend to render:
+
+```tsx
+<Suspense fallback={<AboutSkeleton />}>
+	<About id={id} />
+</Suspense>
+```
+
+Note here it might looks like we’re wait for the data from client side, but actually frontend doesn’t see network request as they are happening at the backend.
+
+## Streaming
+
+> Streaming
+>
+
+```jsx
+export async function Profile({ id }: { id: string }) {
+  return (
+    <div>
+      <h1>Profile</h1>
+      <div>
+          <Suspense fallback={<UserInfoSkeleton />}>
+            <UserInfo id={id} />
+          </Suspense>
+
+          <Suspense fallback={<FriendsSkeleton />}>
+            <Friends id={id} />
+          </Suspense>
+      </div>
+    </div>
+  );
+}
+```
+
+And the `UserInfo` component has two parts:
+
+```jsx
+export async function UserInfo({ id }: { id: string }) {
+  const user = await getUser(id);
+
+  return (
+    <>
+      <About user={user} />
+      <Suspense fallback={<FeedsSkeleton />}>
+        <Feeds category={user.interests[0]} />
+      </Suspense>
+    </>
+  );
+}
+```
+
+The `UserInfo` would block the `Feeds` from rendering, so it’s a better idea to have a `UserInfo` skeleton which contains `AboutSkeleton` and `FriendsSkeleton` and inside `UserInfo` when user is returned and we’re fetching `feeds` ,we can show `FeedsSkeleton` .
+
+That way the user interface is more nature and intuitive, easier for user to interact with the page elements earlier before all resources are loaded.
+
+![Rendering with skeleton component](/tutorials/advanced-network-patterns-react/ch10/profile-rendering-partial.png)
+
+As you can see, we have tried our best to shift content generation from client to backend server side, but there are dosen’t mean we can get rid of client comopnent. Quite opposite, in many cases we need the frontend to enhance high interactivity.
+
