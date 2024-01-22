@@ -1,38 +1,68 @@
 ---
 order: 7
-title: "Server Side Rendering"
-description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
+title: "Introducing Server Side Rendering"
+description: "This chapter dives into leveraging Server-Side Rendering (SSR) in React applications. It discusses how SSR, combined with React Server Components, can optimize initial page load times and enhance overall application performance."
 date: 2024-01-21T17:00:12+11:00
 tutorialId: "advanced-network-patterns-react"
 next: "ch8"
 highlights:
-  - Implementing SWR for optimized data fetching
-  - Strategic use of preload for earlier data loading
-  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
-leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
-summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+  - Understanding and implementing SSR in React
+  - Integrating React Server Components for efficient rendering
+  - Enhancing user experience with faster initial page loads
+leading: "With key insights from this chapter, we pave the way to explore the synergy between SSR and React Server Components, setting the stage for the next topic: Static Site Generation."
+summary: "In this chapter, we explore Server-Side Rendering (SSR) and its integration with React Server Components. We delve into how SSR improves initial page load times, making React applications more performant and user-friendly. Up next: Static Site Generation."
 draft: true
 ---
 
-The idea is that we can send request from backend and assembling final HTML all together, so client side can save some time on request network again (especially when each request take some overhead time on establishing network connection, etc.)
+In the previous chapters, we've explored various client-side techniques to enhance initial page rendering speed. However, significant optimizations can also be achieved server-side, sometimes even before a user sends a request. What if we could complete some tasks during the request, leveraging backend efficiencies?
+
+Let's delve into Server-Side Rendering (SSR) in this chapter, particularly focusing on React Server Components within Next.js.
+
+Server-Side Rendering is a web development technique where the server generates the complete HTML of a webpage in response to a user request. Each time a user accesses a URL or refreshes their browser, the server executes the necessary JavaScript code, renders all dynamic content, and sends this fully prepared HTML to the browser. While this involves some processing time on the server, it allows for a quicker display of a fully rendered page compared to waiting for client-side JavaScript to render content. SSR significantly enhances the user experience, especially for initial page loads, and improves a website's search engine optimization by ensuring all content is immediately accessible.
+
+Implementing SSR requires backend techniques. There are many alternatives: building a full-featured backend service is time-consuming and effort-intensive, but we don't need to start from scratch. In this chapter, we will use Next.js for SSR and React Server Components.
+
+## Introducing Next.js
+
+If you're not familiar with Next.js, I recommend going through its [dashboard tutorial](https://nextjs.org/learn/dashboard-app). It's beneficial to follow along with the tutorial, experiment with it, and then return here.
+
+Next.js is an open-source web development framework built on Node.js, designed to simplify the building of server-rendered React applications. Created by Vercel (formerly Zeit), it aims to streamline the process of building performant, scalable, and user-friendly web applications. It enhances the developer experience with features like automatic code splitting, server-side rendering, static site generation, and built-in CSS support. In this chapter, we'll focus on its app router feature for SSR, which functions similarly to client-side React components.
+
+To start, we'll create a dynamic route – `app/user/[id]/page.tsx`. This path signifies a dynamic route within the `app` directory in Next.js. For instance, accessing `/user/123` renders the `page.tsx` component for the user with ID 123, changing content based on the URL parameter.
 
 <InfoBox>
-  Server-Side Rendering (SSR) is a web development technique where the server generates the complete HTML of a webpage in response to a user's request. This process takes place each time a user accesses a URL or refreshes their browser. The server executes the necessary JavaScript code, renders all the dynamic content, and then sends this fully prepared HTML to the user's browser. Although this method involves some processing time on the server, it allows the browser to display a fully rendered page more quickly compared to waiting for client-side JavaScript to render content. SSR enhances user experience, particularly for the initial page load, and improves the website's search engine optimization by ensuring all content is immediately accessible.
+  Next.js version 13 introduced an App Router utilizing React Server Components, supporting shared layouts, nested routing, loading states, error handling, and more. This system bases its routes on the file structure in the "app" directory.
+
+  Learn more about [Routing Fundamentals](https://nextjs.org/docs/app/building-your-application/routing) and [Pages and Layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts).
 </InfoBox>
 
-From now on, I’m going to use Next.js for SSR, although there are many other alternatives like Remix or so (you can even build your own SSR solution, but that would out of scope of this article).
+In contrast, static rendering generates HTML at build time with pre-fetched data, resulting in super-fast page loads due to static HTML. We'll explore this further in the next chapter.
 
-If you don’t familiar with Next.js, it’s recommended to walk through at least the dashboard tutorial it provides. You might want to follow the tutorial and have a play with it, and come back later.
+In `page.tsx`, we define a `Page` component to fetch data and pass it to the frontend:
 
-<InfoBox>
-  Next.js is an open-source web development framework built on top of Node.js, enabling developers to build server-rendered React applications with ease. It was created by Vercel (formerly Zeit) and is designed to simplify the process of building universal, web applications with React.
+```tsx  title="app/user/[id]/page.tsx" {2}
+export default async function Page({ params }: PageProps) {
+  const { user, friends } = await getUserBasicInfo(params.id);
 
-  The primary goal of Next.js is to provide a straightforward and efficient way to build performant, scalable, and user-friendly web applications. It focuses on enhancing the developer experience with features like automatic code splitting, server-side rendering (SSR), static site generation (SSG), and built-in CSS support. Next.js aims to streamline the process of building complex React applications, making them more accessible to a broader range of developers.
-</InfoBox>
+  return (<Profile user={user} friends={friends} />);
+}
+```
 
-Let’s define a `getUserBasicInfo` in backend a dynamic routing in Next.js `app/user/[id]/page.tsx`
+The `PageProps` interface is:
 
 ```tsx
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+```
+
+The `params` object is part of Next.js's routing feature, which allows you to access dynamic parts of the URL. In the case of `app/user/[id]/page.tsx`, `params` would contain an `id` property. This `id` corresponds to the dynamic segment in the URL. For example, if the URL is `/user/123`, `params.id` will be `123`. This allows the `Page` component to fetch or compute data specific to that user ID.
+
+The function `getUserBasicInfo` is defined as follows for actual data fetching at request time:
+
+```tsx title="app/user/[id]/page.tsx"
 async function getUserBasicInfo(id: string) {
   const [user, friends] = await Promise.all([
     get<User>(`/users/${id}`),
@@ -43,39 +73,9 @@ async function getUserBasicInfo(id: string) {
 }
 ```
 
-<InfoBox>
-  In version 13, Next.js introduced a new App Router built on **React Server Components**, which supports shared layouts, nested routing, loading states, error handling, and more.
+The `Profile` component, defined as a simple presentational component, receives data directly from the `Page` component. We are using `About` and `Friends` components from Chapter 3, they are all presentational component and only render whatever passed in:
 
-  The system is based on the file system, meaning that the routes are determined by the file structure in the "app" directory of your Next.js project. And there are some convention to following,
-
-  Read more on [Routing Fundamentals](https://nextjs.org/docs/app/building-your-application/routing) and
-  [Pages and Layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts).
-</InfoBox>
-
-And then in the `Page` component, we can call this function to get all data and then send to frontend:
-
-```tsx {2}
-export default async function Page({ params }: PageProps) {
-  const { user, friends } = await getUserBasicInfo(params.id);
-  return (<Profile user={user} friends={friends} />);
-}
-```
-
-The PageProps is defined:
-
-```tsx
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-```
-
-In Next.js, `app/user/[id]/page.tsx` represents a dynamic route within the `app` directory. The `[id]` part indicates a variable segment in the URL, which can change based on the user ID. For example, accessing `/user/123` would render the `page.tsx` component for the user with ID 123. This file structure is used for creating pages that change content based on the URL parameter, like displaying different user profiles.
-
-While the `Profile` is defined as a simple presentational component, note how we removed the `loading` and all the status:
-
-```tsx
+```tsx title="components/profile.tsx"
 const Profile = ({ user, friends }: { user: User; friends: User[] }) => {
   return (
     <>
@@ -87,7 +87,7 @@ const Profile = ({ user, friends }: { user: User; friends: User[] }) => {
 };
 ```
 
-We didn’t change the behaviour of `Feeds` though, as that’s some less critical information in such context (and also I would like to show the comparison here too), so we use it as a `Client` component - meaning it behaves as a normal traditional React component:
+Next.js by default uses Server Components, meaning they are rendered server-side without additional setup. We can define traditional, or client components, for contrast. Let's make the `Feeds` component a client component to demonstrate its use alongside Server Components.
 
 ```tsx title="components/feeds.tsx" {1, 9-22}
 'use client';
@@ -135,22 +135,29 @@ const Feeds = ({ category }: { category: string }) => {
 export { Feeds };
 ```
 
-Note how we use `use client` directive to mark it as a client component.
+Pay special attention to the `use client` directive employed in our example. This directive explicitly marks a component as a client-side component in Next.js.
 
-And now when we load the page, initially it is a bit slow, and then we see `About` and `Friends` all together, and immediately we see `loading` for the feeds, and finally when feeds returns we can see all the content.
+This distinction is crucial because it dictates the use of certain React hooks. In client components, you have the freedom to use hooks like `useState` and `useEffect`, just as you would in a standard React application. These hooks are essential for managing state and side effects on the client side.
 
-![Feeds are in loading while About and Friends are ready](/tutorials/advanced-network-patterns-react/ch7/feeds-is-loading.png)
+However, it's important to note that these APIs are not available for Server Components. Server Components are designed for different purposes, mainly focused on preparing and delivering content from the server without interactive or stateful behavior.
 
-You might be wondering what is the point to move these request from frontend to backend. There are a few advantages:
+## React Server Components
 
-- Normally the server side is closer to where the data is stored than frontend, so it’s normally faster to get the data
-- It’s easier to caching (and control) these data in server side
-- more security in backend
-- server machine are more powerful
-- It’s more secure (like, use of API key or token in backend) and frontend is transparent of such setups
+React Server Components represent a paradigm shift in application architecture, as defined on the React homepage. They run ahead of time, separate from your JavaScript bundle, and are instrumental in optimizing your app's performance.
 
-And if we visualise this type of code, it looks like:
+> React's research introduced Server Components as a novel component type that operates before the browser load and is not included in the JavaScript bundle. These components can execute during the build process, allowing access to the filesystem or static content without the need for an API. They facilitate data transfer to interactive Client Components in the browser through props.
+
+Server Components are best suited for non-interactive elements that form the content's framework, while Client Components handle interactive aspects like mouse and keyboard events.
+
+When a page loads, you might notice a slight delay initially. Soon, components like `About` and `Friends` appear, followed by a loading phase for `Feeds`. Once the API call for feeds completes, the entire content is displayed.
 
 ![Server Side Rendering](/tutorials/advanced-network-patterns-react/ch7/server-side-rendering.png)
 
-The initial load might take a bit more time, but after that the application is responsible and don’t have to load any data, that means better user experience. The generated data can be cached also in different levels, so the next time when we request the same data we can save some time.
+Why shift requests from the frontend to the backend? Several benefits include:
+
+- Faster data retrieval, as servers are usually closer to data storage.
+- Simplified data caching and control on the server side.
+- Enhanced security and power in backend processing.
+- Frontend transparency in security setups like API keys or tokens.
+
+Though the initial load may take slightly longer, subsequent operations become more responsive, as no additional data loading is required. This approach enhances the user experience and allows for various caching levels, speeding up future data requests.
