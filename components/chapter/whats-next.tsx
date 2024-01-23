@@ -34,7 +34,7 @@ const LinkButton = ({
   return (
     <div className={`text-center mt-6 font-normal`}>
       <Link
-        className={`no-underline w-full md:w-48 inline-block mt-2 bg-slate-800 dark:bg-slate-200 text-slate-200 dark:text-slate-800 px-4 py-2 rounded-lg saturate-50 hover:saturate-100 hover:shadow-lg transition-all duration-200`}
+        className={`no-underline w-full md:w-52 inline-block mt-2 bg-slate-800 dark:bg-slate-200 text-slate-200 dark:text-slate-800 px-4 py-2 rounded-lg saturate-50 hover:saturate-100 hover:shadow-lg transition-all duration-200`}
         href={href}
       >
         <div className={`flex flex-row items-center gap-2`}>

@@ -1,26 +1,30 @@
 ---
 order: 9
-title: "Enhance User Experience with Skeleton Components"
-description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
+title: "Optimizing User Experience with Skeleton Loading in React"
+description: "This chapter offers a detailed walkthrough on enhancing user experience in React applications by implementing skeleton components. Learn how to create and use these components to provide users with a visual cue during data loading, reducing perceived wait times and improving interaction."
 date: 2024-01-21T17:00:12+11:00
 tutorialId: "advanced-network-patterns-react"
 next: "ch10"
 highlights:
-  - Implementing SWR for optimized data fetching
-  - Strategic use of preload for earlier data loading
-  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
-leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
-summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+  - Building skeleton components in React for effective loading indicators
+  - Demonstrating the use of subtle animations and colors in skeleton design
+  - Techniques to reduce Cumulative Layout Shift (CLS) for a smoother user experience
+leading: "As this chapter concludes, we encapsulate the essence of effective loading indicators and set the stage for the next chapter on server-side technologies."
+summary: "This chapter closes our exploration of enhancing user interfaces in React with skeleton loading. We've covered design principles, implementation techniques, and best practices. Next, we'll shift our focus to server-side technologies for further performance improvements."
 draft: true
 ---
 
-One “small” thing we haven’t dived deep here is the `loading` indicator, which is important to give users some visual feedback, tell them there are something happening at the moment.
+In this chapter, we will look into the `loading` indicator, there are two common ways of showing the users that something is happening and we can not show the data right away: skeleton and spinner.
 
-We could use a skeleton component for indicating that we don’t have anything to show but it should be something like this. And we also can have a spinner showing that we have triggered some data fetching and it’s now loading.
+A skeleton component is a user interface design used to indicate data loading, where a placeholder mimicking the actual content layout is displayed. These are usually grey blocks or lines that show where and how the final content, like text or images, will appear. The skeleton component enhances the user experience by reducing the element of surprise during loading, providing a preview of the content's structure.
 
-## Skeleton
+![Skeleton Components](/tutorials/advanced-network-patterns-react/ch9/skeleton.png)
 
-Create a skeleton and show it while the content are generating is useful. It helps to let users know there is something going on and roughly the shape of the final result looks like - a list, an avatar, a simple description or so with only a few simple shapes.
+On the other hand, a spinner is a more generic loading indicator, often a circular animation, signifying that an operation such as data fetching or processing is in progress. Unlike skeleton components, spinners do not give any hint about the content's layout or the loading duration.
+
+The main difference between the two lies in the level of context they offer. Skeleton components provide a glimpse of the content's layout, making the loading process feel more integrated and smoother. In contrast, spinners are used when the exact content layout is unknown or the loading time is brief, serving as a universal sign of an ongoing process without specific layout information. Skeleton components are about enhancing the user experience with specific layout anticipation, while spinners are more about universally indicating activity.
+
+Skeleton is surprisingly easy to implement, let's see how we can make one for the `About` component when the content is loading:
 
 ```jsx
 function AboutSkeleton() {
@@ -38,10 +42,25 @@ function AboutSkeleton() {
 }
 ```
 
-It renders as a placeholder, you don’t have to put it 100% accurate - it should have the rough shape of the actual component. However, making it close to the height of the actual component could make less CLS(Cumulative Layout Shift).
+The `AboutSkeleton` component creates a row layout with centered items and a gap between them. The `animate-pulse` class applies a shimmering animation effect. The component includes a circular shape to mimic an avatar and two rectangular blocks to represent text lines, all with different shades of gray for a placeholder effect. The use of Tailwind CSS classes like `flex`, `gap-2`, `rounded-full`, and `bg-slate-300` controls the layout and appearance, ensuring the skeleton mimics the structure of the content it represents.
 
 ![Skeleton for About component](/tutorials/advanced-network-patterns-react/ch9/about-skeleton.png)
 
+This placeholder doesn't need to be perfect but should give an idea of the actual component’s layout. Aiming for a close height match with the actual component can help in reducing CLS (Cumulative Layout Shift).
 
-[Check this out](https://www.youtube.com/watch?v=g5u9LzKydAA)
 
+<InfoBox>
+  Cumulative Layout Shift (CLS) is a metric used to quantify how much elements on a webpage move around during loading. It's part of the Core Web Vitals, a set of metrics from Google designed to measure user experience on web pages. CLS specifically measures the stability of a page as it loads, with a focus on how unexpected layout shifts can affect a user's experience.
+
+  [Cumulative Layout Shift (CLS)](https://web.dev/articles/cls)
+</InfoBox>
+
+For those interested in a hands-on guide, my video demonstrates creating a skeleton component from the ground up:
+
+<YouTube id="g5u9LzKydAA" />
+
+Key takeaways for creating custom skeleton components are:
+
+- Choosing subdued colors for the background shapes
+- Aligning the size and position of placeholders as close to the actual UI as possible
+- Employing animation to convey a dynamic `loading` state

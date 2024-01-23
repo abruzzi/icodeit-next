@@ -5,6 +5,7 @@ import { Product } from "@/components/mdx/product";
 import { Challenge } from "@/components/mdx/challenge";
 import { Pre } from "@/components/mdx/code/pre";
 import { Quiz } from "@/components/mdx/quiz";
+import YouTube from "@/components/mdx/youtube";
 
 const components = {
   img: (props: any) => {
@@ -17,6 +18,7 @@ const components = {
       </figure>
     );
   },
+  YouTube,
   InfoBox,
   Product,
   Challenge,
