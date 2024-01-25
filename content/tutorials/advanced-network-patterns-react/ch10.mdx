@@ -118,6 +118,12 @@ export async function Profile({ id }: { id: string }) {
 }
 ```
 
+Let's visualise the component tree to have a more direct perspective, we'll learn how such boundary can help the performance in the section **Streaming in Next.js** later.
+
+![Suspense boundaries](/tutorials/advanced-network-patterns-react/ch10/component-tree-suspense-boundary.png)
+
+## Using skeletons in different layers
+
 Initially, skeleton components `UserInfoSkeleton` and `FriendsSkeleton` are displayed. As data fetched inside each component correspondingly, we can then render the component with data.
 
 In this segment of the code, we define two components in React: `UserInfoSkeleton` and `UserInfo`.
