@@ -1,61 +1,50 @@
 ---
 order: 10
-title: "Thew new Suspense API"
-description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
-date: 2024-01-21T17:00:12+11:00
+title: "The New Suspense API in React"
+description: "Chapter 10 introduces the new Suspense API in React 18, demonstrating its capabilities for asynchronous data fetching, streaming, and enhancing UI interactivity. It explores the concept of pushing client components to leaf nodes for optimal rendering."
+date: 2024-01-25T17:00:12+11:00
 tutorialId: "advanced-network-patterns-react"
 next: "ch11"
 highlights:
-  - Implementing SWR for optimized data fetching
-  - Strategic use of preload for earlier data loading
-  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
-leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
-summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+  - Utilizing the new Suspense API for asynchronous data fetching
+  - Implementing streaming with Next.js for progressive UI rendering
+  - Strategic placement of client components for enhanced interactivity
+leading: "This chapter explores the innovative Suspense API in React 18, showing how it transforms data fetching and UI rendering. We delve into streaming with Next.js and discuss optimizing client component placement."
+summary: "Chapter 10 dives into React 18's Suspense API, highlighting its use in data fetching and UI streaming. We examine practical implementations in Next.js, including the use of Suspense for progressive rendering and the strategic placement of client components."
 draft: true
 ---
 
-## Suspense + fallback
+We've previously explored code splitting and lazy loading using Suspense in Chapter 5. The Suspense API's ability to wait for components to be ready for rendering is impressive, but what if we could apply this pattern to all asynchronous data fetching?
 
-> Suspense
->
-
-With React suspense, we could make the UI much more responsive - you can think of the whole component tree is break down into a few slots (and each slot is independent). Whenever part of the data is ready (in server side), the data was streamed to frontend to render:
+Consider the following scenario: In `About`, we fetch data and wrap it in `Suspense`. While fetching user details, a skeleton component is displayed, and upon data retrieval, the actual content is rendered.
 
 ```tsx
-<Suspense fallback={<AboutSkeleton />}>
-	<About id={id} />
-</Suspense>
-```
+const About = async ({ id }) => {
+  const user = await get(`/users/{id}`);
 
-Note here it might looks like we’re wait for the data from client side, but actually frontend doesn’t see network request as they are happening at the backend.
+  return <div>{user.name}</div>;
+};
 
-## Streaming
-
-> Streaming
->
-
-```jsx
-export async function Profile({ id }: { id: string }) {
+const App = () => {
   return (
-    <div>
-      <h1>Profile</h1>
-      <div>
-          <Suspense fallback={<UserInfoSkeleton />}>
-            <UserInfo id={id} />
-          </Suspense>
-
-          <Suspense fallback={<FriendsSkeleton />}>
-            <Friends id={id} />
-          </Suspense>
-      </div>
-    </div>
+    <Suspense fallback={<AboutSkeleton />}>
+      <About id={id} />
+    </Suspense>
   );
-}
+};
 ```
 
-And the `UserInfo` component has two parts:
+This approach wasn't feasible until the release of React 18, which expanded the use of Suspense beyond just code splitting.
 
-```jsx
+It's important to note that this new application of Suspense is still experimental and not yet widely considered production-ready. However, libraries like SWR and React Query, and frameworks such as Next.js, are already experimenting with it.
+
+Let's examine how to implement data-fetching with Suspense.
+
+## Suspense & Fallback
+
+First, create a `UserInfo` component as a wrapper for `About` and `Friends`:
+
+```tsx title="components/userinfo.tsx" {2,6}
 export async function UserInfo({ id }: { id: string }) {
   const user = await getUser(id);
 
@@ -70,11 +59,205 @@ export async function UserInfo({ id }: { id: string }) {
 }
 ```
 
-The `UserInfo` would block the `Feeds` from rendering, so it’s a better idea to have a `UserInfo` skeleton which contains `AboutSkeleton` and `FriendsSkeleton` and inside `UserInfo` when user is returned and we’re fetching `feeds` ,we can show `FeedsSkeleton` .
+The `UserInfo` component, defined as an asynchronous function, fetches user data based on the given `id`. The fetched user data is then passed to the `About` component. However, since `getUser(id)` is an async call, the entire `UserInfo` component, including the `About` component, will only render once the user data is successfully fetched.
 
-That way the user interface is more nature and intuitive, easier for user to interact with the page elements earlier before all resources are loaded.
+For the `Feeds` component, it's wrapped in a `Suspense` component. This means if `Feeds` is waiting for its data (like fetching additional information based on the user's interests), the `Suspense` component will display the `FeedsSkeleton` as a fallback. Once the data required by `Feeds` is available, the `Feeds` component will render with the actual data.
 
-![Rendering with skeleton component](/tutorials/advanced-network-patterns-react/ch10/profile-rendering-partial.png)
+Therefore, both `About` and `Feeds` depend on the asynchronous fetching of user data, but `Feeds` specifically leverages React's Suspense for a smoother loading experience. The use of Suspense for `Feeds` allows for a part of the component tree to wait on its own data fetching independently, providing a fallback during the wait.
 
-As you can see, we have tried our best to shift content generation from client to backend server side, but there are dosen’t mean we can get rid of client comopnent. Quite opposite, in many cases we need the frontend to enhance high interactivity.
+Here, we use Suspense for the `Feeds` component. The `Friends` component is defined as follows:
 
+```tsx title="components/friends.tsx" {4,10-12}
+import { Friend } from "@/components/friend";
+
+async function Friends({ id }: { id: string }) {
+  const friends = await getFriends(id);
+
+  return (
+    <div className="py-4">
+      <h2 className="text-lg text-slate-900 tracking-wider">Friends</h2>
+      <div className="flex flex-row pt-4 gap-4">
+        {friends.map((user) => (
+          <Friend user={user} key={user.id} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export { Friends };
+```
+
+We define another asynchronous `Friends` function component in React, upon receiving a user `id` as a prop, the component fetches the user's friends using the `getFriends(id)` function. After fetching the friends' data, we map the users into `Friend` components.
+
+These components are then utilized in the `Profile` container:
+
+```tsx title="components/profile.tsx"
+import { Suspense } from "react";
+import { Friends } from "@/components/v4/friends";
+import { UserInfo } from "@/components/v4/userInfo";
+
+import { FriendsSkeleton } from "@/components/misc/friends-skeleton";
+import { UserInfoSkeleton } from "@/components/misc/user-info-skeleton";
+
+export async function Profile({ id }: { id: string }) {
+  return (
+    <div>
+      <h1>Profile</h1>
+      <div>
+        <Suspense fallback={<UserInfoSkeleton />}>
+          <UserInfo id={id} />
+        </Suspense>
+
+        <Suspense fallback={<FriendsSkeleton />}>
+          <Friends id={id} />
+        </Suspense>
+      </div>
+    </div>
+  );
+}
+```
+
+Initially, skeleton components `UserInfoSkeleton` and `FriendsSkeleton` are displayed. As data fetched inside each component correspondingly, we can then render the component with data.
+
+In this segment of the code, we define two components in React: `UserInfoSkeleton` and `UserInfo`.
+
+```tsx title="components/misc/user-info-skeleton.tsx" {5}
+const UserInfoSkeleton = () => {
+  return (
+    <>
+      <AboutSkeleton />
+      <FeedsSkeleton />
+    </>
+  );
+};
+```
+
+`UserInfoSkeleton` is a simple functional component that serves as a placeholder while the actual user information is being fetched. It combines two skeleton components, `AboutSkeleton` and `FeedsSkeleton`, indicating that the `UserInfo` component will consist of two main parts: one for 'About' information and another for 'Feeds'.
+
+```tsx title="components/userinfo.tsx" {7}
+export async function UserInfo({ id }: { id: string }) {
+  const user = await getUser(id);
+
+  return (
+    <>
+      <About user={user} />
+      <Suspense fallback={<FeedsSkeleton />}>
+        <Feeds category={user.interests[0]} />
+      </Suspense>
+    </>
+  );
+}
+```
+
+The `UserInfo` component is more complex. It is an asynchronous function that takes a user `id` as a prop and fetches the user's data with `getUser(id)`. Once the data is fetched, it renders two components: `About` and `Feeds`. The `About` component is rendered directly with the fetched user data. For the `Feeds` component, React's Suspense is used. The `Feeds` component is responsible for displaying content based on the user's interests, and while it's fetching this data, the `FeedsSkeleton` is shown as a fallback. Once the `Feeds` data is ready, the actual `Feeds` component replaces the skeleton.
+
+This setup allows for a smooth and progressive loading experience. Initially, the `UserInfoSkeleton` is displayed. As data is fetched, the actual components (`About` and `Feeds`) gradually replace their respective skeleton components. This approach enhances the user experience by providing visual feedback during data loading and progressively revealing content as it becomes available.
+
+<YouTube id="CTxdi5PDYhc" />
+
+## Streaming in Next.js
+
+Next.js documentation explains streaming as a technique to progressively render UI from the server. It splits work into chunks streamed to the client as they're ready. This allows for immediate rendering of parts of the page.
+
+In Next.js, streaming can be achieved through:
+
+- A special `loading.tsx` file in your app router.
+- Using the Suspense API.
+
+We've seen Suspense above. Alternatively, you can define a `loading.tsx` in `app/user/[id]/loading.tsx`:
+
+```tsx title="app/user/[id]/loading.tsx"
+export default function Loading() {
+  return (
+    <div>
+      <h1>Profile</h1>
+      <div>
+        <AboutSkeleton />
+        <FeedsSkeleton />
+        <FriendsSkeleton />
+      </div>
+    </div>
+  );
+}
+```
+
+In `page.tsx`, you can await all data before rendering:
+
+```tsx {2}
+export default async function Page({ params }: PageProps) {
+  const { user, friends } = await getUserBasicInfo(params.id);
+
+  return (<Profile user={user} friends={friends} />);
+}
+```
+
+Alternatively, you can push streaming to individual components, allowing earlier user interaction. This is the approach we're using now as it's more flexiable, we can define more gradular skeleton and suspense boundary, that also means potentially more content can be static thus rendered much faster (think of the headline, section header, etc.).
+
+![Partial Rendering with Skeletons](/tutorials/advanced-network-patterns-react/ch10/profile-rendering-partial.png)
+
+We aim to shift content generation to the server side as much as possible, but client components remain essential for high interactivity.
+
+## Client Component Strategy
+
+Pushing client components to the leaf of the component tree, particularly in a server-side rendering environment like Next.js, is a strategic approach for optimizing web application performance. By doing so, you ensure that most of the page is server-rendered, which speeds up the initial load time. Interactive elements that require client-side JavaScript are loaded only where necessary, making the page interactive more quickly without overburdening the initial load.
+
+In the provided code snippets, we have two versions of the `Friends` component. The first version marks the entire component as a client component, while the second version pushes the client-side logic down to the individual `Friend` component.
+
+### First Version - Entire Component as Client-Side
+
+The first `Friends` component is wrapped with `use client`, making the entire component and all its children client-side only. This means that even simple, non-interactive parts of this component won't render until the client-side JavaScript loads and executes, which can delay the initial rendering and interactivity of the page.
+
+```tsx title="components/friends.tsx" {1,7,12}
+'use client';
+
+async function Friends({ id }: { id: string }) {
+  const friends = await getFriends(id);
+
+  return (
+    <NextUIProvider>
+      <div>
+        <h2>Friends</h2>
+        {/**/}
+      </div>
+    </NextUIProvider>
+  );
+}
+```
+
+### Second Version - Client Logic at Leaf Node
+
+The second approach optimizes performance by removing the `use client` directive from the `Friends` component. Instead, it delegates client-specific logic to the `Friend` component. This way, the `Friends` component itself can be pre-rendered on the server, and only the interactive parts within each `Friend` component are handled on the client-side. This granular approach speeds up the initial page load, as less JavaScript needs to be downloaded and executed to render the initial view.
+
+```tsx title="components/friends.tsx"
+async function Friends({ id }: { id: string }) {
+  const friends = await getFriends(id);
+
+  return (
+    <div>
+      <h2>Friends</h2>
+      <div>
+        {friends.map((user) => (
+          <Friend user={user} key={user.id} />
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+And we then move `NextUIProvider` usage into `friend` component.
+
+```tsx title="components/friend.tsx" {1,5,7}
+"use client";
+
+export const Friend = ({ user }: { user: User }) => {
+  return (
+    <NextUIProvider>
+      {/* popover code */}
+    </NextUIProvider>
+  );
+};
+```
+
+By applying the client component at the leaf node (`Friend`), you enhance the user experience with faster initial load times and progressively enhance the page with interactive elements as needed. This approach aligns well with modern web development best practices, particularly in frameworks like Next.js, where balancing server-side and client-side rendering is key to achieving optimal performance and user experience.
