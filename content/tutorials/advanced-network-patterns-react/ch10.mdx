@@ -225,6 +225,8 @@ async function Friends({ id }: { id: string }) {
 }
 ```
 
+![The boundary is set to Friends](/tutorials/advanced-network-patterns-react/ch10/client-component-friends.png)
+
 ### Second Version - Client Logic at Leaf Node
 
 The second approach optimizes performance by removing the `use client` directive from the `Friends` component. Instead, it delegates client-specific logic to the `Friend` component. This way, the `Friends` component itself can be pre-rendered on the server, and only the interactive parts within each `Friend` component are handled on the client-side. This granular approach speeds up the initial page load, as less JavaScript needs to be downloaded and executed to render the initial view.
@@ -259,5 +261,7 @@ export const Friend = ({ user }: { user: User }) => {
   );
 };
 ```
+
+![The boundary is set to Friend](/tutorials/advanced-network-patterns-react/ch10/client-component-friend.png)
 
 By applying the client component at the leaf node (`Friend`), you enhance the user experience with faster initial load times and progressively enhance the page with interactive elements as needed. This approach aligns well with modern web development best practices, particularly in frameworks like Next.js, where balancing server-side and client-side rendering is key to achieving optimal performance and user experience.
