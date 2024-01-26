@@ -1,32 +1,60 @@
 ---
 order: 11
-title: "Lazy load and preload in Next.js"
-description: "Chapter 6 delves into advanced prefetching techniques in React applications, using SWR for efficient data fetching. It highlights how to enhance application responsiveness and user experience through strategic data loading and parallel network requests."
-date: 2024-01-21T17:00:12+11:00
+title: "Lazy Load, Dynamic Import, and Preload in Next.js"
+description: "Chapter 11 focuses on enhancing Next.js applications by implementing lazy loading, dynamic importing, and preloading techniques. It discusses how these strategies contribute to efficient data handling and improve user experience."
+date: 2024-01-26T17:00:12+11:00
 tutorialId: "advanced-network-patterns-react"
-next: "ch12"
 highlights:
-  - Implementing SWR for optimized data fetching
-  - Strategic use of preload for earlier data loading
-  - Balancing JavaScript bundle loading with data fetching for enhanced interactivity
-leading: "As we conclude this tutorial, we reflect on the key lessons learned and set the stage for exploring server-side technology and its impact on application performance."
-summary: "This final chapter wraps up our exploration of network patterns in React. We've covered parallel requests, code splitting, and prefetching to improve performance. Up next, we'll explore server-side technologies to further enhance application performance."
+  - Utilizing `next/dynamic` for lazy loading and dynamic import
+  - Techniques for preloading data to enhance responsiveness
+  - Integrating lazy loading with user interaction for efficient content delivery
+leading: "This chapter explores advanced strategies in Next.js for optimizing application performance through lazy loading, dynamic importing, and preloading. We delve into practical implementations to improve data handling and user interaction."
+summary: "In Chapter 11, we delve into lazy loading and preloading in Next.js, showcasing how these techniques optimize performance and user experience. Through practical examples, we demonstrate dynamic importing and efficient data handling in Next.js applications."
 draft: true
 ---
 
-## Lazy load (dynamic load) in Next.js
+Chapter 5 introduced lazy loading in the client-side context, demonstrating how separating non-essential content into different bundles can enhance initial rendering and user experience. While Next.js accelerates initial rendering with static rendering, streaming, and server-side rendering, implementing lazy loading and preloading further optimizes the application. These techniques are especially beneficial for users who don't require access to all content immediately.
 
-Lets emphasis again that our goal is to improve the performance of initial render, and one aspect is that we should reduce the load of the initial render. In any product, there are many features has only a few people are really using, think of your phone, you might have installed dozens of apps, but only a few are used daily. And in one of such app, only a few features are used frequently than others.
+## Dynamic Load in Next.js
 
-Same thing in web application, and it doesn’t make much sense for a user to load extra 3M bytes of JavaScript of a feature they never touched. How can we achieve that on-demand loading then.
+In Next.js, `next/dynamic` is a tool for dynamic component importing, it is a composite of `React.lazy()` and `Suspense`. It's particularly useful for optimizing the loading of components that are not immediately necessary on the initial render, thereby enhancing the performance and user experience of your application.
 
-We could use code split and lazy load. It’s pretty mature feature in nowadays web world. A modal dialog, a dropdown list or context menu are all good usages.
+In the example below, the `Gallery` component is imported dynamically using `next/dynamic`. This means that `Gallery` will not be part of the main JavaScript bundle that loads when the page initially loads. Instead, it will be loaded only when the `App` component renders it:
 
-Let’s think of our example, now we’re showing some information of a friend of current user, but what if we want to see more.
+```tsx {1, 3}
+'use client'
 
-But not every user would do that, right? We could lazy load the popover content - whenever a user click one `Friend` , we start to download the `UserDetailCard`:
+const Gallery = dynamic(() => import("./gallery"));
 
-```jsx
+const App = () => {
+  return <Gallery />
+}
+```
+
+In this case, the `Gallery` component is fetched and loaded asynchronously, only when the `App` component needs it. This approach reduces the initial load time of your application because the browser downloads fewer resources upfront.
+
+Furthermore, `next/dynamic` allows for specifying a fallback component that is displayed while the dynamic component is being loaded:
+
+```tsx
+'use client'
+
+const Gallery = dynamic(() => import("./gallery"), {
+  loading: () => <GallerySkeleton />
+});
+
+const App = () => {
+  return <Gallery />
+}
+```
+
+
+This technique is useful for client components, allowing them to be bundled separately and loaded as needed.
+
+## Implementing the UserDetailCard
+
+Consider a `UserDetailCard` component that might not be immediately needed by every user. We can apply lazy loading to enhance performance:
+
+```tsx title="components/friend.tsx", {1,14}
 const UserDetailCard = dynamic(() => import("./user-detail-card"));
 
 export const Friend = ({ user }: { user: User }) => {
@@ -35,18 +63,12 @@ export const Friend = ({ user }: { user: User }) => {
       <Popover placement="bottom" showArrow offset={10}>
         <PopoverTrigger>
           <button>
-            <Image
-              src={`https://i.pravatar.cc/150?u=${user.id}`}
-              alt={`User ${user.name} avatar`}
-              className="w-8 h-8 rounded-full"
-              width={32}
-              height={32}
-            />
-            <span className="text-xs text-slate-700">{user.name}</span>
+            <Image src={`https://i.pravatar.cc/150?u=${user.id}`} />
+            <span>{user.name}</span>
           </button>
         </PopoverTrigger>
         <PopoverContent>
-					<UserDetailCard id={user.id} />
+          <UserDetailCard id={user.id} />
         </PopoverContent>
       </Popover>
     </NextUIProvider>
@@ -54,33 +76,18 @@ export const Friend = ({ user }: { user: User }) => {
 };
 ```
 
+Here, the `UserDetailCard` is dynamically loaded only when required, reducing the initial load.
+
+
 And in the `UserDetailCard` we could do the skeleton just like above:
 
-```jsx
+```tsx title="components/user-details-card.tsx", {2}
 async function UserDetailCard({ id }: { id: string }) {
   const detail = await getUserDetail(id);
 
   return (
     <Card>
-      <CardHeader>
-        <div>
-          <Avatar src={detail.avatar} />
-          <div>
-            <h4>{detail.name}</h4>
-            <h5>{detail.twitter}</h5>
-          </div>
-        </div>
-      </CardHeader>
-      <CardBody>
-        <p>{detail.bio}</p>
-      </CardBody>
-      <CardFooter>
-        <div>
-          <p>
-            <Link href={detail.homepage}>{detail.homepage}</Link>
-          </p>
-        </div>
-      </CardFooter>
+      {/* same to the UserDetailCard defined in Chapter 6 */}
     </Card>
   );
 }
@@ -90,16 +97,17 @@ And when we click a `Friend` you can see there is an additional request send (fo
 
 ![Code Split with lazy loading](/tutorials/advanced-network-patterns-react/ch11/network-waterfall-code-split.png)
 
-Can we do even better? That leads us to the next, and our final topic - preload.
+You might be wondering if we could do the same `preload` technique as we have seen in Chapter 6, and the answer is yes. We could use the same `useSWR` package in Next.js, but let's try alternative - define a cache and see how we can use Server-Side Rendering to hide the request details.
 
-## Lazy load + preload
+## Preload in Next.js
 
-What if we can load the data for the user a bit earlier, so whenever a user click to open the popover, the data is already there - so we could enhance the user experience even better.
+Preloading can be used to fetch data in advance, such as when a user hovers over a button:
 
-> Preload
->
+```tsx title="components/friend.tsx" {1, 3, 7, 16}
+"use client";
 
-```jsx
+const UserDetailCard = dynamic(() => import("./user-detail-card"));
+
 export const Friend = ({ user }: { user: User }) => {
   const handleHover = () => {
     preload(user.id);
@@ -113,13 +121,11 @@ export const Friend = ({ user }: { user: User }) => {
             tabIndex={0}
             onMouseEnter={handleHover}
           >
-						{/* the user info */}
+            <Brief user={user} />
           </button>
         </PopoverTrigger>
         <PopoverContent>
-          <Suspense fallback={<Loading />}>
-            <UserDetailCard id={user.id} />
-          </Suspense>
+          <UserDetailCard id={user.id} />
         </PopoverContent>
       </Popover>
     </NextUIProvider>
@@ -127,25 +133,31 @@ export const Friend = ({ user }: { user: User }) => {
 };
 ```
 
-While the `preload` is defined as :
+While `preload` is defined as:
 
-```jsx
-export const getUserDetail = cache(async (id: string) => {
+```tsx {8} showLineNumbers
+import { get } from "@/utils/get";
+
+export const getUserDetail = async (id: string) => {
   return await get<UserDetail>(`/users/${id}/details`);
-});
+};
 
 export const preload = (id: string) => {
   void getUserDetail(id);
 };
 ```
 
-Note how the network tab now the data is downloaded before JavaScript chunk downloads.
+The `preload` function fetches the user's details when the user hovers over the `Friend` component. This is accomplished by triggering the `preload` function on the `onMouseEnter` event of the button element. When the mouse pointer enters the button's area, `getUserDetail(id)` is called, and it fetches the details of the user associated with the `Friend` component.
+
+Note here in line 8 above, [the `void` operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void) evaluates the expression (`getUserDetail(id)`) and then returns undefined, which is handy if we want to execute a function but don't care of the return value.
 
 ![Preload data when user hover](/tutorials/advanced-network-patterns-react/ch11/preload-on-hover.png)
 
-To avoid it preload every time when user hover on the `Friend`, we could maintain a simple `Set` internally:
+To optimize the preloading process and prevent unnecessary repeated data fetches, we implement an internal caching mechanism using a Set. Here's the refined explanation for the provided code snippet:
 
-```jsx
+```tsx title="apis.ts" {1,3,6,11}
+import { cache } from "react";
+
 const preloadedUserIds = new Set();
 
 export const getUserDetail = cache(async (id: string) => {
@@ -160,3 +172,82 @@ export const preload = (id: string) => {
 };
 ```
 
+In the `apis.ts` file, we introduce a caching strategy using a `Set` to manage the preloading of user details efficiently. The `Set`, named `preloadedUserIds`, stores user IDs for which details have been preloaded. This unique collection ensures that each user's details are fetched only once, avoiding redundant network requests.
+
+<InfoBox>
+  The `cache` function [in React](https://react.dev/reference/react/cache#cache), currently in the Canary (experimental) version, is designed for use with React Server Components. It allows you to create a cached version of a function, which can be particularly useful for data fetching or expensive computations. When you call the cached function with specific arguments, it first checks if there's a cached result. If so, it returns this result; if not, it executes the function, stores the result in the cache, and then returns it.
+  
+  This approach can significantly optimize performance by avoiding repeated executions of the same function with the same arguments. However, it's important to note that each call to `cache` creates a new function, so calling it multiple times with the same function will not share the cache. Additionally, `cache` only works in Server Components and is for experimental use as of now.
+</InfoBox>
+
+The `getUserDetail` function fetches user details and is enhanced with React's `cache` function. This caching mechanism ensures the asynchronous operation's results are stored, reducing unnecessary data fetching. When the `preload` function is called with a user ID, it first checks if the ID is already in `preloadedUserIds`. If not present, it fetches and caches the user's details. This approach optimizes the preloading process, ensuring it only occurs when necessary and thereby enhancing application performance.
+
+The effective use of caching in the `preload` function demonstrates a keen understanding of optimizing network interactions, ensuring that data fetching is both efficient and necessary. This consideration for performance leads us to another crucial aspect of building web applications in Next.js: the client component strategy.
+
+## Client Component Strategy
+
+Pushing client components to the leaf of the component tree, particularly in a server-side rendering environment like Next.js, is a strategic approach for optimizing web application performance. By doing so, you ensure that most of the page is server-rendered, which speeds up the initial load time. Interactive elements that require client-side JavaScript are loaded only where necessary, making the page interactive more quickly without overburdening the initial load.
+
+In the provided code snippets, we have two versions of the `Friends` component. The first version marks the entire component as a client component, while the second version pushes the client-side logic down to the individual `Friend` component.
+
+### First Version - Entire Component as Client-Side
+
+The first `Friends` component is wrapped with `use client`, making the entire component and all its children client-side only. This means that even simple, non-interactive parts of this component won't render until the client-side JavaScript loads and executes, which can delay the initial rendering and interactivity of the page.
+
+```tsx title="components/friends.tsx" {1,7,12}
+'use client';
+
+async function Friends({ id }: { id: string }) {
+  const friends = await getFriends(id);
+
+  return (
+    <NextUIProvider>
+      <div>
+        <h2>Friends</h2>
+        {/**/}
+      </div>
+    </NextUIProvider>
+  );
+}
+```
+
+![The boundary is set to Friends](/tutorials/advanced-network-patterns-react/ch11/client-component-friends.png)
+
+### Second Version - Client Logic at Leaf Node
+
+The second approach optimizes performance by removing the `use client` directive from the `Friends` component. Instead, it delegates client-specific logic to the `Friend` component. This way, the `Friends` component itself can be pre-rendered on the server, and only the interactive parts within each `Friend` component are handled on the client-side. This granular approach speeds up the initial page load, as less JavaScript needs to be downloaded and executed to render the initial view.
+
+```tsx title="components/friends.tsx"
+async function Friends({ id }: { id: string }) {
+  const friends = await getFriends(id);
+
+  return (
+    <div>
+      <h2>Friends</h2>
+      <div>
+        {friends.map((user) => (
+          <Friend user={user} key={user.id} />
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+And we then move `NextUIProvider` usage into `friend` component.
+
+```tsx title="components/friend.tsx" {1,5,7}
+"use client";
+
+export const Friend = ({ user }: { user: User }) => {
+  return (
+    <NextUIProvider>
+      {/* popover code */}
+    </NextUIProvider>
+  );
+};
+```
+
+![The boundary is set to Friend](/tutorials/advanced-network-patterns-react/ch11/client-component-friend.png)
+
+By applying the client component at the leaf node (`Friend`), you enhance the user experience with faster initial load times and progressively enhance the page with interactive elements as needed. This approach aligns well with modern web development best practices, particularly in frameworks like Next.js, where balancing server-side and client-side rendering is key to achieving optimal performance and user experience.

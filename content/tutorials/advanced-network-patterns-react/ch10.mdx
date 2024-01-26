@@ -1,16 +1,16 @@
 ---
 order: 10
 title: "The New Suspense API in React"
-description: "Chapter 10 introduces the new Suspense API in React 18, demonstrating its capabilities for asynchronous data fetching, streaming, and enhancing UI interactivity. It explores the concept of pushing client components to leaf nodes for optimal rendering."
+description: "Chapter 10 explores the innovative Suspense API in React 18, focusing on its application in asynchronous data fetching and UI streaming. The chapter demonstrates how Suspense, combined with streaming in Next.js, enhances UI interactivity and responsiveness."
 date: 2024-01-25T17:00:12+11:00
 tutorialId: "advanced-network-patterns-react"
 next: "ch11"
 highlights:
-  - Utilizing the new Suspense API for asynchronous data fetching
-  - Implementing streaming with Next.js for progressive UI rendering
-  - Strategic placement of client components for enhanced interactivity
-leading: "This chapter explores the innovative Suspense API in React 18, showing how it transforms data fetching and UI rendering. We delve into streaming with Next.js and discuss optimizing client component placement."
-summary: "Chapter 10 dives into React 18's Suspense API, highlighting its use in data fetching and UI streaming. We examine practical implementations in Next.js, including the use of Suspense for progressive rendering and the strategic placement of client components."
+  - Exploring the new Suspense API for data fetching in React 18
+  - Implementing UI streaming with Next.js for dynamic content rendering
+  - Enhancing user experience with progressive loading and structured data fetching
+leading: "This chapter delves into React 18's new Suspense API, showcasing its capabilities in transforming data fetching and user interface rendering. We explore how to utilize this API alongside Next.js for a more interactive and responsive user experience."
+summary: "In Chapter 10, we investigate the new Suspense API in React 18, highlighting its role in asynchronous data fetching and UI streaming. The chapter provides insights into using this API with Next.js to progressively render content and improve user interaction."
 draft: true
 ---
 
@@ -198,76 +198,42 @@ export default async function Page({ params }: PageProps) {
 }
 ```
 
-Alternatively, you can push streaming to individual components, allowing earlier user interaction. This is the approach we're using now as it's more flexiable, we can define more gradular skeleton and suspense boundary, that also means potentially more content can be static thus rendered much faster (think of the headline, section header, etc.).
+Alternatively, you can push streaming to individual components, allowing earlier user interaction. This is the approach we're using now as it's more flexible, we can define more granular skeleton and suspense boundary, that also means potentially more content can be static thus rendered much faster (think of the headline, section header, etc.).
 
 ![Partial Rendering with Skeletons](/tutorials/advanced-network-patterns-react/ch10/profile-rendering-partial.png)
 
 We aim to shift content generation to the server side as much as possible, but client components remain essential for high interactivity.
 
-## Client Component Strategy
+## Optimizing UI by Grouping Related Data Components
 
-Pushing client components to the leaf of the component tree, particularly in a server-side rendering environment like Next.js, is a strategic approach for optimizing web application performance. By doing so, you ensure that most of the page is server-rendered, which speeds up the initial load time. Interactive elements that require client-side JavaScript are loaded only where necessary, making the page interactive more quickly without overburdening the initial load.
+A key strategy to enhance user experience is to group related data components in the UI. This approach ensures that related information is displayed together, aligning with the user's expectations and the logical flow of data. For instance, in our application, user information displayed in the `About` component is closely related to the `Feeds`, as both pertain to the user's interests. Conversely, the `Friends` component, which can function independently, might be more suitably placed in a separate section of the UI.
 
-In the provided code snippets, we have two versions of the `Friends` component. The first version marks the entire component as a client component, while the second version pushes the client-side logic down to the individual `Friend` component.
+To implement this, we consider a left-right layout that visually and functionally groups related components together. Such an arrangement not only improves the coherence of the displayed information but also enhances the overall aesthetic and navigability of the UI.
 
-### First Version - Entire Component as Client-Side
+![UI Rearrangement Based on Data Grouping](/tutorials/advanced-network-patterns-react/ch10/ui-rearranged.png)
 
-The first `Friends` component is wrapped with `use client`, making the entire component and all its children client-side only. This means that even simple, non-interactive parts of this component won't render until the client-side JavaScript loads and executes, which can delay the initial rendering and interactivity of the page.
+In practice, this layout adjustment requires minimal changes to the code. We introduce a vertical version of the `FriendsSkeleton`, named `FriendsSkeletonVertical`, to align with the new layout. The `Profile` component is then updated to reflect this new structure:
 
-```tsx title="components/friends.tsx" {1,7,12}
-'use client';
-
-async function Friends({ id }: { id: string }) {
-  const friends = await getFriends(id);
-
-  return (
-    <NextUIProvider>
-      <div>
-        <h2>Friends</h2>
-        {/**/}
-      </div>
-    </NextUIProvider>
-  );
-}
-```
-
-![The boundary is set to Friends](/tutorials/advanced-network-patterns-react/ch10/client-component-friends.png)
-
-### Second Version - Client Logic at Leaf Node
-
-The second approach optimizes performance by removing the `use client` directive from the `Friends` component. Instead, it delegates client-specific logic to the `Friend` component. This way, the `Friends` component itself can be pre-rendered on the server, and only the interactive parts within each `Friend` component are handled on the client-side. This granular approach speeds up the initial page load, as less JavaScript needs to be downloaded and executed to render the initial view.
-
-```tsx title="components/friends.tsx"
-async function Friends({ id }: { id: string }) {
-  const friends = await getFriends(id);
-
+```tsx
+export async function Profile({ id }: { id: string }) {
   return (
     <div>
-      <h2>Friends</h2>
+      <h1>Profile</h1>
       <div>
-        {friends.map((user) => (
-          <Friend user={user} key={user.id} />
-        ))}
+        <div>
+          <Suspense fallback={<UserInfoSkeleton />}>
+            <UserInfo id={id} />
+          </Suspense>
+        </div>
+        <div>
+          <Suspense fallback={<FriendsSkeletonVertical />}>
+            <Friends id={id} />
+          </Suspense>
+        </div>
       </div>
     </div>
   );
 }
 ```
 
-And we then move `NextUIProvider` usage into `friend` component.
-
-```tsx title="components/friend.tsx" {1,5,7}
-"use client";
-
-export const Friend = ({ user }: { user: User }) => {
-  return (
-    <NextUIProvider>
-      {/* popover code */}
-    </NextUIProvider>
-  );
-};
-```
-
-![The boundary is set to Friend](/tutorials/advanced-network-patterns-react/ch10/client-component-friend.png)
-
-By applying the client component at the leaf node (`Friend`), you enhance the user experience with faster initial load times and progressively enhance the page with interactive elements as needed. This approach aligns well with modern web development best practices, particularly in frameworks like Next.js, where balancing server-side and client-side rendering is key to achieving optimal performance and user experience.
+This updated layout ensures that each component manages its own data fetching, maintaining a clean separation of concerns. The use of Suspense boundaries for each component enhances the experience by providing immediate visual feedback (through skeletons) and progressively loading the content. This approach not only streamlines the rendering process but also optimizes the interactivity and responsiveness of the application, ensuring users have a smooth and engaging experience navigating through different sections of the user profile.
