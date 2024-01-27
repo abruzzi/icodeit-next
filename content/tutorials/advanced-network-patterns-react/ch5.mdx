@@ -126,9 +126,9 @@ const Friend = React.lazy(() => import("./friend.tsx"));
 
 const Friends = ({ users }: { users: User[] }) => {
   return (
-    <div className="py-4">
-      <h2 className="text-lg text-slate-900 tracking-wider">Friends</h2>
-      <div className="flex flex-row pt-4 gap-4">
+    <div>
+      <h2>Friends</h2>
+      <div>
         {users.map((user) => (
           <Suspense fallback={<FriendSkeleton />}>
             <Friend user={user} key={user.id} />
@@ -157,7 +157,7 @@ const Friend = ({ user }: { user: User }) => {
             <Brief user={user} />
           </button>
         </PopoverTrigger>
-        <PopoverContent className="max-w-[240px] min-w-[200px] max-h-40 min-h-32">
+        <PopoverContent>
           <Suspense fallback={<div>Loading...</div>}>
             <UserDetailCard id={user.id} />
           </Suspense>
