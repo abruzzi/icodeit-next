@@ -14,7 +14,7 @@ const AboutMe = () => {
         <h1
           className={`text-slate-900 text-3xl md:text-6xl tracking-normal dark:text-white ${inter.className}`}
         >
-          I help people write better code through clear, practical guidance.
+          I help developers write better code through clear, practical guidance.
         </h1>
 
         <p>
