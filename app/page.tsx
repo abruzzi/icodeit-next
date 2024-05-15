@@ -58,6 +58,17 @@ export default function Home() {
       <SubTitle content="Recent Articles" />
 
       {allPosts
+        .filter(a => !a.external)
+        .sort((a, b) => compareDesc(a.date, b.date))
+        .slice(0, 5)
+        .map((post) => (
+          <PostCard post={post} key={post._id} />
+        ))}
+
+      <SubTitle content="Articles published on other places" />
+
+      {allPosts
+        .filter(a => a.external)
         .sort((a, b) => compareDesc(a.date, b.date))
         .slice(0, 5)
         .map((post) => (

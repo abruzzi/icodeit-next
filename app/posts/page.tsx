@@ -62,7 +62,9 @@ export default function Posts() {
       </p>
 
       <hr />
+
       {allPosts
+        .filter(a => !a.external)
         .sort((a, b) => compareDesc(a.date, b.date))
         .map((post) => (
           <PostCard post={post} key={post._id} />

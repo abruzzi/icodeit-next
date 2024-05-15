@@ -80,7 +80,6 @@ const merriweather = Merriweather({
 
 export default async function PostPage({ params }: PostProps) {
   const post = await getPostFromParams(params);
-
   if (!post) {
     notFound();
   }
