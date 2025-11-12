@@ -77,12 +77,14 @@ export default function Home() {
 
       <Link
         href="/posts"
-        className={`no-underline border p-2 rounded border-slate-100 dark:border-slate-700`}
+        className={`no-underline border p-3 rounded-lg border-slate-200 dark:border-slate-700 hover:border-brand hover:text-brand transition-all duration-200 inline-block mt-4 hover:scale-105 transform`}
       >
-        Read more...
+        Read more articles →
       </Link>
 
-      <Subscribe />
+      <div className="my-12 p-6 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border border-slate-200 dark:border-slate-700">
+        <Subscribe />
+      </div>
     </div>
   );
 }

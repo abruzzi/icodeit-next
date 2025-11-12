@@ -40,23 +40,26 @@ export const Product = ({
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center w-full sm:w-auto mx-auto gap-6 my-4">
-      <div className="flex-shrink-0">
-        <Image
-          className={`${
-            coverSize === "small" ? "w-44" : "w-96"
-          }  max-w-none object-cover rounded`}
-          width={coverSize === "small" ? 176 : 384}
-          height={coverSize === "small" ? 267 : 212}
-          src={cover}
-          alt={title}
-        />
+    <div className="flex flex-col md:flex-row items-center w-full sm:w-auto mx-auto gap-6 my-8 group">
+      <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+        <a href={link} target="_blank" rel="noopener noreferrer" className="block">
+          <Image
+            className={`${
+              coverSize === "small" ? "w-44" : "w-96"
+            }  max-w-none object-cover rounded shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+            width={coverSize === "small" ? 176 : 384}
+            height={coverSize === "small" ? 267 : 212}
+            src={cover}
+            alt={title}
+          />
+        </a>
       </div>
 
-      <div>
+      <div className="flex-1">
         <a
           href={link}
           target="_blank"
+          rel="noopener noreferrer"
           className="mt-2 inline-block no-underline"
         >
           <h3 className="m-0 flex items-center gap-x-2 text-xl font-semibold leading-tight hover:text-brand transition-colors duration-200">
@@ -64,18 +67,18 @@ export const Product = ({
           </h3>
         </a>
 
-        {content}
+        <div className="my-3">{content}</div>
 
-        <div className={`flex flex-col md:flex-row items-center`}>
-          <div className={`hidden md:flex`}>
+        <div className={`flex flex-col md:flex-row items-center gap-3`}>
+          <div className={`flex flex-wrap gap-2`}>
             {categories.map((cat) => (
               <span
                 key={cat}
                 className={`${
                   cat === "new"
-                    ? "border-green-800 dark:border-green-300"
+                    ? "border-green-800 dark:border-green-300 bg-green-50 dark:bg-green-950/30"
                     : "border-slate-100 dark:border-slate-700"
-                } text-slate-600 dark:text-slate-300  rounded-full border py-1 px-2 text-xs font-light mr-2`}
+                } text-slate-600 dark:text-slate-300  rounded-full border py-1 px-2 text-xs font-light`}
               >
                 {cat}
               </span>
@@ -84,12 +87,11 @@ export const Product = ({
 
           <a
             href={learnMoreLink ? learnMoreLink : link}
-            className={`no-underline rounded border py-1 px-2 border-slate-200 dark:border-slate-600 ml-auto hover:text-brand hover:border-brand transition-colors duration-200`}
+            className={`no-underline rounded border py-1.5 px-3 border-slate-200 dark:border-slate-600 ml-auto hover:text-brand hover:border-brand transition-all duration-200 hover:scale-105 transform flex flex-row items-center gap-1`}
             target="_blank"
+            rel="noopener noreferrer"
           >
-            <div className={`flex flex-row items-center gap-1`}>
-              Learn more <ArrowRightIcon />
-            </div>
+            Learn more <ArrowRightIcon className="transition-transform duration-200 group-hover:translate-x-1" />
           </a>
         </div>
       </div>

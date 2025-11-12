@@ -9,13 +9,13 @@ export function ModeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="border-none rounded-md w-6 h-6 flex items-center justify-center dark:hover:bg-slate-700 hover:bg-slate-200 transition-colors duration-200"
+      className="border-none rounded-lg w-10 h-10 flex items-center justify-center dark:hover:bg-slate-700/50 hover:bg-slate-200/50 transition-colors duration-200 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+      aria-label="Toggle theme"
     >
-      <span className="sr-only">Toggle mode</span>
       {theme !== "dark" ? (
         <GoMoon size={20} />
       ) : (
-        <GoSun size={20} color="orange" />
+        <GoSun size={20} className="text-orange-400" />
       )}
     </button>
   );
