@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { allPosts } from "contentlayer/generated";
+import { allPosts } from "content-collections";
 
 import { Metadata } from "next";
 import { Mdx } from "@/components/supporting/mdx-components";
@@ -109,7 +109,7 @@ export default async function PostPage({ params }: PostProps) {
 
         <hr className="my-8" />
 
-        <Mdx code={post.body.code} />
+        {await Mdx({ code: post.body.code })}
 
         <SocialMediaSharing post={post} />
         <Subscribe />

@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import { Chapter, Tutorial } from "contentlayer/generated";
+import { Breadcrumbs, BreadcrumbItem } from "@heroui/react";
+import type { Chapter, Tutorial } from "content-collections";
 
 function ChapterBreadcrumbs({
   tutorial,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip, Radio, RadioGroup } from "@nextui-org/react";
+import { Button, Chip, Radio, RadioGroup } from "@heroui/react";
 import React, { useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Divider } from "@/components/design-system/divider";

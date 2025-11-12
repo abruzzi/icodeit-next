@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import React from "react";
-import { Chapter, Tutorial } from "contentlayer/generated";
+import type { Chapter, Tutorial } from "content-collections";
 import { Product } from "@/components/mdx/product";
 
 type ProductType = {

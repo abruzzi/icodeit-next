@@ -1,9 +1,9 @@
 import React from "react";
 import { Mdx } from "@/components/supporting/mdx-components";
-import {Tutorial} from "contentlayer/generated";
+import type { Tutorial } from "content-collections";
 
-const TutorialIntro = ({ tutorial }: { tutorial: Tutorial }) => {
-  return <Mdx code={tutorial.body.code} />;
+const TutorialIntro = async ({ tutorial }: { tutorial: Tutorial }) => {
+  return await Mdx({ code: tutorial.body.code });
 };
 
 export { TutorialIntro };

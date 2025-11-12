@@ -52,7 +52,7 @@ import { HeaderWithMenu } from "@/components/design-system/header-with-menu";
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`subpixel-antialiased min-h-screen bg-no-repeat bg-gradient-to-br from-slate-50 to-slate-150 dark:bg-gradient-to-tl dark:from-slate-950 dark:to-slate-800 text-slate-900 dark:text-slate-50 ${inter.className}`}
       >

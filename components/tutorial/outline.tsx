@@ -7,9 +7,9 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
-import { Chapter } from "contentlayer/generated";
+import type { Chapter } from "content-collections";
 import Link from "next/link";
 
 import { CiCircleList } from "react-icons/ci";
@@ -41,7 +41,7 @@ export function Outline({ chapters }: { chapters: Chapter[] | null }) {
                     </span>
                   }
                   description={other.title}
-                  key={other._id}
+                  key={other._meta.path}
                 >
                   <Link href={other.slug} className={`no-underline text-sm`}>
                     <div>{`Chapter ${other.order}`}</div>

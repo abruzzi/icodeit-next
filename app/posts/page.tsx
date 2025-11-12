@@ -1,6 +1,6 @@
 import React from "react";
 
-import { allPosts } from "@/.contentlayer/generated";
+import { allPosts } from "content-collections";
 
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/design-system/subscribe";
@@ -67,7 +67,7 @@ export default function Posts() {
         .filter(a => !a.external)
         .sort((a, b) => compareDesc(a.date, b.date))
         .map((post) => (
-          <PostCard post={post} key={post._id} />
+          <PostCard post={post} key={post._meta.path} />
         ))}
 
       <Subscribe />

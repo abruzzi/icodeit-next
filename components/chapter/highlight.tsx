@@ -1,5 +1,5 @@
 import React from "react";
-import { Chapter } from "contentlayer/generated";
+import type { Chapter } from "content-collections";
 
 export function Highlight({ chapter: { highlights } }: { chapter: Chapter }) {
   return (

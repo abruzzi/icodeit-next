@@ -1,4 +1,4 @@
-import { Chapter } from "contentlayer/generated";
+import type { Chapter } from "content-collections";
 import Link from "next/link";
 import React from "react";
 

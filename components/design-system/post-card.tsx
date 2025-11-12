@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { Post } from "contentlayer/generated";
+import type { Post } from "content-collections";
 import { Merriweather } from "next/font/google";
 import { format } from "date-fns";
 
@@ -8,7 +8,7 @@ const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });
 
 const PostCard = ({ post }: { post: Post }) => {
   return (
-    <article key={post._id} className={`my-8`}>
+    <article key={post._meta.path} className={`my-8`}>
       <Link href={post.slug} className={`no-underline`}>
         <h2
           className={`${merriweather.className} my-2 hover:text-brand transition-colors duration-2`}

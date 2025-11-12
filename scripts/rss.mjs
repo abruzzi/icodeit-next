@@ -1,8 +1,10 @@
 import {writeFileSync} from 'fs';
 import RSS from 'rss';
-
-import {allPosts} from "../.contentlayer/generated/index.mjs";
 import {compareDesc} from "date-fns";
+
+// Use dynamic import for ESM modules - import directly from allPosts.js which uses default export
+const allPostsModule = await import("../.content-collections/generated/allPosts.js");
+const allPosts = allPostsModule.default;
 
 const feed = new RSS({
   title: "I Code It | Juntao Qiu",

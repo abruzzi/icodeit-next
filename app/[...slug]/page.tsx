@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { allPages, Page } from "contentlayer/generated";
+import { allPages } from "content-collections";
+import type { Page } from "content-collections";
 
 import { Mdx } from "@/components/supporting/mdx-components";
 import { Subscribe } from "@/components/design-system/subscribe";
@@ -79,7 +80,7 @@ export default async function PagePage({ params }: PageProps) {
       <h1 className={`py-6`}>{page.title}</h1>
       {page.description && <p className={`font-light`}>{page.description}</p>}
       <hr />
-      <Mdx code={page.body.code} />
+      {await Mdx({ code: page.body.code })}
       <Subscribe />
     </article>
   );

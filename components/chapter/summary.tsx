@@ -1,6 +1,6 @@
 import { FaBookOpen } from "react-icons/fa6";
 import React from "react";
-import { Chapter } from "contentlayer/generated";
+import type { Chapter } from "content-collections";
 import { SlBadge } from "react-icons/sl";
 
 const getBottomBadge = (chapter: Chapter) => {

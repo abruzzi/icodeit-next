@@ -4,7 +4,7 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
-import { ArrowRightIcon } from "@nextui-org/shared-icons";
+import { ArrowRightIcon } from "@heroui/shared-icons";
 import Image from "next/image";
 
 type ProductType = {

@@ -1,6 +1,6 @@
 import { Merriweather } from "next/font/google";
 import React from "react";
-import { Chapter } from "contentlayer/generated";
+import type { Chapter } from "content-collections";
 import { Divider } from "@/components/design-system/divider";
 
 const merriweather = Merriweather({ weight: "400", subsets: ["latin"] });

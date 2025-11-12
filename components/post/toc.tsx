@@ -1,4 +1,4 @@
-import {Post} from "contentlayer/generated";
+import type { Post } from "content-collections";
 import React from "react";
 
 type HeadingType = {
@@ -12,7 +12,11 @@ export const TOC = ({post}: { post: Post }) => {
     <nav className={`order-last hidden shrink-0 md:block lg:block py-32 sticky`}>
       <h3 className={`text-brand uppercase tracking-wide`}>On this page</h3>
       <div>
-        {post.headings.map((heading: HeadingType) => {
+        {post.headings
+          .filter((heading): heading is HeadingType => 
+            heading.text !== undefined && heading.slug !== undefined
+          )
+          .map((heading: HeadingType) => {
           return (
             <div key={`#${heading.slug}`}
                  className={`py-0.5 text-xs font-light text-slate-600 hover:text-slate-800 dark:text-slate-400 hover:dark:text-slate-300 transition-colors duration-200`}>

@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 
 import { notFound } from "next/navigation";
 
-import { allChapters, allTutorials } from "contentlayer/generated";
+import { allChapters, allTutorials } from "content-collections";
 import { Metadata } from "next";
 import { Mdx } from "@/components/supporting/mdx-components";
 import { Subscribe } from "@/components/design-system/subscribe";
@@ -108,6 +108,10 @@ export default async function Chapter({ params }: ChapterProps) {
   const others = await getAllChaptersInCurrentTutorial(chapter.tutorialId);
   const tutorial = await getTutorialFromParams(chapter.tutorialId);
 
+  if (!tutorial) {
+    notFound();
+  }
+
   return (
     <>
       <div className={`relative max-w-4xl`}>
@@ -122,7 +126,7 @@ export default async function Chapter({ params }: ChapterProps) {
 
         <hr />
 
-        <Mdx code={chapter.body.code} />
+        {await Mdx({ code: chapter.body.code })}
 
         <Summary chapter={chapter} />
 

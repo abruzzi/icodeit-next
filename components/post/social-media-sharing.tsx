@@ -7,7 +7,7 @@ import {
   XIcon,
 } from "react-share";
 import React from "react";
-import type { Post } from "contentlayer/generated";
+import type { Post } from "content-collections";
 import { FaLinkedin } from "react-icons/fa6";
 
 const SocialMediaSharing = ({ post }: { post: Post }) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 
 const inter = Inter({ weight: "800", subsets: ["latin"] });
 

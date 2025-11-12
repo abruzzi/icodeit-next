@@ -1,4 +1,4 @@
-import { allTutorials } from "@/.contentlayer/generated";
+import { allTutorials } from "content-collections";
 
 import React from "react";
 
@@ -60,7 +60,7 @@ export default function Tutorials() {
           {allTutorials
             .sort((a, b) => compareDesc(a.date, b.date))
             .map((tutorial) => (
-              <NewTutorialCard tutorial={tutorial} key={tutorial._id} />
+              <NewTutorialCard tutorial={tutorial} key={tutorial._meta.path} />
             ))}
         </div>
       </div>

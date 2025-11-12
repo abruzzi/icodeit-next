@@ -1,6 +1,6 @@
 import React from "react";
 
-import { allPosts } from "@/.contentlayer/generated";
+import { allPosts } from "content-collections";
 import Link from "next/link";
 
 import { compareDesc } from "date-fns";
@@ -62,7 +62,7 @@ export default function Home() {
         .sort((a, b) => compareDesc(a.date, b.date))
         .slice(0, 5)
         .map((post) => (
-          <PostCard post={post} key={post._id} />
+          <PostCard post={post} key={post._meta.path} />
         ))}
 
       <SubTitle content="Articles published on other places" />
@@ -72,7 +72,7 @@ export default function Home() {
         .sort((a, b) => compareDesc(a.date, b.date))
         .slice(0, 5)
         .map((post) => (
-          <PostCard post={post} key={post._id} />
+          <PostCard post={post} key={post._meta.path} />
         ))}
 
       <Link

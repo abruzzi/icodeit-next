@@ -1,5 +1,5 @@
 import React from "react";
-import { Tutorial } from "contentlayer/generated";
+import type { Tutorial } from "content-collections";
 import Link from "next/link";
 import {format} from "date-fns";
 import {Merriweather} from "next/font/google";
