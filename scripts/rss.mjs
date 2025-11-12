@@ -1,9 +1,27 @@
-import {writeFileSync} from 'fs';
+import {writeFileSync, mkdirSync, existsSync} from 'fs';
 import RSS from 'rss';
 import {compareDesc} from "date-fns";
+import {pathToFileURL} from 'url';
+import {fileURLToPath} from 'url';
+import {dirname, resolve} from 'path';
 
-// Use dynamic import for ESM modules - import directly from allPosts.js which uses default export
-const allPostsModule = await import("../.content-collections/generated/allPosts.js");
+// Get the directory of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Ensure the generated directory has package.json for ESM
+const generatedDir = resolve(__dirname, '../.content-collections/generated');
+const packageJsonPath = resolve(generatedDir, 'package.json');
+
+if (!existsSync(packageJsonPath)) {
+  mkdirSync(generatedDir, { recursive: true });
+  writeFileSync(packageJsonPath, JSON.stringify({ type: "module" }, null, 2) + '\n');
+}
+
+// Use file:// URL for reliable ESM import
+const allPostsPath = resolve(generatedDir, 'allPosts.js');
+const allPostsUrl = pathToFileURL(allPostsPath).href;
+const allPostsModule = await import(allPostsUrl);
 const allPosts = allPostsModule.default;
 
 const feed = new RSS({
