@@ -15,12 +15,11 @@ const AboutMe = () => {
         <h1
           className={`text-slate-900 text-3xl md:text-6xl tracking-normal dark:text-white mb-4 ${inter.className}`}
         >
-          I help developers write better code through clear, practical guidance.
+          I'm Helping developers design and build software
         </h1>
 
         <p className="text-slate-600 dark:text-slate-300 mb-6 text-lg">
-          I share in-depth insights and practical tutorials in books, courses
-          and videos.
+          By breaking complexity into structure and guiding the building process with intention — even when AI is involved.
         </p>
 
         <a
