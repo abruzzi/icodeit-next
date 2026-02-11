@@ -17,7 +17,33 @@ export default function Home() {
 
       <hr />
 
+      <SubTitle content="Courses" />
+
+      <Product
+        link="https://icodeit.thinkific.com/courses/frontend-system-design-essentials"
+        cover="/products/courses/frontend-system-design-essentials.png"
+        title="Frontend System Design Essentials"
+        categories={["new", "intermediate"]}
+      >
+        <p>
+          Go beyond coding features. Master frontend system design to build scalable, resilient apps — and grow from developer to system thinker. Learn the patterns and trade-offs behind professional frontend architecture — not just how to code, but how to design.
+        </p>
+      </Product>
+
+      <hr />
+
       <SubTitle content="Books" />
+
+      <Product
+        link="https://leanpub.com/frontend-system-design-essentials"
+        cover="/products/books/frontend-system-design-essentails-book-cover.png"
+        title="Frontend System Design Essentials"
+        categories={["new", "intermediate"]}
+      >
+        <p>
+          A practical guide to designing scalable and maintainable frontends. Learn how to think beyond components, model data effectively, shape APIs around real access patterns, and apply modern techniques like pagination, caching, virtualization, and real-time updates. Perfect for engineers preparing for system design interviews or leveling up in complex frontend projects.
+        </p>
+      </Product>
 
       <Product
         link="https://www.amazon.com/React-Anti-Patterns-maintainable-applications-test-driven/dp/1805123971"

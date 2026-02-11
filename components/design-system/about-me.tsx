@@ -8,17 +8,17 @@ const inter = Inter({ weight: "800", subsets: ["latin"] });
 
 const AboutMe = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center md:items-end space-y-4 py-16 text-lg leading-normal text-left sm:space-y-0 sm:space-x-4">
+    <div className="flex flex-col md:flex-row items-center md:items-end space-y-4 py-16 md:py-20 text-lg leading-normal text-left sm:space-y-0 sm:space-x-6">
       <div className={`flex-1 text-base`}>
-        <p className="text-slate-600 dark:text-slate-400 mb-2">Welcome, I am Juntao — Engineer, Educator, Creator.</p>
+        <p className="text-slate-600 dark:text-slate-400 mb-4">Welcome, I am Juntao — Engineer, Educator, Creator.</p>
 
         <h1
-          className={`text-slate-900 text-3xl md:text-6xl tracking-normal dark:text-white mb-4 ${inter.className}`}
+          className={`text-slate-900 text-3xl md:text-6xl tracking-normal dark:text-white mb-6 ${inter.className}`}
         >
-          I'm Helping developers design and build software
+          Helping developers design and build software
         </h1>
 
-        <p className="text-slate-600 dark:text-slate-300 mb-6 text-lg">
+        <p className="text-slate-600 dark:text-slate-300 mb-8 text-lg leading-relaxed">
           By breaking complexity into structure and guiding the building process with intention — even when AI is involved.
         </p>
 
