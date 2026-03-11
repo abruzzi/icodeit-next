@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
+import { Barlow } from "next/font/google";
 import {
   ReactFlow,
   Controls,
@@ -21,6 +22,11 @@ import {
   type OnReconnect,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
 
 type SubjectNodeData = {
   label: string;
@@ -44,7 +50,7 @@ const PALETTE = ["#22c55e", "#3b82f6", "#a855f7", "#f97316", "#ef4444"] as const
 function SubjectNode({ data }: NodeProps<Node<SubjectNodeData>>) {
   return (
     <div className="relative rounded-md border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden bg-white dark:bg-slate-950">
-      <div className="px-3 py-1.5 text-xs font-semibold tracking-wide uppercase bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 border-b border-slate-200 dark:border-slate-700">
+      <div className="px-3 py-1 text-[11px] font-semibold tracking-wide uppercase bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 border-b border-slate-200 dark:border-slate-700">
         Subject: {data.label}
       </div>
       <div className="px-3 py-2">
@@ -53,7 +59,7 @@ function SubjectNode({ data }: NodeProps<Node<SubjectNodeData>>) {
             className="inline-block h-4 w-4 rounded border border-slate-200 dark:border-slate-700"
             style={{ backgroundColor: data.colorHex }}
           />
-          <span className="font-mono text-xs text-slate-600 dark:text-slate-400">
+          <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
             {data.colorHex}
           </span>
         </div>
@@ -78,13 +84,13 @@ function ObserverNode({ data }: NodeProps<Node<ObserverNodeData>>) {
     <div className="relative rounded-md border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden bg-white dark:bg-slate-950">
       <Handle type="target" position={Position.Left} />
 
-      <div className="px-3 py-1.5 text-xs font-semibold tracking-wide uppercase bg-sky-50 text-sky-800 dark:bg-sky-950/40 dark:text-sky-200 border-b border-slate-200 dark:border-slate-700">
+      <div className="px-3 py-1 text-[11px] font-semibold tracking-wide uppercase bg-sky-50 text-sky-800 dark:bg-sky-950/40 dark:text-sky-200 border-b border-slate-200 dark:border-slate-700">
         Observer: {data.label}
       </div>
       <div className="px-3 py-2">
         <div className="mt-2 flex items-center gap-2">
           {swatch}
-          <span className="font-mono text-xs text-slate-600 dark:text-slate-400">
+          <span className="font-mono text-[11px] text-slate-500 dark:text-slate-400">
             {hex}
           </span>
         </div>
@@ -298,10 +304,14 @@ export function FlowDiagram({
   const stepKey = `${variant}-${step}`;
 
   const edgesReconnectable = step === 4;
+  const fixedZoom = 1;
+  const minZoom = fixedZoom;
+  const maxZoom = fixedZoom;
+  const [zoom, setZoom] = useState<number | null>(null);
 
   return (
     <figure
-      className="my-6 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-50 dark:bg-slate-900/50"
+      className={`my-6 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-50 dark:bg-slate-900/50 ${barlow.className}`}
       style={{ minHeight: 320 }}
     >
       {title && (
@@ -314,7 +324,7 @@ export function FlowDiagram({
           className="w-full h-full relative"
           style={{
             backgroundImage:
-              "radial-gradient(circle, rgba(148,163,184,0.35) 1px, transparent 1px)",
+              "radial-gradient(circle, rgba(148,163,184,0.25) 1px, transparent 1px)",
             backgroundSize: "16px 16px",
             backgroundPosition: "0 0",
           }}
@@ -335,11 +345,24 @@ export function FlowDiagram({
             edgesReconnectable={edgesReconnectable}
             snapToGrid
             snapGrid={[16, 16]}
+            minZoom={minZoom}
+            maxZoom={maxZoom}
+            onMove={(_, viewport) => {
+              setZoom(viewport.zoom);
+            }}
             fitView
-            fitViewOptions={{ padding: 0.2 }}
+            fitViewOptions={{
+              padding: step === 1 ? 0.4 : 0.2,
+              maxZoom,
+            }}
           >
             <Controls />
           </ReactFlow>
+          {zoom !== null && (
+            <div className="absolute bottom-2 right-3 rounded bg-slate-900/70 text-slate-200 px-2 py-0.5 text-[11px]">
+              zoom {zoom.toFixed(2)}
+            </div>
+          )}
         </div>
       </div>
     </figure>
