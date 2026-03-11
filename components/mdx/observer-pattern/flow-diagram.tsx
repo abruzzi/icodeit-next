@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Barlow } from "next/font/google";
 import {
   ReactFlow,
@@ -19,21 +19,8 @@ import {
   type OnReconnect,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import {
-  SubjectNode,
-  ObserverNode,
-  PALETTE,
-  FARM_MOISTURE_STATES,
-  makeNodesForStep,
-  makeNodesForStepFarm,
-  makeEdgesForStep,
-  nextColorHex,
-  nextFarmMoisture,
-  applyNotification,
-  applyNotificationFarm,
-  type FlowStep,
-  type ObserverNodeData,
-} from "./common";
+import { SubjectNode, ObserverNode, makeEdgesForStep, type FlowStep } from "./common";
+import { color as colorPreset, farm as farmPreset } from "./presets";
 
 const barlow = Barlow({
   subsets: ["latin"],
@@ -41,6 +28,8 @@ const barlow = Barlow({
 });
 
 type FlowDiagramVariant = "observer" | "farm";
+
+const presets = { observer: colorPreset, farm: farmPreset } as const;
 
 export function FlowDiagram({
   variant = "observer",
@@ -51,8 +40,8 @@ export function FlowDiagram({
   title?: string;
   step?: FlowStep;
 }) {
-  const [subjectHex, setSubjectHex] = useState<string>(PALETTE[0]);
-  const [moisture, setMoisture] = useState<string>(FARM_MOISTURE_STATES[0]);
+  const preset = presets[variant];
+  const [state, setState] = useState<string>(() => preset.initialState);
 
   const nodeTypes: NodeTypes = useMemo(
     () => ({
@@ -64,23 +53,24 @@ export function FlowDiagram({
   const edgeTypes: EdgeTypes = useMemo(() => ({}), []);
 
   const initial = useMemo(() => {
-    const es = makeEdgesForStep(step);
-    if (variant === "farm") {
-      const ns = makeNodesForStepFarm(step, moisture);
-      return {
-        nodes: applyNotificationFarm(ns, es, moisture),
-        edges: es,
-      };
-    }
-    const ns = makeNodesForStep(step, subjectHex);
+    const es = (preset.makeEdgesForStep ?? makeEdgesForStep)(step);
+    const ns = preset.makeNodesForStep(step, state);
     return {
-      nodes: applyNotification(ns, es, subjectHex),
+      nodes: preset.applyNotification(ns, es, state),
       edges: es,
     };
-  }, [step, subjectHex, moisture, variant]);
+  }, [step, state, preset]);
 
   const [nodes, setNodes] = useState<Node[]>(() => initial.nodes);
   const [edges, setEdges] = useState<Edge[]>(() => initial.edges);
+
+  useEffect(() => {
+    setState(preset.initialState);
+    const es = (preset.makeEdgesForStep ?? makeEdgesForStep)(step);
+    const ns = preset.makeNodesForStep(step, preset.initialState);
+    setNodes(preset.applyNotification(ns, es, preset.initialState));
+    setEdges(es);
+  }, [step, variant, preset]);
 
   const reconnectingEdgeId = useRef<string | null>(null);
   const reconnectCompleted = useRef(false);
@@ -136,18 +126,11 @@ export function FlowDiagram({
   const onNodeClick = useCallback(
     (_: unknown, node: Node) => {
       if (node.id !== "subject") return;
-
-      if (variant === "farm") {
-        const next = nextFarmMoisture(moisture);
-        setMoisture(next);
-        setNodes((ns) => applyNotificationFarm(ns, edges, next));
-      } else {
-        const nextHex = nextColorHex(subjectHex);
-        setSubjectHex(nextHex);
-        setNodes((ns) => applyNotification(ns, edges, nextHex));
-      }
+      const next = preset.nextState(state);
+      setState(next);
+      setNodes((ns) => preset.applyNotification(ns, edges, next));
     },
-    [edges, subjectHex, moisture, variant]
+    [edges, state, preset]
   );
 
   const stepKey = `${variant}-${step}`;
@@ -158,49 +141,14 @@ export function FlowDiagram({
   const maxZoom = 1.6;
 
   const addObserver = useCallback(() => {
-    if (step !== 3) return;
+    if (step !== 3 || !preset.createNewObserver) return;
 
-    setNodes((currentNodes) => {
-      const idx = observerCounterRef.current + 1;
-      observerCounterRef.current = idx;
+    const idx = observerCounterRef.current + 1;
+    observerCounterRef.current = idx;
+    const { node: newNode, edge: newEdge } = preset.createNewObserver(idx);
 
-      const label = String.fromCharCode("A".charCodeAt(0) + (idx - 2));
-      const id = `observer-${label.toLowerCase()}`;
-
-      const baseX = 360;
-      const baseY = 70;
-      const offsetY = (idx - 1) * 90;
-
-      const newNode: Node = {
-        id,
-        type: "observer",
-        position: { x: baseX, y: baseY + offsetY },
-        data: {
-          label,
-          mode: "hex",
-          latestHex: undefined,
-        } satisfies ObserverNodeData,
-      };
-
-      return [...currentNodes, newNode];
-    });
-
-    setEdges((currentEdges) => {
-      const idx = observerCounterRef.current;
-      const label = String.fromCharCode("A".charCodeAt(0) + (idx - 2));
-      const id = `observer-${label.toLowerCase()}`;
-
-      const newEdge: Edge = {
-        id: `s-${id}`,
-        source: "subject",
-        target: id,
-        label: "notify",
-        type: "default",
-        reconnectable: true,
-      };
-
-      return [...currentEdges, newEdge];
-    });
+    setNodes((currentNodes) => [...currentNodes, newNode]);
+    setEdges((currentEdges) => [...currentEdges, newEdge]);
 
     setTimeout(() => {
       reactFlowInstanceRef.current?.fitView({
@@ -208,7 +156,7 @@ export function FlowDiagram({
         maxZoom: initialZoom,
       });
     }, 0);
-  }, [step]);
+  }, [step, preset]);
 
   return (
     <figure
@@ -220,21 +168,18 @@ export function FlowDiagram({
           {title}
         </figcaption>
       )}
-      {step === 3 && variant === "observer" && (
+      {step === 3 && (
         <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-          <span>Click the Subject to change color. Observer B shows the hex only.</span>
-          <button
-            type="button"
-            onClick={addObserver}
-            className="ml-2 inline-flex items-center rounded border border-slate-300 dark:border-slate-600 px-2 py-0.5 text-[11px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          >
-            + Add observer
-          </button>
-        </div>
-      )}
-      {step === 3 && variant === "farm" && (
-        <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700 text-[11px] text-slate-500 dark:text-slate-400">
-          Click the water sensor to change moisture. In Step 4 you can drag an edge to unsubscribe.
+          <span>{preset.step3Message}</span>
+          {preset.createNewObserver && (
+            <button
+              type="button"
+              onClick={addObserver}
+              className="ml-2 inline-flex items-center rounded border border-slate-300 dark:border-slate-600 px-2 py-0.5 text-[11px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              + Add observer
+            </button>
+          )}
         </div>
       )}
       <div className="w-full h-[320px]">
