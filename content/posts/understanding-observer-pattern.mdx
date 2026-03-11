@@ -6,33 +6,77 @@ description: "An explorable introduction to the Observer pattern: how subjects n
 cover: "/posts/images/understanding-observer-pattern/cover.png"
 ---
 
-The Observer pattern is a behavioral design pattern where an object (the **subject**) maintains a list of dependents (**observers**) and notifies them automatically when its state changes. It’s one of the most common patterns in UI and event-driven systems.
+The Observer pattern is a behavioral design pattern where an object (the **subject**) maintains a list of dependents (**observers**) and notifies them automatically when its state changes. It's one of the most common patterns in UI and event-driven systems.
+
+The Observer pattern is one of my favorite design patterns—not only because it was the very first design pattern I ever learnt, but because once you know its basic principle, you start to see it everywhere.
+
+From real-time updates with WebSockets, to DOM events in the browser, and even in large-scale backend system design, it's literally everywhere. If we consider pub-sub as an extension of the pattern, its usage is even wider.
+
+In this post I'll show you how it works and the different variations that make it so useful. By the end you'll have a solid understanding and will start to appreciate its many applications in your own projects.
+
+## Let's start from an example
+
+Imagine we're on a farm with crops in different areas. We care about soil moisture, water usage, fertiliser saturation, and so on.
+
+On a small farm we could hire a few people to collect soil samples each day and analyse them. Once we know the saturation levels we can act: if the chili field is too dry, we water it; if the eggplant field's soil is unhealthy, we fertilise it.
+
+On a bigger farm that approach doesn't scale—there's too much to check. We need a smarter way. Instead of us periodically checking conditions, what if the fields could tell us when something changes? Most of the time things are fine; we only care about abnormal events, like drought or temperature spikes.
+
+Suppose we deploy sensors in the soil that report their status. We then simply listen to those events and respond: water the field, or turn on the heater if it's too cold.
+
+That's the Observer pattern in practice: we don't actively poll the subject's status; we passively listen for changes.
 
 ## How it works
 
-The subject holds references to its observers. When something meaningful happens—state changes, an event occurs—the subject calls a notify method, and each observer gets updated. There is a direct relationship: the subject knows exactly who is observing it.
+There are two roles: **subject** and **observer**. A subject can have many observers. In our farm example, a water sensor in the soil is the subject. A mobile app might listen to it (one observer), and an irrigation system might also listen (another observer).
 
-## 1) Subject only: state changes exist
+### 1) Subject only: state changes exist
 
-In the first diagram, there are **no observers** yet. You can still change the subject’s internal state.
+First, the sensor works on its own. Its state can change (e.g. moisture: Dry → OK → Wet) even with no observers. Click the water sensor to cycle through moisture states.
+
+<FlowDiagram variant="farm" step={1} title="Step 1 — Water sensor only (click to change moisture)" />
+
+Typically an observer registers with a subject so it can be notified when things change. The change might come from elsewhere (e.g. weather) or from the subject itself (e.g. the sensor reading moisture and notifying its observers).
+
+### 2) Add Observer A: the mobile app
+
+We add a **Mobile** observer. When the sensor’s state changes, the mobile app is notified and can show the current moisture (e.g. "Dry", "OK", "Wet").
+
+<FlowDiagram variant="farm" step={2} title="Step 2 — Mobile app is notified" />
+
+### 3) Add Observer B: the irrigation system
+
+We add a second observer—**Irrigation**. Now both Mobile and Irrigation receive the same updates. Each observer can react in its own way (e.g. show a reading vs. turn the water on).
+
+<FlowDiagram variant="farm" step={3} title="Step 3 — Irrigation system is also notified" />
+
+### 4) Unsubscribe: stop receiving notifications
+
+An observer can detach when it’s no longer interested. In the diagram below, drag an edge endpoint away from a node to unsubscribe; that observer will no longer receive updates.
+
+<FlowDiagram variant="farm" step={4} title="Step 4 — Drag an edge to unsubscribe" />
+
+The subject holds references to its observers. When something meaningful happens, it notifies each one. There is a direct relationship: the subject knows who is observing it.
+
+---
+
+## Another example: color state
+
+The same pattern applies in code. Here, a **Subject** holds a **color** value; observers can show a colour swatch, the hex code, or both. Click the subject to change the color; only connected observers update.
+
+**Step 1 — Subject only**
 
 <FlowDiagram variant="observer" step={1} title="Step 1 — Subject only (click to change color)" />
 
-## 2) Add Observer A: render the color
-
-Now we introduce **Observer A**. When you **click the Subject**, it “notifies” Observer A, and Observer A renders a **color swatch**.
+**Step 2 — Observer A shows swatch + hex**
 
 <FlowDiagram variant="observer" step={2} title="Step 2 — Observer A shows swatch + hex" />
 
-## 3) Add Observer B: render only the hex
-
-Next we add **Observer B**, but it displays **only the hex string** (not the swatch). This is a good reminder that *observers decide how to react* to notifications.
+**Step 3 — Observer B shows hex only**
 
 <FlowDiagram variant="observer" step={3} title="Step 3 — Observer B shows hex only" />
 
-## 4) Unsubscribe: stop receiving notifications
-
-In the last diagram, you can **unsubscribe** by **dragging an edge endpoint away** to detach it. After that, clicking the subject won’t update that observer anymore.
+**Step 4 — Detach an edge to unsubscribe**
 
 <FlowDiagram variant="observer" step={4} title="Step 4 — Detach an edge to unsubscribe" />
 

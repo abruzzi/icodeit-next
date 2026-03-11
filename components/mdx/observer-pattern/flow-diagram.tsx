@@ -23,10 +23,14 @@ import {
   SubjectNode,
   ObserverNode,
   PALETTE,
+  FARM_MOISTURE_STATES,
   makeNodesForStep,
+  makeNodesForStepFarm,
   makeEdgesForStep,
   nextColorHex,
+  nextFarmMoisture,
   applyNotification,
+  applyNotificationFarm,
   type FlowStep,
   type ObserverNodeData,
 } from "./common";
@@ -36,7 +40,7 @@ const barlow = Barlow({
   weight: ["400", "500", "600"],
 });
 
-type FlowDiagramVariant = "observer";
+type FlowDiagramVariant = "observer" | "farm";
 
 export function FlowDiagram({
   variant = "observer",
@@ -48,6 +52,7 @@ export function FlowDiagram({
   step?: FlowStep;
 }) {
   const [subjectHex, setSubjectHex] = useState<string>(PALETTE[0]);
+  const [moisture, setMoisture] = useState<string>(FARM_MOISTURE_STATES[0]);
 
   const nodeTypes: NodeTypes = useMemo(
     () => ({
@@ -59,13 +64,20 @@ export function FlowDiagram({
   const edgeTypes: EdgeTypes = useMemo(() => ({}), []);
 
   const initial = useMemo(() => {
-    const ns = makeNodesForStep(step, subjectHex);
     const es = makeEdgesForStep(step);
+    if (variant === "farm") {
+      const ns = makeNodesForStepFarm(step, moisture);
+      return {
+        nodes: applyNotificationFarm(ns, es, moisture),
+        edges: es,
+      };
+    }
+    const ns = makeNodesForStep(step, subjectHex);
     return {
       nodes: applyNotification(ns, es, subjectHex),
       edges: es,
     };
-  }, [step, subjectHex]);
+  }, [step, subjectHex, moisture, variant]);
 
   const [nodes, setNodes] = useState<Node[]>(() => initial.nodes);
   const [edges, setEdges] = useState<Edge[]>(() => initial.edges);
@@ -125,12 +137,17 @@ export function FlowDiagram({
     (_: unknown, node: Node) => {
       if (node.id !== "subject") return;
 
-      const nextHex = nextColorHex(subjectHex);
-      setSubjectHex(nextHex);
-
-      setNodes((ns) => applyNotification(ns, edges, nextHex));
+      if (variant === "farm") {
+        const next = nextFarmMoisture(moisture);
+        setMoisture(next);
+        setNodes((ns) => applyNotificationFarm(ns, edges, next));
+      } else {
+        const nextHex = nextColorHex(subjectHex);
+        setSubjectHex(nextHex);
+        setNodes((ns) => applyNotification(ns, edges, nextHex));
+      }
     },
-    [edges, subjectHex]
+    [edges, subjectHex, moisture, variant]
   );
 
   const stepKey = `${variant}-${step}`;
@@ -203,7 +220,7 @@ export function FlowDiagram({
           {title}
         </figcaption>
       )}
-      {step === 3 && (
+      {step === 3 && variant === "observer" && (
         <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
           <span>Click the Subject to change color. Observer B shows the hex only.</span>
           <button
@@ -213,6 +230,11 @@ export function FlowDiagram({
           >
             + Add observer
           </button>
+        </div>
+      )}
+      {step === 3 && variant === "farm" && (
+        <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700 text-[11px] text-slate-500 dark:text-slate-400">
+          Click the water sensor to change moisture. In Step 4 you can drag an edge to unsubscribe.
         </div>
       )}
       <div className="w-full h-[320px]">
