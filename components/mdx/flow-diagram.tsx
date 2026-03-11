@@ -65,7 +65,11 @@ function SubjectNode({ data }: NodeProps<Node<SubjectNodeData>>) {
         </div>
       </div>
 
-      <Handle type="source" position={Position.Right} />
+      <Handle
+        type="source"
+        position={Position.Right}
+        className="!w-3 !h-3 !bg-emerald-400 !border-none !shadow-[0_0_0_4px_rgba(16,185,129,0.25)]"
+      />
     </div>
   );
 }
@@ -82,7 +86,11 @@ function ObserverNode({ data }: NodeProps<Node<ObserverNodeData>>) {
 
   return (
     <div className="relative rounded-md border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden bg-white dark:bg-slate-950">
-      <Handle type="target" position={Position.Left} />
+      <Handle
+        type="target"
+        position={Position.Left}
+        className="!w-3 !h-3 !bg-sky-400 !border-none !shadow-[0_0_0_4px_rgba(56,189,248,0.25)]"
+      />
 
       <div className="px-3 py-1 text-[11px] font-semibold tracking-wide uppercase bg-sky-50 text-sky-800 dark:bg-sky-950/40 dark:text-sky-200 border-b border-slate-200 dark:border-slate-700">
         Observer: {data.label}
@@ -240,6 +248,8 @@ export function FlowDiagram({
 
   const reconnectingEdgeId = useRef<string | null>(null);
   const reconnectCompleted = useRef(false);
+  const observerCounterRef = useRef(3); // we already use A (2) and B (3) in steps
+  const reactFlowInstanceRef = useRef<{ fitView: (opts?: { padding?: number; maxZoom?: number }) => void } | null>(null);
 
   const onNodesChange: OnNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -309,6 +319,58 @@ export function FlowDiagram({
   const maxZoom = fixedZoom;
   const [zoom, setZoom] = useState<number | null>(null);
 
+  const addObserver = useCallback(() => {
+    if (step !== 3) return;
+
+    setNodes((currentNodes) => {
+      const idx = observerCounterRef.current + 1;
+      observerCounterRef.current = idx;
+
+      const label = String.fromCharCode("A".charCodeAt(0) + (idx - 2)); // C, D, ...
+      const id = `observer-${label.toLowerCase()}`;
+
+      // Place new observers stacked vertically to the right
+      const baseX = 360;
+      const baseY = 70;
+      const offsetY = (idx - 1) * 90;
+
+      const newNode: Node = {
+        id,
+        type: "observer",
+        position: { x: baseX, y: baseY + offsetY },
+        data: {
+          label,
+          mode: "hex",
+          latestHex: undefined,
+        } satisfies ObserverNodeData,
+      };
+
+      return [...currentNodes, newNode];
+    });
+
+    setEdges((currentEdges) => {
+      const idx = observerCounterRef.current;
+      const label = String.fromCharCode("A".charCodeAt(0) + (idx - 2));
+      const id = `observer-${label.toLowerCase()}`;
+
+      const newEdge: Edge = {
+        id: `s-${id}`,
+        source: "subject",
+        target: id,
+        label: "notify",
+        type: "default",
+        reconnectable: true,
+      };
+
+      return [...currentEdges, newEdge];
+    });
+
+    // After React re-renders with the new node, fit view so it's visible
+    setTimeout(() => {
+      reactFlowInstanceRef.current?.fitView({ padding: 0.2, maxZoom: fixedZoom });
+    }, 0);
+  }, [step]);
+
   return (
     <figure
       className={`my-6 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-50 dark:bg-slate-900/50 ${barlow.className}`}
@@ -318,6 +380,18 @@ export function FlowDiagram({
         <figcaption className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
           {title}
         </figcaption>
+      )}
+      {step === 3 && (
+        <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+          <span>Click the Subject to change color. Observer B shows the hex only.</span>
+          <button
+            type="button"
+            onClick={addObserver}
+            className="ml-2 inline-flex items-center rounded border border-slate-300 dark:border-slate-600 px-2 py-0.5 text-[11px] font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          >
+            + Add observer
+          </button>
+        </div>
       )}
       <div className="w-full h-[320px]">
         <div
@@ -333,6 +407,9 @@ export function FlowDiagram({
             key={stepKey}
             nodes={nodes}
             edges={edges}
+            onInit={(instance) => {
+              reactFlowInstanceRef.current = instance;
+            }}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
@@ -343,8 +420,6 @@ export function FlowDiagram({
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             edgesReconnectable={edgesReconnectable}
-            snapToGrid
-            snapGrid={[16, 16]}
             minZoom={minZoom}
             maxZoom={maxZoom}
             onMove={(_, viewport) => {
