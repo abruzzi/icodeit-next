@@ -10,6 +10,7 @@ import { Challenge } from "@/components/mdx/challenge";
 import { Pre } from "@/components/mdx/code/pre";
 import { Quiz } from "@/components/mdx/quiz";
 import YouTube from "@/components/mdx/youtube";
+import { FlowDiagram } from "@/components/mdx/flow-diagram";
 
 const components = {
   img: (props: any) => {
@@ -66,6 +67,7 @@ const components = {
   Challenge,
   pre: Pre,
   Quiz,
+  FlowDiagram,
 };
 
 interface MdxProps {

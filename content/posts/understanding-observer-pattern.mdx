@@ -1,0 +1,45 @@
+---
+title: "Understanding the Observer Pattern"
+date: 2025-03-11T10:00:00+11:00
+category: "long"
+description: "An explorable introduction to the Observer pattern: how subjects notify observers, and how it compares to pub-sub."
+cover: "/posts/images/understanding-observer-pattern/cover.png"
+---
+
+The Observer pattern is a behavioral design pattern where an object (the **subject**) maintains a list of dependents (**observers**) and notifies them automatically when its state changes. It’s one of the most common patterns in UI and event-driven systems.
+
+## How it works
+
+The subject holds references to its observers. When something meaningful happens—state changes, an event occurs—the subject calls a notify method, and each observer gets updated. There is a direct relationship: the subject knows exactly who is observing it.
+
+## 1) Subject only: state changes exist
+
+In the first diagram, there are **no observers** yet. You can still change the subject’s internal state.
+
+<FlowDiagram variant="observer" step={1} title="Step 1 — Subject only (click to change color)" />
+
+## 2) Add Observer A: render the color
+
+Now we introduce **Observer A**. When you **click the Subject**, it “notifies” Observer A, and Observer A renders a **color swatch**.
+
+<FlowDiagram variant="observer" step={2} title="Step 2 — Observer A shows swatch + hex" />
+
+## 3) Add Observer B: render only the hex
+
+Next we add **Observer B**, but it displays **only the hex string** (not the swatch). This is a good reminder that *observers decide how to react* to notifications.
+
+<FlowDiagram variant="observer" step={3} title="Step 3 — Observer B shows hex only" />
+
+## 4) Unsubscribe: stop receiving notifications
+
+In the last diagram, you can **unsubscribe** by **dragging an edge endpoint away** to detach it. After that, clicking the subject won’t update that observer anymore.
+
+<FlowDiagram variant="observer" step={4} title="Step 4 — Detach an edge to unsubscribe" />
+
+## Why it matters
+
+- **Loose coupling**: Observers depend on the subject’s interface, not its concrete implementation.
+- **Dynamic relationships**: You can add and remove observers at runtime.
+- **Broadcast updates**: One change can propagate to many observers without the subject knowing their details.
+
+We’ll expand this with code examples and a comparison to pub-sub in future iterations.
