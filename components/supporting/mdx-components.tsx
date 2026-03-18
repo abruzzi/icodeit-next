@@ -16,6 +16,7 @@ import {
   ObserverStep2,
   ObserverStep3,
   ObserverStep4,
+  ObserverCodePlayground,
 } from "@/components/mdx/flow-diagram";
 
 const components = {
@@ -78,6 +79,7 @@ const components = {
   ObserverStep2,
   ObserverStep3,
   ObserverStep4,
+  ObserverCodePlayground,
 };
 
 interface MdxProps {

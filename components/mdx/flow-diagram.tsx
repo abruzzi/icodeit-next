@@ -4,4 +4,5 @@ export {
   ObserverStep2,
   ObserverStep3,
   ObserverStep4,
+  ObserverCodePlayground,
 } from "./observer-pattern";

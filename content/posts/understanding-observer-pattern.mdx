@@ -58,27 +58,100 @@ An observer can detach when it’s no longer interested. In the diagram below, d
 
 The subject holds references to its observers. When something meaningful happens, it notifies each one. There is a direct relationship: the subject knows who is observing it.
 
----
+## Interesting, can you show me some code?
 
-## Another example: color state
+The diagram gives you the big picture—but how does this look in code? Let's build it step by step in TypeScript. The same ideas apply in other object-oriented languages.
 
-The same pattern applies in code. Here, a **Subject** holds a **color** value; observers can show a colour swatch, the hex code, or both. Click the subject to change the color; only connected observers update.
+### Step 1: A simple subject
 
-**Step 1 — Subject only**
+We start with a `WaterSensor`—a thing that can be observed. It holds a status that can change over time:
 
-<FlowDiagram variant="observer" step={1} title="Step 1 — Subject only (click to change color)" />
+```ts
+type Status = 'Dry' | 'OK' | 'Wet' | 'NA';
 
-**Step 2 — Observer A shows swatch + hex**
+class WaterSensor {
+  private _status: Status = 'NA';
 
-<FlowDiagram variant="observer" step={2} title="Step 2 — Observer A shows swatch + hex" />
+  set status(value: Status) {
+    this._status = value;
+  }
 
-**Step 3 — Observer B shows hex only**
+  get status(): Status {
+    return this._status;
+  }
+}
+```
 
-<FlowDiagram variant="observer" step={3} title="Step 3 — Observer B shows hex only" />
+So far it's just a plain object. When we update the status (e.g. when the soil moisture changes), nothing else happens—we have no way to notify anyone.
 
-**Step 4 — Detach an edge to unsubscribe**
+### Step 2: Define the observer interface
 
-<FlowDiagram variant="observer" step={4} title="Step 4 — Detach an edge to unsubscribe" />
+We need something that can receive notifications. Let's define an interface:
+
+```ts
+interface Observer {
+  notify(status: Status): void;
+}
+```
+
+Any class that implements `notify(status)` can act as an observer. The subject doesn't care what it does—it just calls `notify` when something changes.
+
+### Step 3: Add a list of observers to the subject
+
+The subject needs to keep track of who's listening. We add an array and a `subscribe` method:
+
+```ts
+class WaterSensor {
+  private _status: Status = 'NA';
+  private _observers: Observer[] = [];
+
+  subscribe(observer: Observer): void {
+    this._observers.push(observer);
+  }
+
+  set status(value: Status) {
+    this._status = value;
+    this._observers.forEach((o) => o.notify(value));
+  }
+
+  get status(): Status {
+    return this._status;
+  }
+}
+```
+
+Whenever the status changes, we loop through all observers and call `notify` with the new value. That's the core of the pattern.
+
+### Step 4: Use it
+
+At the call site, we create a sensor, attach observers, and update the status. Everyone subscribed gets notified automatically:
+
+```ts
+const sensor = new WaterSensor();
+
+const mobileApp: Observer = {
+  notify(status) {
+    console.log(`Mobile: moisture is ${status}`);
+  },
+};
+
+const irrigation: Observer = {
+  notify(status) {
+    if (status === 'Dry') console.log('Irrigation: turning water on');
+  },
+};
+
+sensor.subscribe(mobileApp);
+sensor.subscribe(irrigation);
+
+sensor.status = 'Dry';  // Both observers are notified
+```
+
+No polling, no manual checks—the subject pushes updates to whoever is listening. That's the Observer pattern in code.
+
+Try it yourself: add observers, change the sensor status, and watch the output. You can also show the generated TypeScript to see how your setup maps to real code.
+
+<ObserverCodePlayground title="Try it — add observers, change status, see the output" />
 
 ## Why it matters
 
@@ -86,4 +159,4 @@ The same pattern applies in code. Here, a **Subject** holds a **color** value; o
 - **Dynamic relationships**: You can add and remove observers at runtime.
 - **Broadcast updates**: One change can propagate to many observers without the subject knowing their details.
 
-We’ll expand this with code examples and a comparison to pub-sub in future iterations.
+I'm sharing this first to get your feedback. In a follow-up, I'll expand on how Observer compares to pub-sub and when to choose one over the other. *To be continued…*
