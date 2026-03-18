@@ -137,6 +137,8 @@ export async function Mdx({ code }: MdxProps) {
     source: code, 
     components,
     options: {
+      // v6 blocks JS expressions by default; we need them for component props (e.g. categories={[]})
+      blockJS: false,
       mdxOptions: {
         rehypePlugins: [
           addRawCodeToPre,

@@ -71,7 +71,7 @@ export const Product = ({
 
         <div className={`flex flex-col md:flex-row items-center gap-3`}>
           <div className={`flex flex-wrap gap-2`}>
-            {categories.map((cat) => (
+            {(categories ?? []).map((cat) => (
               <span
                 key={cat}
                 className={`${
