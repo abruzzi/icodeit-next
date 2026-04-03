@@ -3,6 +3,8 @@ export const proseShell =
   "prose prose-slate prose-lg dark:prose-invert max-w-none " +
   "prose-headings:font-heading prose-headings:scroll-mt-24 " +
   "prose-headings:text-slate-900 dark:prose-headings:text-slate-50 " +
+  /* h1: invert can fight prose-headings — keep page titles readable in dark mode */
+  "prose-h1:text-slate-900 dark:prose-h1:text-white " +
   "prose-h2:text-palette-azure dark:prose-h2:text-sky-300 " +
   "prose-h3:text-slate-800 dark:prose-h3:text-sky-200 " +
   "prose-h4:text-slate-800 dark:prose-h4:text-slate-100 " +
@@ -10,3 +12,7 @@ export const proseShell =
   "prose-code:text-slate-800 prose-code:bg-slate-100/90 prose-code:font-normal dark:prose-code:bg-slate-800/80 dark:prose-code:text-slate-200 " +
   "prose-a:text-brand prose-a:font-medium prose-a:no-underline hover:prose-a:underline " +
   "font-normal dark:font-light text-slate-800 dark:text-slate-300";
+
+/** Top-of-page title inside proseShell (explicit contrast; pairs with py-6 etc.) */
+export const prosePageTitle =
+  "font-heading text-3xl font-extrabold tracking-tighter text-slate-900 dark:text-white sm:text-4xl md:text-5xl";

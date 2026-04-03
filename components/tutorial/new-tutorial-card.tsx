@@ -36,7 +36,7 @@ const Token = ({ type, content }: { type: TokenType; content: string }) => {
 const NewTutorialCard = ({ tutorial }: { tutorial: Tutorial }) => {
   return (
     <div className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
-      <div className="flex flex-col bg-white text-slate-800 dark:bg-slate-700 dark:text-slate-100 rounded-lg shadow-lg overflow-hidden h-full">
+      <div className="flex flex-col rounded-lg bg-white text-slate-800 shadow-lg overflow-hidden h-full dark:bg-slate-800 dark:text-slate-100">
         <Link href={tutorial.slug} className={`no-underline`}>
           <div className="w-full h-40 overflow-hidden">
             <Image
@@ -50,11 +50,11 @@ const NewTutorialCard = ({ tutorial }: { tutorial: Tutorial }) => {
 
           <div className="p-4 flex-grow">
             <h3
-              className={`${merriweather.className} font-semibold text-lg m-0`}
+              className={`${merriweather.className} m-0 text-lg font-semibold text-slate-900 dark:text-slate-50`}
             >
               {tutorial.title}
             </h3>
-            <p className={`text-xs font-light py-2 m-0`}>
+            <p className="m-0 py-2 text-xs font-light leading-relaxed text-slate-600 dark:text-slate-300">
               {tutorial.description}
             </p>
             <Token

@@ -4,9 +4,8 @@ import React from "react";
 
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/design-system/subscribe";
-import { TutorialCard } from "@/components/tutorial/tutorial-card";
 import { NewTutorialCard } from "@/components/tutorial/new-tutorial-card";
-import { proseShell } from "@/lib/prose-classes";
+import { prosePageTitle, proseShell } from "@/lib/prose-classes";
 
 export const metadata = {
   title: "I Code It - Elevate Your Web Development Skills",
@@ -43,7 +42,7 @@ export const metadata = {
 export default function Tutorials() {
   return (
     <div className={proseShell}>
-      <h1 className={`py-6`}>All Tutorials</h1>
+      <h1 className={`py-6 ${prosePageTitle}`}>All Tutorials</h1>
 
       <p className={`font-light`}>
         In certain scenarios, a detailed, step-by-step guide is essential for
@@ -56,7 +55,7 @@ export default function Tutorials() {
 
       <hr />
 
-      <div className="container mx-auto">
+      <div className="not-prose container mx-auto">
         <div className="flex flex-wrap -mx-2">
           {allTutorials
             .sort((a, b) => compareDesc(a.date, b.date))
