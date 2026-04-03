@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node -e \"const fs=require('fs');try{fs.rmSync('.next',{recursive:true,force:true})}catch(e){if(e.code!=='ENOENT')throw e}\"",
     "build": "next build",
+    "build:fresh": "npm run build",
+    "build:incremental": "next build",
     "rss": "node scripts/rss.mjs",
     "postbuild": "yarn rss",
-    "preview": "next build && next start",
+    "preview": "npm run build && next start",
     "start": "next start",
     "lint": "next lint"
   },
@@ -40,7 +43,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
-    "react-intersection-observer": "^9.5.3",
     "react-share": "^5.0.3",
     "reading-duration": "^1.1.2",
     "rehype-autolink-headings": "^7.1.0",

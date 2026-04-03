@@ -23,9 +23,9 @@ const AboutMe = () => {
           href="https://juntao.substack.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/90 px-6 py-3 text-base font-semibold text-brand shadow-sm ring-1 ring-slate-200/90 transition-all hover:bg-white hover:shadow-md dark:bg-slate-800/90 dark:text-slate-50 dark:ring-slate-600/50 dark:hover:bg-slate-800 md:w-auto"
+          className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-white/90 px-6 py-3 text-base font-semibold text-brand shadow-sm ring-1 ring-slate-200/90 transition-all hover:bg-white hover:shadow-md dark:bg-white dark:text-brand dark:shadow-md dark:ring-slate-200/80 dark:hover:bg-slate-50 md:w-auto"
         >
-          <HiMail className="h-4 w-4 text-palette-azure cta-icon-breathe" />
+          <HiMail className="h-4 w-4 text-palette-azure cta-icon-breathe dark:text-brand" />
           <span>Subscribe</span>
         </a>
       </div>

@@ -22,6 +22,7 @@ export default function Home() {
 
       <Product
         link="https://icodeit.thinkific.com/courses/frontend-system-design-essentials"
+        learnMoreLink="https://frontend.icodeit.com.au/courses/frontend-system-design-essentials"
         cover="/products/courses/frontend-system-design-essentials.png"
         title="Frontend System Design Essentials"
         categories={["new", "intermediate"]}
@@ -104,14 +105,12 @@ export default function Home() {
 
       <Link
         href="/posts"
-        className={`no-underline border p-3 rounded-lg border-slate-200 dark:border-slate-700 hover:border-brand hover:text-brand transition-all duration-200 inline-block mt-4 hover:scale-105 transform`}
+        className="mt-4 inline-block transform rounded-lg border border-slate-200 p-3 text-slate-800 no-underline transition-all duration-200 hover:scale-105 hover:border-brand hover:text-brand dark:border-slate-600 dark:text-slate-200 dark:hover:border-brand dark:hover:text-brand"
       >
         Read more articles →
       </Link>
 
-      <div className="my-12 p-6 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border border-slate-200 dark:border-slate-700">
-        <Subscribe />
-      </div>
+      <Subscribe />
     </div>
   );
 }
