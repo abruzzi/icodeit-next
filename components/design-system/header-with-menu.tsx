@@ -22,8 +22,8 @@ function HeaderWithMenu() {
   const menuItems = ["Posts", "Tutorials", "Books", "Courses"];
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-slate-50/80 dark:bg-slate-950/80 border-b border-slate-200/50 dark:border-slate-800/50 backdrop-blur-sm">
-      <div className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto px-4 py-2">
+    <header className="sticky top-0 z-40 -mx-4 border-b border-slate-200/60 bg-slate-100/85 px-4 py-2 backdrop-blur-md dark:border-slate-800/60 dark:bg-slate-900/85 sm:-mx-6 sm:px-6">
+      <div className="w-full">
         <Navbar 
           onMenuOpenChange={setIsMenuOpen} 
           className="bg-transparent"
@@ -40,7 +40,7 @@ function HeaderWithMenu() {
             </NavbarBrand>
           </NavbarContent>
 
-          <NavbarContent className="hidden sm:flex gap-6" justify="center">
+          <NavbarContent className="hidden sm:flex gap-x-5 md:gap-x-6" justify="center">
             {menuItems.map((menu) => {
               const path = `/${menu.toLowerCase()}`;
               const isActive = current === path;
@@ -48,10 +48,10 @@ function HeaderWithMenu() {
                 <NavbarItem key={path} isActive={isActive}>
                   <Link 
                     href={path}
-                    className={`text-base font-medium transition-colors duration-200 ${
+                    className={`rounded-md px-1 py-1.5 text-[0.9375rem] font-medium no-underline transition-colors duration-200 ${
                       isActive 
-                        ? "text-brand dark:text-brand" 
-                        : "text-slate-600 dark:text-slate-400 hover:text-brand dark:hover:text-brand"
+                        ? "text-brand" 
+                        : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
                     }`}
                   >
                     {menu}
@@ -67,7 +67,7 @@ function HeaderWithMenu() {
             </NavbarItem>
           </NavbarContent>
 
-        <NavbarMenu className="pt-4">
+        <NavbarMenu className="border-t border-slate-200/80 pt-2 dark:border-slate-800/80">
           {menuItems.map((item, index) => {
             const path = `/${item.toLowerCase()}`;
             const isActive = path === current;
@@ -75,10 +75,10 @@ function HeaderWithMenu() {
               <NavbarMenuItem key={`${item}-${index}`}>
                 <Link
                   href={path}
-                  className={`w-full text-base font-medium py-2 transition-colors duration-200 ${
+                  className={`w-full rounded-md px-2 py-3 text-base font-medium transition-colors duration-200 ${
                     isActive
-                      ? "text-brand dark:text-brand"
-                      : "text-slate-700 dark:text-slate-300"
+                      ? "bg-slate-200/80 text-brand dark:bg-slate-800/80"
+                      : "text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50"
                   }`}
                   size="lg"
                 >
@@ -90,7 +90,7 @@ function HeaderWithMenu() {
         </NavbarMenu>
         </Navbar>
       </div>
-    </div>
+    </header>
   );
 }
 

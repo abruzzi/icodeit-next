@@ -6,6 +6,7 @@ import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/design-system/subscribe";
 import { TutorialCard } from "@/components/tutorial/tutorial-card";
 import { NewTutorialCard } from "@/components/tutorial/new-tutorial-card";
+import { proseShell } from "@/lib/prose-classes";
 
 export const metadata = {
   title: "I Code It - Elevate Your Web Development Skills",
@@ -41,7 +42,7 @@ export const metadata = {
 
 export default function Tutorials() {
   return (
-    <div className="max-w-4xl mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+    <div className={proseShell}>
       <h1 className={`py-6`}>All Tutorials</h1>
 
       <p className={`font-light`}>

@@ -9,10 +9,11 @@ import { PostCard } from "@/components/design-system/post-card";
 import { AboutMe } from "@/components/design-system/about-me";
 import { Product } from "@/components/mdx/product";
 import { Subscribe } from "@/components/design-system/subscribe";
+import { proseShell } from "@/lib/prose-classes";
 
 export default function Home() {
   return (
-    <div className="max-w-4xl mx-auto prose dark:prose-invert text-base">
+    <div className={proseShell}>
       <AboutMe />
 
       <hr />

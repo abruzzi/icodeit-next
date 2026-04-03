@@ -8,6 +8,144 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Design system: hero “breathing” wash (frontend.icodeit family) */
+@keyframes hero-breathe-a {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translate(2%, -1%) scale(1.02);
+  }
+}
+
+@keyframes hero-breathe-b {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: translate(-2%, 2%) scale(1.03);
+  }
+}
+
+.hero-breathe-layer-a {
+  background: radial-gradient(
+    ellipse 80% 60% at 20% 0%,
+    color-mix(in srgb, var(--palette-magenta) 18%, transparent),
+    transparent 70%
+  );
+  animation: hero-breathe-a 14.5s ease-in-out infinite;
+}
+
+.dark .hero-breathe-layer-a {
+  background: radial-gradient(
+    ellipse 80% 60% at 20% 0%,
+    color-mix(in srgb, var(--palette-magenta) 28%, transparent),
+    transparent 70%
+  );
+}
+
+.hero-breathe-layer-b {
+  background: radial-gradient(
+    ellipse 70% 50% at 85% 10%,
+    color-mix(in srgb, var(--palette-azure) 16%, transparent),
+    transparent 65%
+  );
+  animation: hero-breathe-b 19s ease-in-out infinite;
+}
+
+.dark .hero-breathe-layer-b {
+  background: radial-gradient(
+    ellipse 70% 50% at 85% 10%,
+    color-mix(in srgb, var(--palette-azure) 22%, transparent),
+    transparent 65%
+  );
+}
+
+/* CTA icon subtle motion (design system) */
+@keyframes cta-icon-breathe {
+  0%,
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(3px) scale(1.05);
+    opacity: 1;
+  }
+}
+
+.cta-icon-breathe {
+  animation: cta-icon-breathe 2.8s ease-in-out infinite;
+}
+
+.cta-icon-breathe:hover {
+  animation-play-state: paused;
+}
+
+/* Thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(51 65 85 / 0.85) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(51 65 85 / 0.85);
+  border-radius: 9999px;
+}
+
+/* Dark mode prose: headings + strong (explicit; beats invert / token clashes) */
+.dark .prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: #7dd3fc;
+}
+
+.dark .prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: #bae6fd;
+}
+
+.dark .prose :where(h4):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: #e2e8f0;
+}
+
+.dark .prose :where(strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  color: #f1f5f9;
+}
+
+/* Inline code in dark mode (paragraph/list/table/heading only — not pre > code) */
+.dark .prose p code,
+.dark .prose li code,
+.dark .prose td code,
+.dark .prose th code,
+.dark .prose h1 code,
+.dark .prose h2 code,
+.dark .prose h3 code,
+.dark .prose h4 code,
+.dark .prose h5 code,
+.dark .prose h6 code {
+  color: #e2e8f0;
+  background-color: rgb(51 65 85 / 0.55);
+}
+
+.prose pre,
+.prose code {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
 .prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *))::before {
   content: "";
 }

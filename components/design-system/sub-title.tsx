@@ -1,14 +1,11 @@
 import React from "react";
-import {Inter} from "next/font/google";
 
-const inter = Inter({weight: "400", subsets: ["latin"]});
-
-const SubTitle = ({content}: { content: string }) => {
-  return (<h2
-    className={`text-xl text-brand mb-4 uppercase ${inter.className} tracking-widest color-brand font-bold`}
-  >
-    {content}
-  </h2>)
-}
+const SubTitle = ({ content }: { content: string }) => {
+  return (
+    <h2 className="font-heading mb-6 mt-10 text-xs font-bold uppercase tracking-[0.18em] text-brand first:mt-0">
+      {content}
+    </h2>
+  );
+};
 
 export {SubTitle};

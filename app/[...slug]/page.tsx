@@ -6,6 +6,7 @@ import type { Page } from "content-collections";
 import { Mdx } from "@/components/supporting/mdx-components";
 import { Subscribe } from "@/components/design-system/subscribe";
 import React from "react";
+import { proseShell } from "@/lib/prose-classes";
 
 interface PageProps {
   params: {
@@ -76,7 +77,7 @@ export default async function PagePage({ params }: PageProps) {
   }
 
   return (
-    <article className="max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+    <article className={proseShell}>
       <h1 className={`py-6`}>{page.title}</h1>
       {page.description && <p className={`font-light`}>{page.description}</p>}
       <hr />

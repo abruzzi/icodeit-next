@@ -5,6 +5,7 @@ import { ChapterCard } from "@/components/design-system/chapter-card";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { TutorialIntro } from "@/components/tutorial/tutorial-intro";
+import { proseShell } from "@/lib/prose-classes";
 
 import { allChapters, allTutorials } from "content-collections";
 
@@ -99,7 +100,7 @@ export default async function Tutorial({ params }: TutorialProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+    <div className={proseShell}>
       <h1 className={`py-6`}>{tutorial.title}</h1>
 
       {await TutorialIntro({ tutorial })}

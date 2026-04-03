@@ -1,4 +1,5 @@
 const { heroui } = require("@heroui/react");
+const plugin = require("tailwindcss/plugin");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -13,6 +14,30 @@ module.exports = {
     extend: {
       colors: {
         brand: "#e23e57",
+        brandSecondary: "#C084FC",
+        brandDanger: "#b91c1c",
+        "palette-magenta": "#ff0855",
+        "palette-azure": "#0090ff",
+        "palette-tangerine": "#ff8000",
+        "palette-gold": "#f4c70f",
+        "palette-jade": "#00b209",
+        slate: {
+          150: "#e8edf3",
+        },
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        heading: [
+          "var(--font-heading)",
+          "var(--font-inter)",
+          "system-ui",
+          "sans-serif",
+        ],
+        mono: [
+          "var(--font-jetbrains-mono)",
+          "ui-monospace",
+          "monospace",
+        ],
       },
     },
   },
@@ -40,5 +65,16 @@ module.exports = {
       },
     }),
     require("@tailwindcss/typography"),
+    plugin(({ addBase }) => {
+      addBase({
+        ":root": {
+          "--palette-magenta": "#ff0855",
+          "--palette-azure": "#0090ff",
+          "--palette-tangerine": "#ff8000",
+          "--palette-gold": "#f4c70f",
+          "--palette-jade": "#00b209",
+        },
+      });
+    }),
   ],
 };

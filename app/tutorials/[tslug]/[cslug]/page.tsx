@@ -12,6 +12,7 @@ import { WhatsNext } from "@/components/chapter/whats-next";
 import { Summary } from "@/components/chapter/summary";
 import { Outline } from "@/components/tutorial/outline";
 import { ChapterBreadcrumbs } from "@/components/chapter/breadcrumbs";
+import { proseShell } from "@/lib/prose-classes";
 
 interface ChapterProps {
   params: {
@@ -119,7 +120,7 @@ export default async function Chapter({ params }: ChapterProps) {
         <Outline chapters={others} />
       </div>
 
-      <article className="relative max-w-4xl py-16 prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
+      <article className={`relative py-12 ${proseShell}`}>
         <ChapterHeader chapter={chapter} />
 
         <Highlight chapter={chapter} />

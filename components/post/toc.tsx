@@ -79,21 +79,21 @@ export const TOC = ({ post }: { post: Post }) => {
 
   return (
     <nav
-      className="order-last hidden shrink-0 md:block lg:block py-32 sticky top-24 self-start ml-10 lg:ml-14"
+      className="order-last sticky top-24 hidden shrink-0 self-start py-32 md:block lg:block lg:ml-14 ml-10"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       aria-label="On this page"
     >
       <div className="flex items-stretch overflow-hidden transition-all duration-200 ease-out">
         {/* Rail: horizontal line indicators (visible when collapsed and when expanded) */}
-        <div className="flex flex-col justify-center py-3 pl-0.5 shrink-0">
+        <div className="flex shrink-0 flex-col justify-center py-3 pl-0.5">
           {headings.map((heading) => {
             const isActive = activeSlug === heading.slug;
             return (
               <a
                 key={heading.slug}
                 href={`${post.slug}#${heading.slug}`}
-                className="flex items-center gap-2 group/rail py-1"
+                className="group flex items-center gap-2 py-1"
                 title={heading.text}
               >
                 <span
@@ -101,8 +101,8 @@ export const TOC = ({ post }: { post: Post }) => {
                     h-1 shrink-0 rounded-full transition-all duration-200
                     ${isExpanded ? "w-2.5" : "w-4"}
                     ${isActive
-                      ? "bg-brand w-5 opacity-100"
-                      : "bg-slate-300 dark:bg-slate-600 opacity-70 group-hover/rail:opacity-100"}
+                      ? "w-5 bg-brand opacity-100"
+                      : "bg-slate-300 opacity-70 group-hover:opacity-100 dark:bg-slate-600"}
                   `}
                 />
               </a>
@@ -115,10 +115,10 @@ export const TOC = ({ post }: { post: Post }) => {
           className={`
             min-w-[10rem] max-w-[12rem]
             transition-opacity duration-200
-            ${isExpanded ? "opacity-100 pl-3 pr-3 py-3" : "opacity-0 pl-0 pr-0 py-0 pointer-events-none"}
+            ${isExpanded ? "px-3 py-3 opacity-100" : "pointer-events-none px-0 py-0 opacity-0"}
           `}
         >
-          <h3 className="text-brand uppercase tracking-wide text-xs font-semibold mb-2">
+          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand">
             On this page
           </h3>
           <div className="flex flex-col gap-0.5">
@@ -129,13 +129,13 @@ export const TOC = ({ post }: { post: Post }) => {
                   key={heading.slug}
                   href={`${post.slug}#${heading.slug}`}
                   className={`
-                    text-xs font-light py-0.5 -mx-1 px-1 rounded
+                    -mx-1 rounded px-1 py-0.5 text-xs font-light
                     border-l-2 pl-2.5
                     transition-colors duration-200
                     ${heading.level === "two" ? "pl-3" : heading.level === "three" ? "pl-5" : ""}
                     ${isActive
                       ? "border-brand text-slate-900 dark:text-slate-100"
-                      : "border-transparent text-slate-600 hover:text-slate-800 dark:text-slate-400 hover:dark:text-slate-300"}
+                      : "border-transparent text-slate-600 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-300"}
                   `}
                   data-level={heading.level}
                 >

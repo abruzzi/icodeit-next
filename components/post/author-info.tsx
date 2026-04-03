@@ -5,11 +5,11 @@ const Avatar = () => {
   return (
     <div className="w-12 h-12">
       <Image
-        src="/juntao.qiu.avatar.png"
+        src="/juntao.qiu.avatar.webp"
         width={48}
         height={48}
-        alt="Juntao Qiu Avatar"
-        className="m-0 rounded-full"
+        alt="Juntao Qiu"
+        className="m-0 rounded-3xl object-cover"
       />
     </div>
   );

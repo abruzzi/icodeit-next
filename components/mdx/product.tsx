@@ -40,8 +40,8 @@ export const Product = ({
   }
 
   return (
-    <div className="flex flex-col md:flex-row items-center w-full sm:w-auto mx-auto gap-6 my-8 group">
-      <div className="flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+    <div className="group mx-auto my-8 flex w-full flex-col items-center gap-6 rounded-2xl border border-slate-200/90 bg-white/80 p-4 shadow-sm transition-[border-color,box-shadow] sm:w-auto sm:p-6 dark:border-slate-600/50 dark:bg-slate-800/60 dark:hover:border-slate-500/60 dark:hover:shadow-md md:flex-row hover:border-slate-300/90 hover:shadow-md">
+      <div className="flex-shrink-0 transition-shadow duration-300">
         <a href={link} target="_blank" rel="noopener noreferrer" className="block">
           <Image
             className={`${
@@ -62,12 +62,14 @@ export const Product = ({
           rel="noopener noreferrer"
           className="mt-2 inline-block no-underline"
         >
-          <h3 className="m-0 flex items-center gap-x-2 text-xl font-semibold leading-tight hover:text-brand transition-colors duration-200">
+          <h3 className="font-heading m-0 flex items-center gap-x-2 text-xl font-semibold leading-tight text-slate-900 transition-colors duration-200 hover:text-brand dark:text-slate-100 dark:hover:text-brand">
             {title}
           </h3>
         </a>
 
-        <div className="my-3">{content}</div>
+        <div className="my-3 text-slate-600 dark:text-slate-300 [&_a]:text-brand [&_a]:no-underline hover:[&_a]:underline">
+          {content}
+        </div>
 
         <div className={`flex flex-col md:flex-row items-center gap-3`}>
           <div className={`flex flex-wrap gap-2`}>
@@ -87,11 +89,12 @@ export const Product = ({
 
           <a
             href={learnMoreLink ? learnMoreLink : link}
-            className={`no-underline rounded border py-1.5 px-3 border-slate-200 dark:border-slate-600 ml-auto hover:text-brand hover:border-brand transition-all duration-200 hover:scale-105 transform flex flex-row items-center gap-1`}
+            className="group/learn ml-auto inline-flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-white/90 px-4 py-2 text-sm font-semibold text-brand no-underline ring-1 ring-slate-200/60 transition-colors duration-200 hover:bg-slate-50 hover:text-brand dark:border-slate-600/80 dark:bg-slate-900/60 dark:text-slate-50 dark:ring-slate-600/50 dark:hover:bg-slate-800/80 dark:hover:text-white"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Learn more <ArrowRightIcon className="transition-transform duration-200 group-hover:translate-x-1" />
+            Learn more
+            <ArrowRightIcon className="h-4 w-4 shrink-0 text-palette-azure transition-transform duration-200 group-hover/learn:translate-x-0.5" />
           </a>
         </div>
       </div>

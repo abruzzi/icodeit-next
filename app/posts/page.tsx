@@ -4,6 +4,7 @@ import { allPosts } from "content-collections";
 
 import { compareDesc } from "date-fns";
 import { Subscribe } from "@/components/design-system/subscribe";
+import { proseShell } from "@/lib/prose-classes";
 import { PostCard } from "@/components/design-system/post-card";
 
 export const metadata = {
@@ -23,7 +24,7 @@ export const metadata = {
     url: "https://icodeit.com.au/posts",
     // @ts-ignore
     type: "website",
-    image: "/juntao.qiu.avatar.png", // Replace with the actual image URL
+    image: "/juntao.qiu.avatar.webp",
   },
   twitter: {
     // @ts-ignore
@@ -34,7 +35,7 @@ export const metadata = {
       "Discover ways to grow as a developer with Juntao Qiu. Learn about writing maintainable, efficient code at I Code It.",
     url: "https://icodeit.com.au/posts",
     creator: "@JuntaoQiu",
-    image: "/juntao.qiu.avatar.png", // Replace with the actual Twitter image URL
+    image: "/juntao.qiu.avatar.webp",
   },
   charSet: "UTF-8",
   robots: "index, follow",
@@ -43,32 +44,49 @@ export const metadata = {
 
 export default function Posts() {
   return (
-    <div className="max-w-4xl mx-auto prose dark:prose-invert font-normal dark:font-light text-slate-800 dark:text-slate-300">
-      <h1 className={`py-6`}>All Articles</h1>
+    <div className={proseShell}>
+      <h1 className="font-heading pt-2 pb-2 text-3xl font-extrabold tracking-tighter text-slate-900 dark:text-white sm:text-4xl md:text-5xl">
+        All Articles
+      </h1>
 
-      <p className={`font-light`}>
-        In this blog, I share insights on software development, focusing on
-        design principles and patterns to address complex business challenges.
-        Topics like refactoring, test-driven development, and pair programming
-        are covered, emphasizing how they contribute to more maintainable and
-        enjoyable coding practices.
-      </p>
+      <div className="mb-4 space-y-4 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+        <p className="font-light">
+          In this blog, I share insights on software development, focusing on
+          design principles and patterns to address complex business challenges.
+          Topics like refactoring, test-driven development, and pair programming
+          are covered, emphasizing how they contribute to more maintainable and
+          enjoyable coding practices.
+        </p>
 
-      <p className={`font-light`}>
-        Software development is an intellectually stimulating journey. It&apos;s
-        rewarding to overcome challenges and achieve a deep sense of
-        satisfaction. This blog is where I document these enriching experiences,
-        hoping to inspire and engage fellow enthusiasts in the art of coding.
-      </p>
+        <p className="font-light">
+          Software development is an intellectually stimulating journey. It&apos;s
+          rewarding to overcome challenges and achieve a deep sense of
+          satisfaction. This blog is where I document these enriching experiences,
+          hoping to inspire and engage fellow enthusiasts in the art of coding.
+        </p>
+      </div>
 
-      <hr />
+      {/* Section break: spacing + soft marker (not a full-width rule like prose hr) */}
+      <div
+        className="not-prose my-16 flex flex-col items-center gap-4 sm:my-20"
+        role="separator"
+        aria-hidden
+      >
+        <div className="flex w-full max-w-[12rem] items-center gap-3">
+          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-slate-300 dark:to-slate-600" />
+          <span className="size-1.5 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500" />
+          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-300 dark:to-slate-600" />
+        </div>
+      </div>
 
+      <div className="not-prose">
       {allPosts
         .filter(a => !a.external)
         .sort((a, b) => compareDesc(a.date, b.date))
         .map((post) => (
           <PostCard post={post} key={post._meta.path} />
         ))}
+      </div>
 
       <Subscribe />
     </div>
